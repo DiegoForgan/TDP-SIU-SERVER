@@ -1,0 +1,22 @@
+{
+  "name": "tdp-siu-server",
+  "version": "1.0.0",
+  "description": "Servidor utilizado para el sistema de inscripcion",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DiegoForgan/TDP-SIU-SERVER.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DiegoForgan/TDP-SIU-SERVER/issues"
+  },
+  "homepage": "https://github.com/DiegoForgan/TDP-SIU-SERVER#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
