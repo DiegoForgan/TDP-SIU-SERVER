@@ -1,6 +1,16 @@
 var express = require('express');
 var app = express();
 
+//librerias propias
+var admin = require('./routes/admin.js');
+
+//public
+app.use('/admin', express.static("public"));
+
+//router
+app.use('/admin', admin);
+
+
 const PORT = process.env.PORT || 8080;
 
 
