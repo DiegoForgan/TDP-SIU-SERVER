@@ -1,11 +1,13 @@
 const { Pool } = require('pg');
 
-//Aqui hay que ver como se llama la variable de ambiente de heroku pero mientras tanto esta hardcodeado el string de mi base de pruebas
-const string_de_coneccion = process.env.connectionString || 'postgresql://postgres:12345@localhost:5432/test';
+//Inicializa la configuracion de la coneccion con la variable de ambiente de la base de datos, sino usa la local. 
+const string_de_coneccion = process.env.DATABASE_URL || 'postgresql://postgres:12345@localhost:5432/test';
 
 //Se cambia a esta forma de configuracion que es mas adaptable a ser incorporada a Heroku
 const pool = new Pool({
     connectionString: string_de_coneccion,
+    ssl: true,
+    max: 1, //lo limito a 1 por temas de sincronismo pero lo ideal del pool seria trabajar con multiples
 });
 
 module.exports = {
