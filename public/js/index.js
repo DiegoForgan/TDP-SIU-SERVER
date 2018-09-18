@@ -1,3 +1,9 @@
+//const db = require('../db');
+
+$(document).ready(()=>{
+
+});
+
 function clickEstudiantes() {
 	var reader = new FileReader();
 
@@ -9,6 +15,18 @@ function clickEstudiantes() {
 			console.log(lines[i]);
 		}
 	}
+	$.ajax({
+		url: '../base',
+		type: 'GET',
+		success: (data)=>{
+			console.log("dfd");
+			console.log(data);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+	        alert(xhr.responseText);
+	        alert(thrownError);
+	      }
+	})
 }
 
 function clickDocentes() {
