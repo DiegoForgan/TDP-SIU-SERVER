@@ -8,25 +8,51 @@ function clickEstudiantes() {
 	var reader = new FileReader();
 
 	reader.readAsText($("#archivoEstudiantes").prop("files")[0]);
-	
+	$.blockUI({ message: "Cargando.." });
 	reader.onload = function(e) {
 		var lines = reader.result.split('\n');
+		var listaAlumnos = [];
 		for (var i = 0; i <= lines.length; i++) {
-			console.log(lines[i]);
+			if (lines[i]){
+				var splittedLine = lines[i].split(',');
+				var data = {
+					padron: splittedLine[0].trim(),
+					apellido: splittedLine[1].trim(),
+					nombre: splittedLine[2].trim(),
+					usuario: splittedLine[3].trim(),
+					contrasena: splittedLine[4].trim(),
+					prioridad: splittedLine[5].trim()
+				}
+				listaAlumnos.push(data);
+			}
 		}
+		$.ajax({
+			url: '../admin/alumnos',
+			type: 'POST',
+			data: {
+				"listaAlumnos": listaAlumnos
+			},
+			success: (data)=>{
+				$.unblockUI();
+				swal({
+				  type: 'success',
+				  title: 'Guardado!',
+				  text: 'Se han guardado los alumnos'
+				});
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+		        $.unblockUI();
+		        swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  text: 'Ha ocurrido un error al intentar guardar alumnos'
+				});
+		        console.log(xhr.responseText);
+		        console.log(thrownError);
+	      	}
+		})
 	}
-	$.ajax({
-		url: '../base',
-		type: 'GET',
-		success: (data)=>{
-			console.log("dfd");
-			console.log(data);
-		},
-		error: function (xhr, ajaxOptions, thrownError) {
-	        alert(xhr.responseText);
-	        alert(thrownError);
-	      }
-	})
+	
 }
 
 function clickDocentes() {

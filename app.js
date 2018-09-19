@@ -1,6 +1,11 @@
 var express = require('express');
 var app = express();
 const db = require('./db');
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 const PORT = process.env.PORT || 8080;
 
 //librerias propias
@@ -12,7 +17,7 @@ app.use('/admin', express.static("public"));
 
 //router
 app.use('/admin', admin);
-app.use('/alumno',alumno);
+app.use('/alumno', alumno);
 
 
 
