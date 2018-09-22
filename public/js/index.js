@@ -23,6 +23,7 @@ function cargarCursos(termina){
 			url: '../admin/cursos',
 			type: 'GET',
 			success: (data)=>{
+				console.log(data)
 				if (data.length > 0){
 					$("#tablaCursos").empty();
 
@@ -88,7 +89,7 @@ function cargarCursos(termina){
 						tr.append(tdNombre);
 
 						var tdDocente = document.createElement("td");
-						tdDocente.innerHTML = data[i].docente_a_cargo;
+						tdDocente.innerHTML = data[i].nombre_docente;
 						tr.append(tdDocente);
 
 						var tdSede = document.createElement("td");

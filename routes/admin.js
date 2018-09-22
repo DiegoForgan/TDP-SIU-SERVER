@@ -35,7 +35,8 @@ router.post('/docentes', (req, res) => {
 
 //carga cursos
 router.get('/cursos', (req, res) => {
-  db.query("SELECT * FROM cursos", null, (err, response)=>{
+  db.query("SELECT c.*, d.apellido || ', ' || d.nombre as nombre_docente FROM cursos c\
+            INNER JOIN docentes d ON d.legajo = c.docente_a_cargo", null, (err, response)=>{
     res.send(response.rows);
   })
 });
