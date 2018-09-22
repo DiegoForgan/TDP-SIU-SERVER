@@ -1,8 +1,34 @@
-//const db = require('../db');
-
 $(document).ready(()=>{
+	var termina = {
+		cursosCargados: false
+	};
 
+	$.blockUI({message: "Cargando.."})
+	cargarCursos(termina);
 });
+
+function cargarCursos(termina){
+	$.ajax({
+			url: '../admin/cursos',
+			type: 'GET',
+			success: (data)=>{
+				termina.cursosCargados = true;
+				if(termina.cursosCargados){
+					$.unblockUI();
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+		        $.unblockUI();
+		        swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  text: 'Ha ocurrido un error al intentar cargar cursos'
+				});
+		        console.log(xhr.responseText);
+		        console.log(thrownError);
+	      	}
+		});
+}
 
 function clickEstudiantes() {
 	var reader = new FileReader();
@@ -105,6 +131,28 @@ function clickDocentes() {
 	}
 }
 
+// maneja menu
+function cambiarPantalla(numero){
+	switch(numero){
+		case 1:
+			$("#importacionPantalla").show();
+			$("#abmCursosPantalla").hide();
+
+			$("#importacionMenu").addClass("active");
+			$("#abmCursosMenu").removeClass("active");
+			break;
+		case 2:
+			$("#importacionPantalla").hide();
+			$("#abmCursosPantalla").show();
+
+			$("#importacionMenu").removeClass("active");
+			$("#abmCursosMenu").addClass("active");
+			break;
+	}
+}
+
+//comentar linea, solo para desarrollo
+cambiarPantalla(2);
 
 // maneja el input
 $(".input-file-estudiantes").before(
