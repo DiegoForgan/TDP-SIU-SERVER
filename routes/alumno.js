@@ -1,6 +1,11 @@
 var router = require('express').Router();
 var db = require('../db');
 
+
+function obtenerValoresComoArreglo(string_a_separar) {
+    return (string_a_separar.trim()).split(";");
+}
+
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
     console.log('Se solicito %s en el endpoint /alumno %s', req.method, req.url);
@@ -25,6 +30,44 @@ router.get('/prioridad/:padron', function (req, res) {
             } else {
                 res.send({
                     "prioridad": "undefined"
+                });
+            }
+        }
+    });
+});
+
+//Devuelve la oferta academica POR AHORA sin importar en que carrera estas inscripto.
+router.get('/oferta', function (req, res) {
+    console.log("Un alumno consulto la oferta academica");
+    var JSON_de_salida = {
+        'oferta': []
+    };
+    //TODO: Que filtre por carrera
+    //ACA habria que agregar la condicion para que busque por carrera.
+    db.query('SELECT * FROM cursos', [], (error, respuesta) => {
+        if (!error) {
+            if (respuesta.rowCount != 0) {
+                (respuesta.rows).forEach(curso => {
+                    var aulas = obtenerValoresComoArreglo(curso.aulas)
+                    var sede = obtenerValoresComoArreglo(curso.sede);
+                    var dias = obtenerValoresComoArreglo(curso.dias);
+                    var horarios = obtenerValoresComoArreglo(curso.horarios);
+                    var elemento = {
+                        'codigo': curso.codigo,
+                        'nombre': curso.nombre,
+                        'docente': curso.docente_a_cargo,
+                        'sede': sede,
+                        'aulas': aulas,
+                        'cupos': curso.cupos_disponibles,
+                        'dias': dias,
+                        'horarios': horarios
+                    };
+                    JSON_de_salida.oferta.push(elemento);
+                });
+                res.send(JSON_de_salida);
+            } else {
+                res.send({
+                    'oferta': 'undefined'
                 });
             }
         }
