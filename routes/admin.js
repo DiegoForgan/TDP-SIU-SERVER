@@ -7,6 +7,7 @@ router.use(function timeLog(req, res, next) {
 	next();
 });
 
+// carga alumnos
 router.post('/alumnos', (req, res) => {
   var resp;
   db.query("TRUNCATE TABLE alumnos");
@@ -15,6 +16,20 @@ router.post('/alumnos', (req, res) => {
   	db.query("INSERT INTO alumnos(padron, apellido, nombre, usuario, contrasena, prioridad)\
   			VALUES($1, $2, $3, $4, $5, $6)", 
   			[alumno.padron, alumno.apellido, alumno.nombre, alumno.usuario, alumno.contrasena, alumno.prioridad]);
+  
+  }
+  res.send("ok");
+});
+
+//carga docentes
+router.post('/docentes', (req, res) => {
+  var resp;
+  db.query("TRUNCATE TABLE docentes");
+  for (var i = 0; i < req.body.listaDocentes.length; i++) {
+  	var docente = req.body.listaDocentes[i]
+  	db.query("INSERT INTO docentes(legajo, apellido, nombre, usuario, contrasena)\
+  			VALUES($1, $2, $3, $4, $5)", 
+  			[docente.legajo, docente.apellido, docente.nombre, docente.usuario, docente.contrasena]);
   
   }
   res.send("ok");

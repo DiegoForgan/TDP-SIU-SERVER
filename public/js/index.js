@@ -50,7 +50,7 @@ function clickEstudiantes() {
 		        console.log(xhr.responseText);
 		        console.log(thrownError);
 	      	}
-		})
+		});
 	}
 	
 }
@@ -59,12 +59,49 @@ function clickDocentes() {
 	var reader = new FileReader();
 
 	reader.readAsText($("#archivoDocentes").prop("files")[0]);
-	
+	$.blockUI({ message: "Cargando.." });
 	reader.onload = function(e) {
 		var lines = reader.result.split('\n');
+		var listaDocentes = [];
 		for (var i = 0; i <= lines.length; i++) {
-			console.log(lines[i]);
+			if (lines[i]){
+				var splittedLine = lines[i].split(',');
+				
+				var data = {
+					legajo: splittedLine[0].trim(),
+					apellido: splittedLine[1].trim(),
+					nombre: splittedLine[2].trim(),
+					usuario: splittedLine[3].trim(),
+					contrasena: splittedLine[4].trim()
+				}
+				listaDocentes.push(data);
+			}
 		}
+		$.ajax({
+			url: '../admin/docentes',
+			type: 'POST',
+			data: {
+				"listaDocentes": listaDocentes
+			},
+			success: (data)=>{
+				$.unblockUI();
+				swal({
+				  type: 'success',
+				  title: 'Guardado!',
+				  text: 'Se han guardado los docentes'
+				});
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+		        $.unblockUI();
+		        swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  text: 'Ha ocurrido un error al intentar guardar docentes'
+				});
+		        console.log(xhr.responseText);
+		        console.log(thrownError);
+	      	}
+		});
 	}
 }
 
