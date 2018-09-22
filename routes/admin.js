@@ -9,7 +9,6 @@ router.use(function timeLog(req, res, next) {
 
 // carga alumnos
 router.post('/alumnos', (req, res) => {
-  var resp;
   db.query("TRUNCATE TABLE alumnos");
   for (var i = 0; i < req.body.listaAlumnos.length; i++) {
   	var alumno = req.body.listaAlumnos[i]
@@ -23,7 +22,6 @@ router.post('/alumnos', (req, res) => {
 
 //carga docentes
 router.post('/docentes', (req, res) => {
-  var resp;
   db.query("TRUNCATE TABLE docentes");
   for (var i = 0; i < req.body.listaDocentes.length; i++) {
   	var docente = req.body.listaDocentes[i]
@@ -32,6 +30,11 @@ router.post('/docentes', (req, res) => {
   			[docente.legajo, docente.apellido, docente.nombre, docente.usuario, docente.contrasena]);
   
   }
+  res.send("ok");
+});
+
+//carga cursos
+router.get('/cursos', (req, res) => {
   res.send("ok");
 });
 

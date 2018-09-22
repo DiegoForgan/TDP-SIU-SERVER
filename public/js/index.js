@@ -12,6 +12,9 @@ function cargarCursos(termina){
 			url: '../admin/cursos',
 			type: 'GET',
 			success: (data)=>{
+				console.log(data)
+
+
 				termina.cursosCargados = true;
 				if(termina.cursosCargados){
 					$.unblockUI();
