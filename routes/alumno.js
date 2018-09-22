@@ -6,20 +6,6 @@ function obtenerValoresComoArreglo(string_a_separar) {
     return (string_a_separar.trim()).split(";");
 }
 
-//NO SE USA PORQUE FALLA POR ALGUN MOTIVO PERO LA IDEA ESTA!
-function obtenerNombreAPartirDeLegajo(legajo_del_docente) {
-    db.query('SELECT apellido,nombre FROM docentes WHERE legajo = $1', [legajo_del_docente], (error, respuesta) => {
-        if (!error) {
-            if (respuesta.rowCount != 0) {
-                var apellido = respuesta.rows[0].apellido;
-                var nombre = respuesta.rows[0].nombre;
-                //console.log(apellido + "," + nombre);
-                return (apellido + "," + nombre);
-            }
-        }
-    });
-}
-
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
     console.log('Se solicito %s en el endpoint /alumno %s', req.method, req.url);
