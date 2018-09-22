@@ -58,7 +58,7 @@ pool.query("DROP TABLE IF EXISTS cursos;\
 				horario varchar(40) not null);\
 			\
 			insert into cursos values(DEFAULT,'75.46','Taller de desarrollo de proyectos II','12345','PC','201',30,'lunes','17-22');\
-			insert into cursos values(DEFAULT,'75.73','Arquitectura de Software','00000','LAB B',20,'jueves','18-22');\
+			insert into cursos values(DEFAULT,'75.73','Arquitectura de Software','00000','PC','LAB B',20,'jueves','18-22');\
 			\
 			");
 
