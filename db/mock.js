@@ -50,6 +50,7 @@ module.exports = function(pool){
 			\
 			insert into cursos values(DEFAULT,'75.46','Taller de desarrollo de proyectos II','12345','PC','201;LAB F',30,'lunes','17-22');\
 			insert into cursos values(DEFAULT,'75.73','Arquitectura de Software','00000','PC;LH','LAB B',20,'lunes;jueves','18-22;19-21');\
+			insert into cursos values(DEFAULT,'75.04','Algoritmos y Programacion III','12345','PC;PC','400',50,'lunes;miercoles','18-21;19:22');\
 			\
 			");
 }
