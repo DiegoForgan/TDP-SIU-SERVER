@@ -1,9 +1,23 @@
 var router = require('express').Router();
 var db = require('../db');
 
-
+//Funcion que recibe un string separado por ";" (punto y coma) y devuelve un arreglo con cada uno de los parametros.
 function obtenerValoresComoArreglo(string_a_separar) {
     return (string_a_separar.trim()).split(";");
+}
+
+//NO SE USA PORQUE FALLA POR ALGUN MOTIVO PERO LA IDEA ESTA!
+function obtenerNombreAPartirDeLegajo(legajo_del_docente) {
+    db.query('SELECT apellido,nombre FROM docentes WHERE legajo = $1', [legajo_del_docente], (error, respuesta) => {
+        if (!error) {
+            if (respuesta.rowCount != 0) {
+                var apellido = respuesta.rows[0].apellido;
+                var nombre = respuesta.rows[0].nombre;
+                //console.log(apellido + "," + nombre);
+                return (apellido + "," + nombre);
+            }
+        }
+    });
 }
 
 // middleware that is specific to this router
@@ -48,20 +62,17 @@ router.get('/oferta', function (req, res) {
         if (!error) {
             if (respuesta.rowCount != 0) {
                 (respuesta.rows).forEach(curso => {
-                    var aulas = obtenerValoresComoArreglo(curso.aulas)
-                    var sede = obtenerValoresComoArreglo(curso.sede);
-                    var dias = obtenerValoresComoArreglo(curso.dias);
-                    var horarios = obtenerValoresComoArreglo(curso.horarios);
+                    //NO SE PORQUE NO FUNCIONA ESA FUNCION!!!!!!
                     //var nombre_docente = obtenerNombreAPartirDeLegajo(curso.docente_a_cargo);
                     var elemento = {
                         'codigo': curso.codigo,
                         'nombre': curso.nombre,
                         'docente': curso.docente_a_cargo,
-                        'sede': sede,
-                        'aulas': aulas,
+                        'sede': obtenerValoresComoArreglo(curso.sede),
+                        'aulas': obtenerValoresComoArreglo(curso.aulas),
                         'cupos': curso.cupos_disponibles,
-                        'dias': dias,
-                        'horarios': horarios
+                        'dias': obtenerValoresComoArreglo(curso.dias),
+                        'horarios': obtenerValoresComoArreglo(curso.horarios)
                     };
                     JSON_de_salida.oferta.push(elemento);
                 });
