@@ -35,7 +35,9 @@ router.post('/docentes', (req, res) => {
 
 //carga cursos
 router.get('/cursos', (req, res) => {
-  res.send("ok");
+  db.query("SELECT * FROM cursos", null, (err, response)=>{
+    res.send(response.rows);
+  })
 });
 
 module.exports = router;

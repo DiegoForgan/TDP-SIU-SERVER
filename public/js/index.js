@@ -12,8 +12,116 @@ function cargarCursos(termina){
 			url: '../admin/cursos',
 			type: 'GET',
 			success: (data)=>{
-				console.log(data)
+				if (data.length > 0){
+					$("#tablaCursos").empty();
 
+					var table = document.createElement("table");
+					table.className = "table table-striped";
+
+					var thead = document.createElement("thead");
+					table.append(thead);
+
+					var tr = document.createElement("tr");
+					thead.append(tr);
+
+					var thCodigo = document.createElement("th");
+					thCodigo.innerHTML = "Codigo";
+					tr.append(thCodigo);
+
+					var thNombre = document.createElement("th");
+					thNombre.innerHTML = "Nombre";
+					tr.append(thNombre);
+
+					var thDocente = document.createElement("th");
+					thDocente.innerHTML = "Docente";
+					tr.append(thDocente);
+
+					var thSede = document.createElement("th");
+					thSede.innerHTML = "Sede";
+					tr.append(thSede);
+
+					var thAulas = document.createElement("th");
+					thAulas.innerHTML = "Aulas";
+					tr.append(thAulas);
+
+					var thCupos = document.createElement("th");
+					thCupos.innerHTML = "Cupos";
+					tr.append(thCupos);
+
+					var thDias = document.createElement("th");
+					thDias.innerHTML = "Dias";
+					tr.append(thDias);
+
+					var thHorarios = document.createElement("th");
+					thHorarios.innerHTML = "Horarios";
+					tr.append(thHorarios);
+
+					var thAcciones = document.createElement("th");
+					thAcciones.innerHTML = "Acciones";
+					tr.append(thAcciones);
+
+					var tbody = document.createElement("tbody");
+					table.append(tbody);
+
+					for (var i = 0; i < data.length; i++) {
+						var tr = document.createElement("tr");
+						tr.setAttribute("id", data[i].id_curso)
+						tbody.append(tr);
+
+						var tdCodigo = document.createElement("td");
+						tdCodigo.innerHTML = data[i].codigo;
+						tr.append(tdCodigo);
+
+						var tdNombre = document.createElement("td");
+						tdNombre.innerHTML = data[i].nombre;
+						tr.append(tdNombre);
+
+						var tdDocente = document.createElement("td");
+						tdDocente.innerHTML = data[i].docente_a_cargo;
+						tr.append(tdDocente);
+
+						var tdSede = document.createElement("td");
+						tdSede.innerHTML = data[i].sede;
+						tr.append(tdSede);
+
+						var tdAulas = document.createElement("td");
+						tdAulas.innerHTML = data[i].aulas;
+						tr.append(tdAulas);
+
+						var tdCupos = document.createElement("td");
+						tdCupos.innerHTML = data[i].cupos_disponibles;
+						tr.append(tdCupos);
+
+						var tdDias = document.createElement("td");
+						tdDias.innerHTML = data[i].dias;
+						tr.append(tdDias);
+
+						var tdHorarios = document.createElement("td");
+						tdHorarios.innerHTML = data[i].horarios;
+						tr.append(tdHorarios);
+
+						var tdAcciones = document.createElement("td");
+						tr.append(tdAcciones);
+
+						var divEditar = document.createElement("a");
+						divEditar.className = "btn btn-primary btnAccion";
+						var spanEditar = document.createElement("span");
+						spanEditar.className = "glyphicon glyphicon-edit";
+						spanEditar.setAttribute("aria-hidden", "true");
+						tdAcciones.append(divEditar)
+						divEditar.append(spanEditar);
+
+						var divBorrar = document.createElement("a");
+						divBorrar.className = "btn btn-danger btnAccion";
+						var spanBorrar = document.createElement("span");
+						spanBorrar.className = "glyphicon glyphicon-trash";
+						spanBorrar.setAttribute("aria-hidden", "true");
+						tdAcciones.append(divBorrar)
+						divBorrar.append(spanBorrar);
+					}
+
+					$("#tablaCursos").append(table);
+				}
 
 				termina.cursosCargados = true;
 				if(termina.cursosCargados){
