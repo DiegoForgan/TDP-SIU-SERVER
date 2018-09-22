@@ -44,16 +44,16 @@ router.get('/oferta', function (req, res) {
     };
     //TODO: Que filtre por carrera
     //ACA habria que agregar la condicion para que busque por carrera.
-    db.query('SELECT * FROM cursos', [], (error, respuesta) => {
+    db.query("SELECT cursos.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
+             FROM cursos\
+             INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo", [], (error, respuesta) => {
         if (!error) {
             if (respuesta.rowCount != 0) {
                 (respuesta.rows).forEach(curso => {
-                    //NO SE PORQUE NO FUNCIONA ESA FUNCION!!!!!!
-                    //var nombre_docente = obtenerNombreAPartirDeLegajo(curso.docente_a_cargo);
                     var elemento = {
                         'codigo': curso.codigo,
                         'nombre': curso.nombre,
-                        'docente': curso.docente_a_cargo,
+                        'docente': curso.nombre_docente,
                         'sede': obtenerValoresComoArreglo(curso.sede),
                         'aulas': obtenerValoresComoArreglo(curso.aulas),
                         'cupos': curso.cupos_disponibles,
