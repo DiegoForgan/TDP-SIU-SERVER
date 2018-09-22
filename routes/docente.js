@@ -23,6 +23,7 @@ router.get('/cursos/:legajo', (req, res) => {
             if (respuesta.rowCount != 0) {
                 (respuesta.rows).forEach(curso => {
                     var nuevo_curso = {
+                        'id_curso' : curso.id_curso,
                         'codigo' : curso.codigo,
                         'nombre' : curso.nombre,
                         'sede': separar(curso.sede),
