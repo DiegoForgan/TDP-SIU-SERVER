@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var db = require('../db');
-var separar = require('./separarValoresPuntoYComa');
+var separar = require('../auxiliares/separarValoresPuntoYComa');
 
 /*//Funcion que recibe un string separado por ";" (punto y coma) y devuelve un arreglo con cada uno de los parametros.
 function obtenerValoresComoArreglo(string_a_separar) {

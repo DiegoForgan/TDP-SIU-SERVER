@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var db = require('../db');
-var separar = require('./separarValoresPuntoYComa');
+var separar = require('../auxiliares/separarValoresPuntoYComa');
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
