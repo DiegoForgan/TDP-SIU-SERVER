@@ -52,6 +52,7 @@ router.get('/oferta', function (req, res) {
                     var sede = obtenerValoresComoArreglo(curso.sede);
                     var dias = obtenerValoresComoArreglo(curso.dias);
                     var horarios = obtenerValoresComoArreglo(curso.horarios);
+                    //var nombre_docente = obtenerNombreAPartirDeLegajo(curso.docente_a_cargo);
                     var elemento = {
                         'codigo': curso.codigo,
                         'nombre': curso.nombre,
