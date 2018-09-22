@@ -1,10 +1,11 @@
 var router = require('express').Router();
 var db = require('../db');
+var separar = require('../auxiliares/separarValoresPuntoYComa');
 
-//Funcion que recibe un string separado por ";" (punto y coma) y devuelve un arreglo con cada uno de los parametros.
+/*//Funcion que recibe un string separado por ";" (punto y coma) y devuelve un arreglo con cada uno de los parametros.
 function obtenerValoresComoArreglo(string_a_separar) {
     return (string_a_separar.trim()).split(";");
-}
+}*/
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -54,11 +55,11 @@ router.get('/oferta', function (req, res) {
                         'codigo': curso.codigo,
                         'nombre': curso.nombre,
                         'docente': curso.nombre_docente,
-                        'sede': obtenerValoresComoArreglo(curso.sede),
-                        'aulas': obtenerValoresComoArreglo(curso.aulas),
+                        'sede': separar(curso.sede),
+                        'aulas': separar(curso.aulas),
                         'cupos': curso.cupos_disponibles,
-                        'dias': obtenerValoresComoArreglo(curso.dias),
-                        'horarios': obtenerValoresComoArreglo(curso.horarios)
+                        'dias': separar(curso.dias),
+                        'horarios': separar(curso.horarios)
                     };
                     JSON_de_salida.oferta.push(elemento);
                 });
