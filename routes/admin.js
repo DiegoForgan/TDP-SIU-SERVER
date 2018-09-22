@@ -40,4 +40,9 @@ router.get('/cursos', (req, res) => {
   })
 });
 
+router.delete('/cursos/:id', (req, res) => {
+  db.query("DELETE FROM cursos WHERE id_curso = $1", [req.params.id]);
+  res.send("ok");
+});
+
 module.exports = router;

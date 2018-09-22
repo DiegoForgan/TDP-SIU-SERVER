@@ -7,6 +7,17 @@ $(document).ready(()=>{
 	cargarCursos(termina);
 });
 
+function borrarCurso(curso){
+	$.ajax({
+			url: '../admin/cursos/' + curso,
+			type: 'DELETE',
+			success: (data)=>{
+				console.log(data);
+				cargarCursos();
+			}
+		});
+}
+
 function cargarCursos(termina){
 	$.ajax({
 			url: '../admin/cursos',
@@ -113,6 +124,7 @@ function cargarCursos(termina){
 
 						var divBorrar = document.createElement("a");
 						divBorrar.className = "btn btn-danger btnAccion";
+						divBorrar.setAttribute("onclick", "borrarCurso(" + data[i].id_curso + ")");
 						var spanBorrar = document.createElement("span");
 						spanBorrar.className = "glyphicon glyphicon-trash";
 						spanBorrar.setAttribute("aria-hidden", "true");
@@ -121,11 +133,15 @@ function cargarCursos(termina){
 					}
 
 					$("#tablaCursos").append(table);
+				} else{
+					$("#tablaCursos").html("No existen cursos.");
 				}
 
-				termina.cursosCargados = true;
-				if(termina.cursosCargados){
-					$.unblockUI();
+				if(termina){
+					termina.cursosCargados = true;
+					if(termina.cursosCargados){
+						$.unblockUI();
+					}
 				}
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
