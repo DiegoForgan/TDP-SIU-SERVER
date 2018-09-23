@@ -40,7 +40,7 @@ router.get('/prioridad/:padron', function (req, res) {
 //Devuelve la oferta academica POR AHORA sin importar en que carrera estas inscripto.
 router.get('/oferta', function (req, res) {
     console.log("Un alumno consulto la oferta academica");
-    var JSON_de_salida = {
+    var listado_de_cursos = {
         'oferta': []
     };
     //TODO: Que filtre por carrera
@@ -61,9 +61,9 @@ router.get('/oferta', function (req, res) {
                         'dias': separar(curso.dias),
                         'horarios': separar(curso.horarios)
                     };
-                    JSON_de_salida.oferta.push(elemento);
+                    listado_de_cursos.oferta.push(elemento);
                 });
-                res.send(JSON_de_salida);
+                res.send(listado_de_cursos);
             } else {
                 res.send({
                     'oferta': 'undefined'
@@ -71,6 +71,43 @@ router.get('/oferta', function (req, res) {
             }
         }
     });
+});
+
+
+//Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso".
+router.post('/inscribir/:id_curso/:padron', (req, res) => {
+    var padron_del_alumno = req.params.padron;
+    var curso_a_inscribir = req.params.id_curso;
+    db.query('SELECT * FROM cursos WHERE $1 = cursos.id_curso', [curso_a_inscribir], (error, respuesta) => {
+        if (!error) {
+            if (respuesta.rowCount != 0) {
+                var inscriptos = respuesta.rows[0].inscriptos;
+                var capacidad = respuesta.rows[0].cupos_disponibles;
+                var condicionales = respuesta.rows[0].condicionales;
+                var es_regular = true;
+
+                // verifica si se lleno la capacidad del curso.
+                if (inscriptos == capacidad) {
+                    condicionales++;
+                    es_regular = false;
+                } else {
+                    inscriptos++;
+                }
+                //Actualiza la informacion de inscriptos y condicionales para el curso al cual se incribio el alumno.
+                db.query('UPDATE cursos\
+                SET inscriptos = $1, condicionales = $2\
+                WHERE cursos.id_curso = $3', [inscriptos, condicionales, curso_a_inscribir], (err, resp) => {
+                    //Agrega la informacion de inscripcion a la tabla de inscripciones.
+                    db.query("INSERT INTO inscripciones (padron, id_curso, es_regular)\
+                    VALUES ($1, $2, $3)", [padron_del_alumno, curso_a_inscribir, es_regular]);
+                    res.send("INSCRIPCION OK!");
+                });
+            } else {
+                res.send("INSCRIPCION FALLIDA! (No existe el curso al que te queres inscribir)")
+            }
+        }
+    });
+    console.log("Finalizo la operacion de inscripcion!");
 });
   
 module.exports = router;
