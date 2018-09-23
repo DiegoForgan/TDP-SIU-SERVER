@@ -31,8 +31,9 @@ router.get('/cursos/:legajo', (req, res) => {
                         'sede': separar(curso.sede),
                         'aulas': separar(curso.aulas),
                         'cupos_totales': curso.cupos_disponibles,
-                        'inscriptos': curso.inscriptos,
+                        'regulares': curso.inscriptos,
                         'condicionales': curso.condicionales,
+                        'total_inscriptos': (curso.inscriptos + curso.condicionales),
                         'dias': separar(curso.dias),
                         'horarios': separar(curso.horarios)
                     }
