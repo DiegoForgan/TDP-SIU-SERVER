@@ -47,7 +47,8 @@ router.get('/oferta', function (req, res) {
     //ACA habria que agregar la condicion para que busque por carrera.
     db.query("SELECT cursos.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
              FROM cursos\
-             INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo", [], (error, respuesta) => {
+             INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
+             ORDER BY cursos.id_curso ASC", [], (error, respuesta) => {
         if (!error) {
             if (respuesta.rowCount != 0) {
                 (respuesta.rows).forEach(curso => {

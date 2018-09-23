@@ -20,7 +20,7 @@ router.get('/cursos/:legajo', (req, res) => {
     var listado_de_cursos_a_cargo = {
         'cursos': []
     };
-    db.query('SELECT * FROM cursos WHERE $1 = cursos.docente_a_cargo', [legajo_del_docente], (error, respuesta) => {
+    db.query('SELECT * FROM cursos WHERE $1 = cursos.docente_a_cargo ORDER BY id_curso ASC', [legajo_del_docente], (error, respuesta) => {
         if (!error) {
             if (respuesta.rowCount != 0) {
                 (respuesta.rows).forEach(curso => {
