@@ -53,4 +53,13 @@ module.exports = function(pool){
 			insert into cursos values(DEFAULT,'75.04','Algoritmos y Programacion III','12345','PC;PC','400',50,'lunes;miercoles','18-21;19-22');\
 			\
 			");
+	pool.query("DROP TABLE IF EXISTS inscripciones;\
+			\
+			create table inscripciones(\
+				padron varchar(10) not null,\
+				id_curso int not null,\
+				es_regular boolean not null);\
+			"
+			);
+
 }
