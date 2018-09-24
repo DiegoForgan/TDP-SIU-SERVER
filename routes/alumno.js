@@ -1,24 +1,11 @@
 var router = require('express').Router();
 var db = require('../db');
+var separar = require('../auxiliares/separarValoresPuntoYComa');
 
-//Funcion que recibe un string separado por ";" (punto y coma) y devuelve un arreglo con cada uno de los parametros.
+/*//Funcion que recibe un string separado por ";" (punto y coma) y devuelve un arreglo con cada uno de los parametros.
 function obtenerValoresComoArreglo(string_a_separar) {
     return (string_a_separar.trim()).split(";");
-}
-
-//NO SE USA PORQUE FALLA POR ALGUN MOTIVO PERO LA IDEA ESTA!
-function obtenerNombreAPartirDeLegajo(legajo_del_docente) {
-    db.query('SELECT apellido,nombre FROM docentes WHERE legajo = $1', [legajo_del_docente], (error, respuesta) => {
-        if (!error) {
-            if (respuesta.rowCount != 0) {
-                var apellido = respuesta.rows[0].apellido;
-                var nombre = respuesta.rows[0].nombre;
-                //console.log(apellido + "," + nombre);
-                return (apellido + "," + nombre);
-            }
-        }
-    });
-}
+}*/
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -53,30 +40,31 @@ router.get('/prioridad/:padron', function (req, res) {
 //Devuelve la oferta academica POR AHORA sin importar en que carrera estas inscripto.
 router.get('/oferta', function (req, res) {
     console.log("Un alumno consulto la oferta academica");
-    var JSON_de_salida = {
+    var listado_de_cursos = {
         'oferta': []
     };
     //TODO: Que filtre por carrera
     //ACA habria que agregar la condicion para que busque por carrera.
-    db.query('SELECT * FROM cursos', [], (error, respuesta) => {
+    db.query("SELECT cursos.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
+             FROM cursos\
+             INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
+             ORDER BY cursos.id_curso ASC", [], (error, respuesta) => {
         if (!error) {
             if (respuesta.rowCount != 0) {
                 (respuesta.rows).forEach(curso => {
-                    //NO SE PORQUE NO FUNCIONA ESA FUNCION!!!!!!
-                    //var nombre_docente = obtenerNombreAPartirDeLegajo(curso.docente_a_cargo);
                     var elemento = {
                         'codigo': curso.codigo,
                         'nombre': curso.nombre,
-                        'docente': curso.docente_a_cargo,
-                        'sede': obtenerValoresComoArreglo(curso.sede),
-                        'aulas': obtenerValoresComoArreglo(curso.aulas),
+                        'docente': curso.nombre_docente,
+                        'sede': separar(curso.sede),
+                        'aulas': separar(curso.aulas),
                         'cupos': curso.cupos_disponibles,
-                        'dias': obtenerValoresComoArreglo(curso.dias),
-                        'horarios': obtenerValoresComoArreglo(curso.horarios)
+                        'dias': separar(curso.dias),
+                        'horarios': separar(curso.horarios)
                     };
-                    JSON_de_salida.oferta.push(elemento);
+                    listado_de_cursos.oferta.push(elemento);
                 });
-                res.send(JSON_de_salida);
+                res.send(listado_de_cursos);
             } else {
                 res.send({
                     'oferta': 'undefined'
@@ -84,6 +72,43 @@ router.get('/oferta', function (req, res) {
             }
         }
     });
+});
+
+
+//Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso".
+router.post('/inscribir/:id_curso/:padron', (req, res) => {
+    var padron_del_alumno = req.params.padron;
+    var curso_a_inscribir = req.params.id_curso;
+    db.query('SELECT * FROM cursos WHERE $1 = cursos.id_curso', [curso_a_inscribir], (error, respuesta) => {
+        if (!error) {
+            if (respuesta.rowCount != 0) {
+                var inscriptos = respuesta.rows[0].inscriptos;
+                var capacidad = respuesta.rows[0].cupos_disponibles;
+                var condicionales = respuesta.rows[0].condicionales;
+                var es_regular = true;
+
+                // verifica si se lleno la capacidad del curso.
+                if (inscriptos == capacidad) {
+                    condicionales++;
+                    es_regular = false;
+                } else {
+                    inscriptos++;
+                }
+                //Actualiza la informacion de inscriptos y condicionales para el curso al cual se incribio el alumno.
+                db.query('UPDATE cursos\
+                SET inscriptos = $1, condicionales = $2\
+                WHERE cursos.id_curso = $3', [inscriptos, condicionales, curso_a_inscribir], (err, resp) => {
+                    //Agrega la informacion de inscripcion a la tabla de inscripciones.
+                    db.query("INSERT INTO inscripciones (padron, id_curso, es_regular)\
+                    VALUES ($1, $2, $3)", [padron_del_alumno, curso_a_inscribir, es_regular]);
+                    res.send("INSCRIPCION OK!");
+                });
+            } else {
+                res.send("INSCRIPCION FALLIDA! (No existe el curso al que te queres inscribir)")
+            }
+        }
+    });
+    console.log("Finalizo la operacion de inscripcion!");
 });
   
 module.exports = router;
