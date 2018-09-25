@@ -50,8 +50,8 @@ module.exports = function(pool){
 				dias varchar(40) not null,\
 				horarios varchar(40) not null);\
 			\
-			insert into cursos values(DEFAULT,'75.46','Taller de desarrollo de proyectos II','12345','PC','201;LAB F',2,0,0,'lunes','17-22');\
-			insert into cursos values(DEFAULT,'75.73','Arquitectura de Software','00000','PC;LH','LAB B',20,0,0,'lunes;jueves','18-22;19-21');\
+			insert into cursos values(DEFAULT,'75.46','Taller de desarrollo de proyectos II','12345','PC','LAB C',2,0,0,'lunes','17-22');\
+			insert into cursos values(DEFAULT,'75.73','Arquitectura de Software','00000','PC;LH','201;LAB F',20,0,0,'lunes;jueves','18-22;19-21');\
 			insert into cursos values(DEFAULT,'75.04','Algoritmos y Programacion III','12345','PC;PC','400',50,0,0,'lunes;miercoles','18-21;19-22');\
 			\
 			");
@@ -63,5 +63,18 @@ module.exports = function(pool){
 				es_regular boolean not null);\
 			"
 			);
+
+	pool.query("DROP TABLE IF EXISTS aulas;\
+			\
+			create table aulas(\
+				id SERIAL,\
+				aula varchar(200) not null);\
+			\
+			insert into aulas(aula) values('LAB C');\
+			insert into aulas(aula) values('LAB F');\
+			insert into aulas(aula) values('201');\
+			insert into aulas(aula) values('400');\
+			\
+			");
 
 }
