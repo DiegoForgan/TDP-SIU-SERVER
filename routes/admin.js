@@ -43,16 +43,16 @@ router.get('/cursos', (req, res) => {
 
 router.post('/cursos/', (req, res) => {
     console.log(req.body)
-    db.query('INSERT INTO cursos(dias, aulas, sede)\
-                VALUES($1, $2, $3)', [req.body.dias, req.body.aulas, req.body.sedes]);
+    db.query('INSERT INTO cursos(dias, aulas, sede, docente_a_cargo)\
+                VALUES($1, $2, $3, $4)', [req.body.dias, req.body.aulas, req.body.sedes, req.body.docente]);
     res.send("ok");
 });
 
 router.put('/cursos/:id', (req, res) => {
     console.log(req.body)
     db.query('UPDATE cursos\
-                SET dias = $2, aulas = $3, sede = $4\
-                WHERE id_curso = $1', [req.params.id, req.body.dias, req.body.aulas, req.body.sedes]);
+                SET dias = $2, aulas = $3, sede = $4, docente_a_cargo = $5\
+                WHERE id_curso = $1', [req.params.id, req.body.dias, req.body.aulas, req.body.sedes, req.body.docente]);
     res.send("ok");
 });
 

@@ -366,7 +366,8 @@ function guardarCurso(){
 			data: {
 				dias: strDias,
 				aulas: strAulas,
-				sedes: strSedes
+				sedes: strSedes,
+				docente: $("#modalSelectDocentes").val() 
 			},
 			success: (data)=>{
 				$.unblockUI();
@@ -413,7 +414,8 @@ function agregarCurso(){
 			data: {
 				dias: strDias,
 				aulas: strAulas,
-				sedes: strSedes
+				sedes: strSedes,
+				docente: $("#modalSelectDocentes").val() 
 			},
 			success: (data)=>{
 				$.unblockUI();
@@ -460,6 +462,9 @@ $('#modalCurso').on('show.bs.modal', function (event) {
   		var docente = tr.find("td[data-info='docente']").attr("data-legajo");
   		$("#modalSelectDocentes").val(docente).trigger("change");
 
+  		var cupos = tr.find("td[data-info='cupos']")[0].innerHTML;
+  		$("#modalInputCupos").val(cupos).trigger("change");
+
   		var dias = tr.find("td[data-info='dias']")[0].innerHTML.trim().split(";");
   		$("#modalSelectDias").val(dias).trigger("change");
 
@@ -476,6 +481,12 @@ $('#modalCurso').on('show.bs.modal', function (event) {
   		modal.find('.modal-title').text('Agregar Curso');
 
   		$("#btnModal").attr("onclick", "agregarCurso()");
+
+  		$("#modalSelectDocentes").val('').trigger("change");
+
+  		$("#modalInputCupos").val(0).trigger("change");
+
+  		$("#modalSelectDias").val('').trigger("change");
   	}
 })
 
