@@ -16,6 +16,7 @@ const pool = new Pool({
 // carga la base de datos con mocks
 cargarBase(pool);
 
+//carga las funciones para consultarle a la base de datos
 cargarStoreProcedures(pool);
 
 
