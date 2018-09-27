@@ -30,7 +30,6 @@ app.get('/', function (req, res) {
 
 //params: ?usuario={nombre_de_usuario}&contrasena={contraseña}
 app.get('/login',(req,res)=>{
-  var datos_del_usuario = [];
   if (!req.query.usuario || !req.query.contrasena){
     res.send("Login mal realizado! Faltan datos!");
   }
