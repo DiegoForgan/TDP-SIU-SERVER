@@ -49,5 +49,11 @@ router.get('/cursos/:legajo', (req, res) => {
     });
 });
 
+router.get('/test',(req,res)=>{
+    db.query('SELECT * FROM VerTodosLosCursos()',[],(err,resp)=>{
+        res.send(resp);
+    });
+});
+
 
 module.exports = router;
