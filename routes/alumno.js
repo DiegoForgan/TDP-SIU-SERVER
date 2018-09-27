@@ -51,14 +51,14 @@ router.get('/oferta/:padron', function (req, res) {
     }else{
         filtro = '%%';
     }
-    
+    console.log(filtro)
     // envio materias
     if (!req.query.id_materia) {
         db.query("SELECT m.*\
                     FROM materias m\
                     INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
                     INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
-                    WHERE a.padron = $1 AND (m.codigo like $2 or m.nombre like $2)\
+                    WHERE a.padron = $1 AND (m.codigo ilike $2 or m.nombre ilike $2)\
                     ORDER BY m.nombre",
                 [padron, filtro],
                 (error, respuesta) => {
@@ -72,24 +72,22 @@ router.get('/oferta/:padron', function (req, res) {
                                 };
                                 listado.push(elemento);
                             });
+                            console.log(listado);
                             res.send(listado);
                         }
                     }
                 })
     }else{
-        db.query("SELECT cursos.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
-                 FROM cursos\
-                 INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
-                 INNER JOIN materias_carrera mc ON mc.id_materia = $1\
-                 INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
-                 WHERE nombre_docente like $2\
-                 ORDER BY cursos.id_curso ASC", [req.query.id_materia, filtro], (error, respuesta) => {
+        db.query("SELECT c.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
+                 FROM cursos c\
+                 INNER JOIN docentes ON docentes.legajo = c.docente_a_cargo\
+                 WHERE docentes.apellido || ',' || docentes.nombre ilike $2 and c.id_materia = $1\
+                 ORDER BY c.id_curso ASC", [req.query.id_materia, filtro], (error, respuesta) => {
             if (!error) {
                 if (respuesta.rowCount != 0) {
                     (respuesta.rows).forEach(curso => {
                         var elemento = {
-                            'codigo': curso.codigo,
-                            'nombre': curso.nombre,
+                            'id': curso.id_curso,
                             'docente': curso.nombre_docente,
                             'sede': separar(curso.sede),
                             'aulas': separar(curso.aulas),
@@ -99,6 +97,7 @@ router.get('/oferta/:padron', function (req, res) {
                         };
                         listado.push(elemento);
                     });
+                    console.log(listado);
                     res.send(listado);
                 } else {
                     res.send({
