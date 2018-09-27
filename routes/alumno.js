@@ -2,11 +2,6 @@ var router = require('express').Router();
 var db = require('../db');
 var separar = require('../auxiliares/separarValoresPuntoYComa');
 
-/*//Funcion que recibe un string separado por ";" (punto y coma) y devuelve un arreglo con cada uno de los parametros.
-function obtenerValoresComoArreglo(string_a_separar) {
-    return (string_a_separar.trim()).split(";");
-}*/
-
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
     console.log('Se solicito %s en el endpoint /alumno %s', req.method, req.url);
