@@ -43,14 +43,14 @@ app.get('/login',(req,res)=>{
             else{
               if (resp_docentes.rowCount == 0) res.send({'tipo':'inexistente'});
               else{
-                (resp_docentes.rows[0]).tipo = 'docente';
+                (resp_docentes.rows[0]).tipo = 2;
                 res.send(resp_docentes.rows[0]);
               }
             }
           });
         }
         else {
-          (resp_alumnos.rows[0]).tipo = 'alumno';
+          (resp_alumnos.rows[0]).tipo = 1;
           res.send(resp_alumnos.rows[0]);
         }
       }
