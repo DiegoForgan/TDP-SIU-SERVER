@@ -1,4 +1,6 @@
 module.exports = function(pool){
+
+    //Esta query devuelve todos los cursos existentes en la base de datos
     pool.query("DROP FUNCTION IF EXISTS verTodosLosCursos();\
     \
     CREATE OR REPLACE FUNCTION verTodosLosCursos ()\
@@ -12,6 +14,7 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Esta query devuelve el listado de todas las materias que hay en la base de datos
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeMaterias();\
     \
     CREATE OR REPLACE FUNCTION obtenerListadoDeMaterias ()\
@@ -25,6 +28,7 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Esta consulta toma el identificador de la materia y me devuelve todos los cursos que hay actualmente para esa materia.
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeCursosPorMateria(id_consultada int);\
     \
     CREATE OR REPLACE FUNCTION  obtenerListadoDeCursosPorMateria (id_consultada int)\
@@ -41,6 +45,7 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Esta funcion devuelve el listado de alumnos de un determinado curso
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeAlumnosPorCurso(id_curso_consultado int);\
     \
     CREATE OR REPLACE FUNCTION  obtenerListadoDeAlumnosPorCurso (id_curso_consultado int)\
@@ -57,6 +62,7 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Esta funcion devuelve la prioridad del alumno a partir de su padron
     pool.query("DROP FUNCTION IF EXISTS obtenerPrioridadDelAlumno(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerPrioridadDelAlumno (padron_consultado text)\
@@ -71,6 +77,8 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'"
     );
+
+    //Esta consulta devuelve los cursos donde se inscribio el alumno
     pool.query("DROP FUNCTION IF EXISTS obtenerCursosDondeMeInscribi(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerCursosDondeMeInscribi (padron_consultado text)\
