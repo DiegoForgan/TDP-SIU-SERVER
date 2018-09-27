@@ -28,6 +28,37 @@ app.get('/', function (req, res) {
   res.send('Hello World!');
 });
 
+//params: ?usuario={nombre_de_usuario}&contrasena={contraseña}
+app.get('/login',(req,res)=>{
+  var datos_del_usuario = [];
+  if (!req.query.usuario || !req.query.contrasena){
+    res.send("Login mal realizado! Faltan datos!");
+  }
+  else {
+    db.query('SELECT * FROM obtenerAlumnoConCredenciales($1,$2)',[req.query.usuario, req.query.contrasena],(error,resp_alumnos)=>{
+      if (error) res.send ('Hubo un error!');
+      else {
+        if (resp_alumnos.rowCount == 0) {
+          db.query('SELECT * FROM obtenerDocenteConCredenciales($1,$2)',[req.query.usuario, req.query.contrasena],(err,resp_docentes)=>{
+            if (err) res.send ('Hubo un error!');
+            else{
+              if (resp_docentes.rowCount == 0) res.send({'tipo':'inexistente'});
+              else{
+                (resp_docentes.rows[0]).tipo = 'docente';
+                res.send(resp_docentes.rows[0]);
+              }
+            }
+          });
+        }
+        else {
+          (resp_alumnos.rows[0]).tipo = 'alumno';
+          res.send(resp_alumnos.rows[0]);
+        }
+      }
+    });
+  }
+});
+
 app.listen(PORT, function () {
   console.log('Servido escuchando en el puerto: ' + PORT);
 });
