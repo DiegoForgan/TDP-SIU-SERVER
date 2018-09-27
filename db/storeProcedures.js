@@ -1,19 +1,4 @@
 module.exports = function(pool){
-
-    //Esta query devuelve todos los cursos existentes en la base de datos
-    pool.query("DROP FUNCTION IF EXISTS verTodosLosCursos();\
-    \
-    CREATE OR REPLACE FUNCTION verTodosLosCursos ()\
-    RETURNS TABLE(id_materia int, codigo varchar(6), nombre varchar(40))\
-    AS $$\
-    BEGIN\
-    RETURN QUERY\
-        SELECT cursos.id_materia, cursos.codigo, cursos.nombre FROM cursos;\
-    END; $$\
-    \
-    LANGUAGE 'plpgsql'"
-    );
-
     //Esta query devuelve los cursos existentes a cargo del docente en la base de datos
     pool.query("DROP FUNCTION IF EXISTS verCursosAMiCargo(legajo_del_docente varchar(10));\
     \
@@ -22,10 +7,11 @@ module.exports = function(pool){
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.id_curso, cursos.codigo, cursos.nombre, cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales\
+        SELECT cursos.id_curso, materias.codigo, materias.nombre, cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales\
         FROM cursos\
+        INNER JOIN materias ON cursos.id_materia = materias.id\
         WHERE legajo_del_docente = cursos.docente_a_cargo\
-        ORDER BY cursos.codigo ASC;\
+        ORDER BY materias.codigo ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
@@ -35,11 +21,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeMaterias();\
     \
     CREATE OR REPLACE FUNCTION obtenerListadoDeMaterias ()\
-    RETURNS TABLE(id_materia int, codigo varchar(6), nombre varchar(40))\
+    RETURNS TABLE(id_materia int, codigo varchar(6), nombre varchar(40), creditos int)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT materias.id, materias.codigo, materias.nombre FROM materias;\
+        SELECT materias.id, materias.codigo, materias.nombre, materias.creditos FROM materias;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
@@ -105,12 +91,13 @@ module.exports = function(pool){
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.codigo,cursos.nombre, docentes.apellido || ',' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
+        SELECT materias.codigo,materias.nombre, docentes.apellido || ',' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
         FROM inscripciones\
         INNER JOIN cursos ON cursos.id_curso = inscripciones.id_curso\
+        INNER JOIN materias ON materias.id = cursos.id_materia\
         INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
         WHERE padron_consultado = inscripciones.padron\
-        ORDER BY cursos.codigo ASC;\
+        ORDER BY materias.codigo ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"

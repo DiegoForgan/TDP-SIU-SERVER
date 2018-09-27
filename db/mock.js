@@ -55,8 +55,6 @@ module.exports = function(pool){
 			create table cursos(\
 				id_curso SERIAL PRIMARY KEY,\
 				id_materia int,\
-				codigo varchar(6) ,\
-				nombre varchar(40) ,\
 				docente_a_cargo varchar(10) not null,\
 				sede varchar not null,\
 				aulas varchar not null,\
@@ -66,10 +64,10 @@ module.exports = function(pool){
 				dias varchar not null,\
 				horarios varchar not null);\
 			\
-			insert into cursos values(DEFAULT, 1, '75.46','Taller de desarrollo de proyectos II','12345','PC','LAB C',2,0,0,'lunes','17:00-22:00');\
-			insert into cursos values(DEFAULT, 2, '75.73','Arquitectura de Software','00000','PC;LH','201;LAB F',20,0,0,'lunes;jueves','18:00-22:00;19:00-21:00');\
-			insert into cursos values(DEFAULT, 3,'75.04','Algoritmos y Programacion III','12345','PC;PC','400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
-			insert into cursos values(DEFAULT, 2,'75.73','Arquitectura de Software','12345','PC;PC','400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
+			insert into cursos values(DEFAULT, 1, '12345','PC','LAB C',2,0,0,'lunes','17:00-22:00');\
+			insert into cursos values(DEFAULT, 2, '00000','PC;LH','201;LAB F',20,0,0,'lunes;jueves','18:00-22:00;19:00-21:00');\
+			insert into cursos values(DEFAULT, 3, '12345','PC;PC','400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
+			insert into cursos values(DEFAULT, 2, '12345','PC;PC','400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
 			\
 			");
 	pool.query("DROP TABLE IF EXISTS inscripciones;\
@@ -99,11 +97,12 @@ module.exports = function(pool){
 			create table materias(\
 				id serial,\
 				codigo varchar(6) not null,\
-				nombre varchar(40) not null);\
+				nombre varchar(40) not null,\
+				creditos int not null);\
 			\
-			insert into materias(codigo, nombre) values('75.46', 'Taller de desarrollo de proyectos II');\
-			insert into materias(codigo, nombre) values('75.73', 'Arquitectura de Software');\
-			insert into materias(codigo, nombre) values('75.04', 'Algoritmos y Programacion III');\
+			insert into materias(codigo, nombre, creditos) values('75.46', 'Taller de desarrollo de proyectos II',6);\
+			insert into materias(codigo, nombre, creditos) values('75.73', 'Arquitectura de Software',4);\
+			insert into materias(codigo, nombre, creditos) values('75.04', 'Algoritmos y Programacion III',6);\
 			\
 			");
 }
