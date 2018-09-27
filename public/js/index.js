@@ -253,7 +253,8 @@ function clickEstudiantes() {
 					nombre: splittedLine[2].trim(),
 					usuario: splittedLine[3].trim(),
 					contrasena: splittedLine[4].trim(),
-					prioridad: splittedLine[5].trim()
+					prioridad: splittedLine[5].trim(),
+					carrera: splittedLine[6].trim()
 				}
 				listaAlumnos.push(data);
 			}

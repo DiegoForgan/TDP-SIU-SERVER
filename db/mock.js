@@ -7,10 +7,25 @@ module.exports = function(pool){
 				nombre varchar(200) not null,\
 				usuario varchar(50) not null,\
 				contrasena varchar(20) not null,\
-				prioridad int not null);\
+				prioridad int not null,\
+				carrera int not null);\
 			\
-			insert into alumnos values('96803', 'luques', 'agustin','agusluques', 'contrasecreta', 1);\
-			insert into alumnos values('10101', 'riquelme', 'juan roman','romi', 'capo', 10);\
+			insert into alumnos values('96803', 'luques', 'agustin','agusluques', 'contrasecreta', 1, 10);\
+			insert into alumnos values('10101', 'riquelme', 'juan roman','romi', 'capo', 10, 10);\
+			insert into alumnos values('12345678', 'Martins', 'Diego','12345678', 'gil', 99, 10);\
+			insert into alumnos values('38324264', 'Etcheverri', 'Franco','38324264', 'gil', 1, 10);\
+            ");
+
+	pool.query("DROP TABLE IF EXISTS materias_carrera;\
+			\
+			create table materias_carrera(\
+				id_carrera int not null,\
+				id_materia int not null);\
+			\
+			insert into materias_carrera values(10, 1);\
+			insert into materias_carrera values(10, 2);\
+			insert into materias_carrera values(10, 3);\
+			insert into materias_carrera values(9, 3);\
 			\
             ");
 
