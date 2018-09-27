@@ -43,14 +43,13 @@ router.get('/oferta/:padron', function (req, res) {
     }else{
         filtro = '%%';
     }
-    console.log(filtro)
     // envio materias
     if (!req.query.id_materia) {
         db.query("SELECT m.*\
                     FROM materias m\
                     INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
                     INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
-                    WHERE a.padron = $1 AND (m.codigo ilike $2 or m.nombre ilike $2)\
+                    WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $2)\
                     ORDER BY m.nombre",
                 [padron, filtro],
                 (error, respuesta) => {
@@ -64,7 +63,6 @@ router.get('/oferta/:padron', function (req, res) {
                                 };
                                 listado.push(elemento);
                             });
-                            console.log(listado);
                             res.send(listado);
                         }else{
                             res.send([{}]);
@@ -91,7 +89,6 @@ router.get('/oferta/:padron', function (req, res) {
                         };
                         listado.push(elemento);
                     });
-                    console.log(listado);
                     res.send(listado);
                 } else {
                     res.send([{}]);
