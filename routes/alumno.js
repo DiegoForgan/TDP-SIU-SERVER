@@ -74,6 +74,8 @@ router.get('/oferta/:padron', function (req, res) {
                             });
                             console.log(listado);
                             res.send(listado);
+                        }else{
+                            res.send({});
                         }
                     }
                 })
@@ -100,9 +102,7 @@ router.get('/oferta/:padron', function (req, res) {
                     console.log(listado);
                     res.send(listado);
                 } else {
-                    res.send({
-                        'oferta': 'undefined'
-                    });
+                    res.send({});
                 }
             }
         });
