@@ -14,6 +14,23 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Esta query devuelve los cursos existentes a cargo del docente en la base de datos
+    pool.query("DROP FUNCTION IF EXISTS verCursosAMiCargo(legajo_del_docente varchar(10));\
+    \
+    CREATE OR REPLACE FUNCTION verCursosAMiCargo(legajo_del_docente varchar(10))\
+    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes int, regulares int, condicionales int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.id_curso, cursos.codigo, cursos.nombre, cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales\
+        FROM cursos\
+        WHERE legajo_del_docente = cursos.docente_a_cargo\
+        ORDER BY cursos.codigo ASC;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
     //Esta query devuelve el listado de todas las materias que hay en la base de datos
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeMaterias();\
     \
@@ -56,7 +73,8 @@ module.exports = function(pool){
         SELECT alumnos.padron, alumnos.apellido || ',' || alumnos.nombre AS apellido_y_nombre, alumnos.prioridad, inscripciones.es_regular\
         FROM alumnos\
         INNER JOIN inscripciones ON alumnos.padron = inscripciones.padron\
-        WHERE id_curso_consultado = inscripciones.id_curso;\
+        WHERE id_curso_consultado = inscripciones.id_curso\
+        ORDER BY apellido_y_nombre ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"

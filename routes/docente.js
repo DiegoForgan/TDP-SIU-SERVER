@@ -15,43 +15,24 @@ router.get('/', function (req, res) {
 });
 
 router.get('/cursos/:legajo', (req, res) => {
-    console.log('Un docente esta consultado sus cursos');
-    var legajo_del_docente = req.params.legajo;
-    var listado_de_cursos_a_cargo = {
-        'cursos': []
-    };
-    db.query('SELECT * FROM cursos WHERE $1 = cursos.docente_a_cargo ORDER BY id_curso ASC', [legajo_del_docente], (error, respuesta) => {
-        if (!error) {
-            if (respuesta.rowCount != 0) {
-                (respuesta.rows).forEach(curso => {
-                    var nuevo_curso = {
-                        'id_curso': curso.id_curso,
-                        'codigo': curso.codigo,
-                        'nombre': curso.nombre,
-                        'sede': separar(curso.sede),
-                        'aulas': separar(curso.aulas),
-                        'cupos_totales': curso.cupos_disponibles,
-                        'regulares': curso.inscriptos,
-                        'condicionales': curso.condicionales,
-                        'total_inscriptos': (curso.inscriptos + curso.condicionales),
-                        'dias': separar(curso.dias),
-                        'horarios': separar(curso.horarios)
-                    }
-                    listado_de_cursos_a_cargo.cursos.push(nuevo_curso);
-                });
-                res.send(listado_de_cursos_a_cargo);
-            } else {
-                res.send({
-                    'cursos': 'undefined'
-                });
-            }
+    db.query('SELECT * FROM verCursosAMiCargo($1)',[req.params.legajo],(err,resp_cursos)=>{
+        if (err) res.send('HUBO UN ERROR!');
+        else if (resp_cursos.rowCount != 0){
+            res.send({'cursos': resp_cursos.rows});
+        }
+        else{
+            res.send({
+                'cursos': 'undefined'
+            });
         }
     });
 });
 
-router.get('/test',(req,res)=>{
-    db.query('SELECT * FROM VerTodosLosCursos()',[],(err,resp)=>{
-        res.send(resp);
+router.get('/inscriptos/:id_curso',(req,res)=>{
+    db.query('SELECT * FROM obtenerListadoDeAlumnosPorCurso($1)',[req.params.id_curso],(err,resp_cursos)=>{
+        if (err) res.send('HUBO UN ERROR!');
+        else if (resp_cursos.rowCount != 0) res.send({'inscriptos': resp_cursos.rows});
+        else res.send({'inscriptos':[]});
     });
 });
 
