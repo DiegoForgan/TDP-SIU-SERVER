@@ -38,40 +38,77 @@ router.get('/prioridad/:padron', function (req, res) {
 });
 
 //Devuelve la oferta academica POR AHORA sin importar en que carrera estas inscripto.
-router.get('/oferta', function (req, res) {
+//params: ?id_materia={id_materia}&filtro={filtro}
+router.get('/oferta/:padron', function (req, res) {
     console.log("Un alumno consulto la oferta academica");
-    var listado_de_cursos = {
-        'oferta': []
-    };
-    //TODO: Que filtre por carrera
-    //ACA habria que agregar la condicion para que busque por carrera.
-    db.query("SELECT cursos.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
-             FROM cursos\
-             INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
-             ORDER BY cursos.id_curso ASC", [], (error, respuesta) => {
-        if (!error) {
-            if (respuesta.rowCount != 0) {
-                (respuesta.rows).forEach(curso => {
-                    var elemento = {
-                        'codigo': curso.codigo,
-                        'nombre': curso.nombre,
-                        'docente': curso.nombre_docente,
-                        'sede': separar(curso.sede),
-                        'aulas': separar(curso.aulas),
-                        'cupos': curso.cupos_disponibles,
-                        'dias': separar(curso.dias),
-                        'horarios': separar(curso.horarios)
-                    };
-                    listado_de_cursos.oferta.push(elemento);
-                });
-                res.send(listado_de_cursos);
-            } else {
-                res.send({
-                    'oferta': 'undefined'
-                });
+    var listado = [];
+
+    var padron = req.params.padron;
+
+    var filtro;
+    if (req.query.filtro){
+        filtro = '%' + req.query.filtro + '%';
+    }else{
+        filtro = '%%';
+    }
+    
+    // envio materias
+    if (!req.query.id_materia) {
+        db.query("SELECT m.*\
+                    FROM materias m\
+                    INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
+                    INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
+                    WHERE a.padron = $1 AND (m.codigo like $2 or m.nombre like $2)\
+                    ORDER BY m.nombre",
+                [padron, filtro],
+                (error, respuesta) => {
+                    if (!error) {
+                        if (respuesta.rowCount != 0) {
+                            (respuesta.rows).forEach(materia => {
+                                var elemento = {
+                                    'id': materia.id,
+                                    'codigo': materia.codigo,
+                                    'nombre': materia.nombre,
+                                };
+                                listado.push(elemento);
+                            });
+                            res.send(listado);
+                        }
+                    }
+                })
+    }else{
+        db.query("SELECT cursos.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
+                 FROM cursos\
+                 INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
+                 INNER JOIN materias_carrera mc ON mc.id_materia = $1\
+                 INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
+                 WHERE nombre_docente like $2\
+                 ORDER BY cursos.id_curso ASC", [req.query.id_materia, filtro], (error, respuesta) => {
+            if (!error) {
+                if (respuesta.rowCount != 0) {
+                    (respuesta.rows).forEach(curso => {
+                        var elemento = {
+                            'codigo': curso.codigo,
+                            'nombre': curso.nombre,
+                            'docente': curso.nombre_docente,
+                            'sede': separar(curso.sede),
+                            'aulas': separar(curso.aulas),
+                            'cupos': curso.cupos_disponibles,
+                            'dias': separar(curso.dias),
+                            'horarios': separar(curso.horarios)
+                        };
+                        listado.push(elemento);
+                    });
+                    res.send(listado);
+                } else {
+                    res.send({
+                        'oferta': 'undefined'
+                    });
+                }
             }
-        }
-    });
+        });
+    }
+
 });
 
 
