@@ -17,14 +17,8 @@ router.get('/', function (req, res) {
 router.get('/cursos/:legajo', (req, res) => {
     db.query('SELECT * FROM verCursosAMiCargo($1)',[req.params.legajo],(err,resp_cursos)=>{
         if (err) res.send('HUBO UN ERROR!');
-        else if (resp_cursos.rowCount != 0){
-            res.send({'cursos': resp_cursos.rows});
-        }
-        else{
-            res.send({
-                'cursos': 'undefined'
-            });
-        }
+        else if (resp_cursos.rowCount != 0) res.send({'cursos': resp_cursos.rows});
+        else res.send({'cursos': []});
     });
 });
 

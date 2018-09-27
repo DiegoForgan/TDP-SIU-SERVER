@@ -63,6 +63,7 @@ module.exports = function(pool){
     );
 
     //Esta funcion devuelve el listado de alumnos de un determinado curso
+    //TODO: Que ordene a los regulares primero
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeAlumnosPorCurso(id_curso_consultado int);\
     \
     CREATE OR REPLACE FUNCTION  obtenerListadoDeAlumnosPorCurso (id_curso_consultado int)\
@@ -100,14 +101,16 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerCursosDondeMeInscribi(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerCursosDondeMeInscribi (padron_consultado text)\
-    RETURNS TABLE(codigo varchar(6), nombre varchar(40), docente varchar, sede varchar, aulas varchar, dias varchar, horarios varchar)\
+    RETURNS TABLE(codigo varchar(6), nombre varchar(40), docente text, sede varchar, aulas varchar, dias varchar, horarios varchar)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.codigo,cursos.nombre, cursos.docente_a_cargo , cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
+        SELECT cursos.codigo,cursos.nombre, docentes.apellido || ',' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
         FROM inscripciones\
         INNER JOIN cursos ON cursos.id_curso = inscripciones.id_curso\
-        WHERE padron_consultado = inscripciones.padron;\
+        INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
+        WHERE padron_consultado = inscripciones.padron\
+        ORDER BY cursos.codigo ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"

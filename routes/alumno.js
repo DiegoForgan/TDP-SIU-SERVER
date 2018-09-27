@@ -22,18 +22,10 @@ router.get('/', function (req, res) {
 // Si el padron del alumno existe en la base de datos, devuelve un JSON con el campo prioridad y su valor
 // Si el padron NO EXISTE en la base de datos, devuelve un JSON con el campo prioridad y valor "undefined"
 router.get('/prioridad/:padron', function (req, res) {
-    var padron_del_alumno = req.params.padron;
-    console.log('Estas buscando la prioridad del alumno cuyo padron es: ' + padron_del_alumno);
-    db.query('SELECT prioridad FROM alumnos WHERE padron = $1', [padron_del_alumno], (error, respuesta) => {
-        if (!error) {
-            if (respuesta.rowCount != 0) {
-                res.send(respuesta.rows[0]);
-            } else {
-                res.send({
-                    "prioridad": "undefined"
-                });
-            }
-        }
+    db.query('SELECT * FROM obtenerPrioridadDelAlumno($1)',[req.params.padron],(err,resp_padron)=>{
+        if (err) res.send('HUBO UN ERROR!');
+        else if (resp_padron.rowCount != 0) res.send(resp_padron.rows[0]);
+        else res.send({'prioridad':[]});
     });
 });
 
@@ -110,8 +102,27 @@ router.get('/oferta/:padron', function (req, res) {
 
 });
 
+//Recibe los cursos disponibles para una determinada materia.
+router.get('/cursos/:id_materia',(req,res)=>{
+    db.query('SELECT * FROM obtenerListadoDeCursosPorMateria($1)',[req.params.id_materia],(err,resp_cursos)=>{
+        if (err) res.send('HUBO UN ERROR!');
+        else if (resp_cursos.rowCount != 0) res.send({'cursos': resp_cursos.rows});
+        else res.send({'cursos':[]});
+    });
+});
+
+//Devuelve los cursos a los cuales se inscribio el alumno
+router.get('/inscripciones/:padron',(req,res)=>{
+    db.query('SELECT * FROM obtenerCursosDondeMeInscribi($1)',[req.params.padron],(err,resp_cursos)=>{
+        if (err) res.send('HUBO UN ERROR!');
+        else if (resp_cursos.rowCount != 0) res.send({'cursos':resp_cursos.rows});
+        else res.send({'cursos':[]});
+    });
+});
+
 
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso".
+//params: ?curso={id_curso}&padron={padron_alumno}
 router.post('/inscribir/:id_curso/:padron', (req, res) => {
     var padron_del_alumno = req.params.padron;
     var curso_a_inscribir = req.params.id_curso;
