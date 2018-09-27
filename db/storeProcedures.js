@@ -1,0 +1,150 @@
+module.exports = function(pool){
+
+    //Esta query devuelve todos los cursos existentes en la base de datos
+    pool.query("DROP FUNCTION IF EXISTS verTodosLosCursos();\
+    \
+    CREATE OR REPLACE FUNCTION verTodosLosCursos ()\
+    RETURNS TABLE(id_materia int, codigo varchar(6), nombre varchar(40))\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.id_materia, cursos.codigo, cursos.nombre FROM cursos;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Esta query devuelve los cursos existentes a cargo del docente en la base de datos
+    pool.query("DROP FUNCTION IF EXISTS verCursosAMiCargo(legajo_del_docente varchar(10));\
+    \
+    CREATE OR REPLACE FUNCTION verCursosAMiCargo(legajo_del_docente varchar(10))\
+    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes int, regulares int, condicionales int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.id_curso, cursos.codigo, cursos.nombre, cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales\
+        FROM cursos\
+        WHERE legajo_del_docente = cursos.docente_a_cargo\
+        ORDER BY cursos.codigo ASC;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Esta query devuelve el listado de todas las materias que hay en la base de datos
+    pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeMaterias();\
+    \
+    CREATE OR REPLACE FUNCTION obtenerListadoDeMaterias ()\
+    RETURNS TABLE(id_materia int, codigo varchar(6), nombre varchar(40))\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT materias.id, materias.codigo, materias.nombre FROM materias;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Esta consulta toma el identificador de la materia y me devuelve todos los cursos que hay actualmente para esa materia.
+    pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeCursosPorMateria(id_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerListadoDeCursosPorMateria (id_consultada int)\
+    RETURNS TABLE(id_curso int,docente text,  sede varchar, aulas varchar, vacantes integer, dias varchar, horarios varchar)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.id_curso, docentes.apellido || ',' || docentes.nombre AS nombre_docente , cursos.sede, cursos.aulas,cursos.cupos_disponibles, cursos.dias, cursos.horarios\
+        FROM cursos\
+        INNER JOIN docentes ON cursos.docente_a_cargo = docentes.legajo\
+        WHERE id_consultada = cursos.id_materia;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Esta funcion devuelve el listado de alumnos de un determinado curso
+    //TODO: Que ordene a los regulares primero
+    pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeAlumnosPorCurso(id_curso_consultado int);\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerListadoDeAlumnosPorCurso (id_curso_consultado int)\
+    RETURNS TABLE(padron varchar(10), apellido_y_nombre text,  prioridad int, es_regular boolean)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT alumnos.padron, alumnos.apellido || ',' || alumnos.nombre AS apellido_y_nombre, alumnos.prioridad, inscripciones.es_regular\
+        FROM alumnos\
+        INNER JOIN inscripciones ON alumnos.padron = inscripciones.padron\
+        WHERE id_curso_consultado = inscripciones.id_curso\
+        ORDER BY apellido_y_nombre ASC;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Esta funcion devuelve la prioridad del alumno a partir de su padron
+    pool.query("DROP FUNCTION IF EXISTS obtenerPrioridadDelAlumno(padron_consultado text);\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerPrioridadDelAlumno (padron_consultado text)\
+    RETURNS TABLE(prioridad int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT alumnos.prioridad\
+        FROM alumnos\
+        WHERE padron_consultado = alumnos.padron;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Esta consulta devuelve los cursos donde se inscribio el alumno
+    pool.query("DROP FUNCTION IF EXISTS obtenerCursosDondeMeInscribi(padron_consultado text);\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerCursosDondeMeInscribi (padron_consultado text)\
+    RETURNS TABLE(codigo varchar(6), nombre varchar(40), docente text, sede varchar, aulas varchar, dias varchar, horarios varchar)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.codigo,cursos.nombre, docentes.apellido || ',' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
+        FROM inscripciones\
+        INNER JOIN cursos ON cursos.id_curso = inscripciones.id_curso\
+        INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
+        WHERE padron_consultado = inscripciones.padron\
+        ORDER BY cursos.codigo ASC;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    pool.query("DROP FUNCTION IF EXISTS obtenerAlumnoConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerAlumnoConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
+    RETURNS TABLE(padron varchar(10), apellido varchar(200), nombre varchar(200), prioridad int, carrera int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT alumnos.padron,alumnos.apellido, alumnos.nombre , alumnos.prioridad , alumnos.carrera\
+        FROM alumnos\
+        WHERE usuario_consultado = alumnos.usuario AND contrasena_consultada = alumnos.contrasena;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    pool.query("DROP FUNCTION IF EXISTS obtenerDocenteConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerDocenteConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
+    RETURNS TABLE(legajo varchar(10), apellido varchar(200), nombre varchar(200))\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT docentes.legajo,docentes.apellido, docentes.nombre\
+        FROM docentes\
+        WHERE usuario_consultado = docentes.usuario AND contrasena_consultada = docentes.contrasena;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+}
+
+

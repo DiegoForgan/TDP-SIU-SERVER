@@ -1,5 +1,7 @@
 const { Pool } = require('pg');
-var cargarBase = require('./mock')
+var cargarBase = require('./mock');
+
+var cargarStoreProcedures = require('./storeProcedures');
 
 //Inicializa la configuracion de la coneccion con la variable de ambiente de la base de datos, sino usa la local. 
 const string_de_coneccion = process.env.DATABASE_URL || 'postgresql://postgres:12345@localhost:5432/test';
@@ -13,6 +15,9 @@ const pool = new Pool({
 
 // carga la base de datos con mocks
 cargarBase(pool);
+
+//carga las funciones para consultarle a la base de datos
+cargarStoreProcedures(pool);
 
 
 module.exports = {
