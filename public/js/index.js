@@ -61,7 +61,16 @@ function cargarInfo(termina){
 					}
 					if(data[1]){
 						initialData.listadoAulas = data[1].rows;
-					} 
+					}
+					if (data[2]){
+						initialData.listadoMaterias = data[2].rows;
+						for (var i = 0; i < data[2].rows.length; i++) {
+							var materia = data[2].rows[i];
+							var option = new Option(materia.codigo + " - " + materia.nombre, materia.id, false, false);
+							$("#modalSelectMaterias").append(option);
+						}
+						$("#modalSelectMaterias").trigger('change');
+					}
 				}
 
 				if(termina){
@@ -137,6 +146,7 @@ function cargarCursos(termina){
 
 						var tdCodigo = document.createElement("td");
 						tdCodigo.setAttribute("data-info", "codigo");
+						tdCodigo.setAttribute("data-id", data[i].id_materia);
 						tdCodigo.innerHTML = data[i].codigo;
 						tr.append(tdCodigo);
 
@@ -346,17 +356,20 @@ function cerrarModal(){
 
 function guardarCurso(){
 	var docente = $("#modalSelectDocentes").val();
+	var cupos = $("#modalInputCupos").val();
 	var dias = $("#modalSelectDias").val();
 	var strDias = "", strAulas = "", strSedes = "", strHorarios = "";
 	for (var i = 0; i < dias.length; i++) {
 		strAulas = strAulas + $("#modalSelectAulas" + dias[i]).val() + ";";
 		strSedes = strSedes + $("#modalSelectSedes" + dias[i]).val() + ";";
+		strHorarios = strHorarios + $("#modalInputHoraInicial" + dias[i]).val() + "-" + $("#modalInputHoraFinal" + dias[i]).val() + ";";
 		strDias = strDias + dias[i] + ";";
 	}
 
 	strAulas = strAulas.slice(0, -1);
 	strSedes = strSedes.slice(0, -1);
 	strDias = strDias.slice(0, -1);
+	strHorarios = strHorarios.slice(0, -1);
 
 	var idCurso = $("#modalInputId").val();
 	$.blockUI({message:"Guardando.."})
@@ -367,6 +380,9 @@ function guardarCurso(){
 				dias: strDias,
 				aulas: strAulas,
 				sedes: strSedes,
+				cupos: cupos,
+				horarios: strHorarios,
+				materia: $("#modalSelectMaterias").val(),
 				docente: $("#modalSelectDocentes").val() 
 			},
 			success: (data)=>{
@@ -394,17 +410,20 @@ function guardarCurso(){
 
 function agregarCurso(){
 	var docente = $("#modalSelectDocentes").val();
+	var cupos = $("#modalInputCupos").val();
 	var dias = $("#modalSelectDias").val();
 	var strDias = "", strAulas = "", strSedes = "", strHorarios = "";
 	for (var i = 0; i < dias.length; i++) {
 		strAulas = strAulas + $("#modalSelectAulas" + dias[i]).val() + ";";
 		strSedes = strSedes + $("#modalSelectSedes" + dias[i]).val() + ";";
+		strHorarios = strHorarios + $("#modalInputHoraInicial" + dias[i]).val() + "-" + $("#modalInputHoraFinal" + dias[i]).val() + ";";
 		strDias = strDias + dias[i] + ";";
 	}
 
 	strAulas = strAulas.slice(0, -1);
 	strSedes = strSedes.slice(0, -1);
 	strDias = strDias.slice(0, -1);
+	strHorarios = strHorarios.slice(0, -1);
 
 	var idCurso = $("#modalInputId").val();
 	$.blockUI({message:"Guardando.."})
@@ -415,6 +434,9 @@ function agregarCurso(){
 				dias: strDias,
 				aulas: strAulas,
 				sedes: strSedes,
+				cupos: cupos,
+				horarios: strHorarios,
+				materia: $("#modalSelectMaterias").val(),
 				docente: $("#modalSelectDocentes").val() 
 			},
 			success: (data)=>{
@@ -459,6 +481,9 @@ $('#modalCurso').on('show.bs.modal', function (event) {
 
   		$("#modalInputId").val(button.data('id'));
 
+  		var materia = tr.find("td[data-info='codigo']").attr("data-id");
+  		$("#modalSelectMaterias").val(materia).trigger("change");
+
   		var docente = tr.find("td[data-info='docente']").attr("data-legajo");
   		$("#modalSelectDocentes").val(docente).trigger("change");
 
@@ -477,10 +502,21 @@ $('#modalCurso').on('show.bs.modal', function (event) {
   		for (var i = 0; i < dias.length; i++) {
   			$("#modalSelectAulas" + dias[i]).val(aulas[i]).trigger("change");
   		}
+
+  		var horas = tr.find("td[data-info='horarios']")[0].innerHTML.trim().split(";");
+  		for (var i = 0; i < dias.length; i++) {
+  			var horaInicial, horaFinal;
+  			[horaInicial, horaFinal] = horas[i].trim().split("-");
+  			$("#modalInputHoraInicial" + dias[i]).val(horaInicial).trigger("change");
+  			$("#modalInputHoraFinal" + dias[i]).val(horaFinal).trigger("change");
+  		}
+
   	} else{
   		modal.find('.modal-title').text('Agregar Curso');
 
   		$("#btnModal").attr("onclick", "agregarCurso()");
+
+  		$("#modalSelectMaterias").val('').trigger("change");
 
   		$("#modalSelectDocentes").val('').trigger("change");
 
@@ -516,9 +552,13 @@ $("#modalSelectDias").on('change', (event) => {
 						</div>\
 						\
 						<div class='row'>\
-							<div class='col-lg-12'>\
-							    <label>Horarios:</label>\
-							    <input type='text' id='modalSelectHorarios" + dias[i].id + "' style='width: 100%'>\
+							<div class='col-lg-6'>\
+							    <label>Hora Inicial:</label>\
+							    <input type='time' id='modalInputHoraInicial" + dias[i].id + "' style='width: 100%'>\
+							</div>\
+							<div class='col-lg-6'>\
+							    <label>Hora Final:</label>\
+							    <input type='time' id='modalInputHoraFinal" + dias[i].id + "' style='width: 100%'>\
 							</div>\
 						</div>\
 						<div class='row'>\
