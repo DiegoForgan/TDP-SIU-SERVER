@@ -118,6 +118,17 @@ router.get('/inscripciones/:padron',(req,res)=>{
 
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso".
 //params: ?curso={id_curso}&padron={padron_alumno}
+//Devuelve el estado de la inscripcion con un detalle
+//ESTADOS POSIBLES:
+/*
+    -1 : IMPLICA UN ERROR EN LA BASE DE DATOS!
+     1 : EL ALUMNO FUE INSCRIPTO EN EL CURSO QUE QUERIA DE FORMA REGULAR!
+     2 : EL ALUMNO NO FUE INSCRIPTO YA QUE HAY MAS CURSOS PARA LA MATERIA DESEADA 
+        (SE DEVUELVEN LOS CURSOS DISPONIBLES EN EL ITEM "cursos_disponibles")
+     3 : EL ALUMNO FUE INSCRIPTO EN EL CURSO DESEADO PERO DE FORMA CONDICIONAL
+         YA QUE O NO HAY OTRO CURSO DISPONIBLE PARA ESA MATERIA (CATEDRA UNICA)
+         O TODOS LOS CURSOS PARA ESA MATERIA ESTAN LLENOS!
+*/
 router.post('/inscribir', (req, res) => {
     if (!req.query.curso || !req.query.padron) res.send({'estado':-1, 'detalles':'Faltan Datos para inscribir'});
     else{
