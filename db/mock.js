@@ -65,8 +65,9 @@ module.exports = function(pool){
 				horarios varchar not null);\
 			\
 			insert into cursos values(DEFAULT, 1, '12345','PC','LAB C',2,0,0,'lunes','17:00-22:00');\
+			insert into cursos values(DEFAULT, 1, '12345','PC','LAB C',5,0,0,'lunes','17:00-22:00');\
 			insert into cursos values(DEFAULT, 2, '00000','PC;LH','201;LAB F',20,0,0,'lunes;jueves','18:00-22:00;19:00-21:00');\
-			insert into cursos values(DEFAULT, 3, '12345','PC;PC','400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
+			insert into cursos values(DEFAULT, 3, '12345','PC;PC','400',3,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
 			insert into cursos values(DEFAULT, 2, '12345','PC;PC','400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
 			\
 			");

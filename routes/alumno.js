@@ -80,7 +80,7 @@ router.get('/oferta/:padron', function (req, res) {
                             'docente': curso.nombre_docente,
                             'sede': separar(curso.sede),
                             'aulas': separar(curso.aulas),
-                            'cupos': curso.cupos_disponibles,
+                            'vacantes': curso.cupos_disponibles,
                             'dias': separar(curso.dias),
                             'horarios': separar(curso.horarios)
                         };
@@ -118,39 +118,76 @@ router.get('/inscripciones/:padron',(req,res)=>{
 
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso".
 //params: ?curso={id_curso}&padron={padron_alumno}
-router.post('/inscribir/:id_curso/:padron', (req, res) => {
-    var padron_del_alumno = req.params.padron;
-    var curso_a_inscribir = req.params.id_curso;
-    db.query('SELECT * FROM cursos WHERE $1 = cursos.id_curso', [curso_a_inscribir], (error, respuesta) => {
-        if (!error) {
-            if (respuesta.rowCount != 0) {
-                var inscriptos = respuesta.rows[0].inscriptos;
-                var capacidad = respuesta.rows[0].cupos_disponibles;
-                var condicionales = respuesta.rows[0].condicionales;
-                var es_regular = true;
-
-                // verifica si se lleno la capacidad del curso.
-                if (inscriptos == capacidad) {
-                    condicionales++;
-                    es_regular = false;
-                } else {
-                    inscriptos++;
+//Devuelve el estado de la inscripcion con un detalle
+//ESTADOS POSIBLES:
+/*
+    -1 : IMPLICA UN ERROR EN LA BASE DE DATOS!
+     1 : EL ALUMNO FUE INSCRIPTO EN EL CURSO QUE QUERIA DE FORMA REGULAR!
+     2 : EL ALUMNO NO FUE INSCRIPTO YA QUE HAY MAS CURSOS PARA LA MATERIA DESEADA 
+        (SE DEVUELVEN LOS CURSOS DISPONIBLES EN EL ITEM "cursos_disponibles")
+     3 : EL ALUMNO FUE INSCRIPTO EN EL CURSO DESEADO PERO DE FORMA CONDICIONAL
+         YA QUE O NO HAY OTRO CURSO DISPONIBLE PARA ESA MATERIA (CATEDRA UNICA)
+         O TODOS LOS CURSOS PARA ESA MATERIA ESTAN LLENOS!
+*/
+router.post('/inscribir', (req, res) => {
+    if (!req.query.curso || !req.query.padron) res.send({'estado':-1, 'detalles':'Faltan Datos para inscribir'});
+    else{
+        db.query('SELECT * FROM obtenerDatosDeInscripcionDelCurso($1)',[req.query.curso],(error,resp_curso)=>{
+            if (error) res.send({'estado':-1, 'detalles':'error en la query del curso de la base'});
+            else if (resp_curso.rowCount == 0) res.send({'estado':-1, 'detalles':'el curso no existe!'});
+            else {
+                //Chequeo las vacantes del curso donde se quiere inscribir el alumno
+                var vacantes_disponibles = resp_curso.rows[0].vacantes;
+                var regularesActuales = resp_curso.rows[0].regulares;
+                var condicionales = resp_curso.rows[0].condicionales;
+                var id_materia = resp_curso.rows[0].materia;
+                if (vacantes_disponibles != 0){
+                    //hay lugar para regulares todavia en este curso
+                    regularesActuales++;
+                    vacantes_disponibles--;
+                    db.query('UPDATE cursos\
+                    SET inscriptos = $1, cupos_disponibles = $2\
+                    WHERE cursos.id_curso = $3',[regularesActuales,vacantes_disponibles,req.query.curso],(error,resp)=>{
+                        if (error) res.send({'estado':-1, 'detalles':'error en la query de actualizar el curso en la base'})
+                        db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[req.query.padron,req.query.curso,true]);
+                        res.send({'estado':1, 'detalles':'el alumno fue inscripto con exito!'});
+                    });
                 }
-                //Actualiza la informacion de inscriptos y condicionales para el curso al cual se incribio el alumno.
-                db.query('UPDATE cursos\
-                SET inscriptos = $1, condicionales = $2\
-                WHERE cursos.id_curso = $3', [inscriptos, condicionales, curso_a_inscribir], (err, resp) => {
-                    //Agrega la informacion de inscripcion a la tabla de inscripciones.
-                    db.query("INSERT INTO inscripciones (padron, id_curso, es_regular)\
-                    VALUES ($1, $2, $3)", [padron_del_alumno, curso_a_inscribir, es_regular]);
-                    res.send("INSCRIPCION OK!");
-                });
-            } else {
-                res.send("INSCRIPCION FALLIDA! (No existe el curso al que te queres inscribir)")
+                else{
+                    //Debo chequear si los otros cursos de la materia todavia tienen vacantes!
+                    db.query('SELECT * FROM getOtrosCursosDeLaMismaMateria($1,$2)',[req.query.curso,id_materia],(error,resp_cursos)=>{
+                        if (error) res.send({'estado':-1, 'detalles':'error en la query del curso de la base'});
+                        else if (resp_cursos.rowCount != 0){
+                            var todos_llenos = true;
+                            var cursos_a_llenar = [];
+                            (resp_cursos.rows).forEach(curso => {
+                                if (curso.vacantes != 0) {
+                                    todos_llenos = false;
+                                    cursos_a_llenar.push(curso);
+                                }
+                            });
+                            if(!todos_llenos){
+                                //Todavia hay lugar en otros cursos para la misma materia, se devuelven los cursos que aun no estan llenos
+                                res.send({'estado':2, 'detalles':'todavia hay cursos por llenar de la misma materia', 'cursos_disponibles':cursos_a_llenar});
+                            }
+                            else inscribirComoCondicional(condicionales,req.query.curso,req.query.padron,req,res);
+                        }else inscribirComoCondicional(condicionales,req.query.curso,req.query.padron,req,res);
+                    });
+                }
             }
-        }
-    });
-    console.log("Finalizo la operacion de inscripcion!");
+        });
+    }
 });
   
 module.exports = router;
+
+function inscribirComoCondicional(condicionales,id_curso,padron_alumno,req,res) {
+    condicionales++;
+    db.query('UPDATE cursos\
+      SET condicionales = $1\
+      WHERE cursos.id_curso = $2',[condicionales,id_curso],(error,resp)=>{
+      if (error) res.send({'estado':-1, 'detalles':'error en la query de actualizar el curso en la base'})
+        db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[padron_alumno,id_curso,false]);
+        res.send({'estado':3, 'detalles':'el alumno fue inscripto como condicional!'});
+    });
+}

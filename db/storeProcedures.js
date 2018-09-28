@@ -3,11 +3,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS verCursosAMiCargo(legajo_del_docente varchar(10));\
     \
     CREATE OR REPLACE FUNCTION verCursosAMiCargo(legajo_del_docente varchar(10))\
-    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes int, regulares int, condicionales int)\
+    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes int, regulares int, condicionales int, alumnos_totales int)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.id_curso, materias.codigo, materias.nombre, cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales\
+        SELECT cursos.id_curso, materias.codigo, materias.nombre, cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales, cursos.inscriptos + cursos.condicionales\
         FROM cursos\
         INNER JOIN materias ON cursos.id_materia = materias.id\
         WHERE legajo_del_docente = cursos.docente_a_cargo\
@@ -103,6 +103,7 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Dado un usuario y contraseña de un alumno, devuelve sus datos.
     pool.query("DROP FUNCTION IF EXISTS obtenerAlumnoConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
     \
     CREATE OR REPLACE FUNCTION  obtenerAlumnoConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
@@ -118,6 +119,7 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Dado un usuario y contraseña de un docente, devuelve sus datos.
     pool.query("DROP FUNCTION IF EXISTS obtenerDocenteConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
     \
     CREATE OR REPLACE FUNCTION  obtenerDocenteConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
@@ -128,6 +130,40 @@ module.exports = function(pool){
         SELECT docentes.legajo,docentes.apellido, docentes.nombre\
         FROM docentes\
         WHERE usuario_consultado = docentes.usuario AND contrasena_consultada = docentes.contrasena;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Devuelve datos relevantes para saber si el alumno se puede inscribir al curso tales como: vacantes, inscriptos_regulares, inscriptos_condicionales y la materia.
+    pool.query("DROP FUNCTION IF EXISTS obtenerDatosDeInscripcionDelCurso(id_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerDatosDeInscripcionDelCurso(id_consultada int)\
+    RETURNS TABLE(vacantes int, regulares int, condicionales int, materia int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales, cursos.id_materia\
+        FROM cursos\
+        WHERE cursos.id_curso = id_consultada;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+
+    // Devuelve el resto de los cursos (si hay mas de uno) de la materia deseada
+    pool.query("DROP FUNCTION IF EXISTS getOtrosCursosDeLaMismaMateria(id_curso_consultado int,id_materia_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  getOtrosCursosDeLaMismaMateria(id_curso_consultado int,id_materia_consultada int)\
+    RETURNS TABLE(id int, docente text ,sede varchar, aulas varchar, vacantes int,dias varchar,horarios varchar)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.id_curso, docentes.apellido || ',' || docentes.nombre, cursos.sede, cursos.aulas, cursos.cupos_disponibles, cursos.dias, cursos.horarios\
+        FROM cursos\
+        INNER JOIN docentes ON cursos.docente_a_cargo = docentes.legajo\
+        WHERE cursos.id_curso != id_curso_consultado AND cursos.id_materia = id_materia_consultada;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
