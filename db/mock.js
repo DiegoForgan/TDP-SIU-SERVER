@@ -40,6 +40,7 @@ module.exports = function(pool){
 			\
 			insert into docentes values('12345', 'fontela', 'carlos','calitos10', 'tdplove');\
 			insert into docentes values('00000', 'calonico', 'cristian','calo', 'pass123');\
+			insert into docentes values('cond', 'unused', 'unused','unused', 'unused');\
 			\
 			");
 

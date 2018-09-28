@@ -125,9 +125,7 @@ router.get('/inscripciones/:padron',(req,res)=>{
      1 : EL ALUMNO FUE INSCRIPTO EN EL CURSO QUE QUERIA DE FORMA REGULAR!
      2 : EL ALUMNO NO FUE INSCRIPTO YA QUE HAY MAS CURSOS PARA LA MATERIA DESEADA 
         (SE DEVUELVEN LOS CURSOS DISPONIBLES EN EL ITEM "cursos_disponibles")
-     3 : EL ALUMNO FUE INSCRIPTO EN EL CURSO DESEADO PERO DE FORMA CONDICIONAL
-         YA QUE O NO HAY OTRO CURSO DISPONIBLE PARA ESA MATERIA (CATEDRA UNICA)
-         O TODOS LOS CURSOS PARA ESA MATERIA ESTAN LLENOS!
+     3 : SE CREA UN CURSO CONDICIONAL YA QUE NO HAY MAS VACANTES DISPONIBLES EN NINGUN CURSO
 */
 router.post('/inscribir', (req, res) => {
     if (!req.query.curso || !req.query.padron) res.send({'estado':-1, 'detalles':'Faltan Datos para inscribir'});
@@ -170,8 +168,8 @@ router.post('/inscribir', (req, res) => {
                                 //Todavia hay lugar en otros cursos para la misma materia, se devuelven los cursos que aun no estan llenos
                                 res.send({'estado':2, 'detalles':'todavia hay cursos por llenar de la misma materia', 'cursos_disponibles':cursos_a_llenar});
                             }
-                            else inscribirComoCondicional(condicionales,req.query.curso,req.query.padron,req,res);
-                        }else inscribirComoCondicional(condicionales,req.query.curso,req.query.padron,req,res);
+                            else crearCursoCondicional(condicionales,id_materia,req.query.padron,req,res);
+                        }else crearCursoCondicional(condicionales,id_materia,req.query.padron,req,res);
                     });
                 }
             }
@@ -181,13 +179,10 @@ router.post('/inscribir', (req, res) => {
   
 module.exports = router;
 
-function inscribirComoCondicional(condicionales,id_curso,padron_alumno,req,res) {
+function crearCursoCondicional(condicionales,id_materia,padron_alumno,req,res) {
     condicionales++;
-    db.query('UPDATE cursos\
-      SET condicionales = $1\
-      WHERE cursos.id_curso = $2',[condicionales,id_curso],(error,resp)=>{
-      if (error) res.send({'estado':-1, 'detalles':'error en la query de actualizar el curso en la base'})
-        db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[padron_alumno,id_curso,false]);
-        res.send({'estado':3, 'detalles':'el alumno fue inscripto como condicional!'});
+    db.query("INSERT INTO cursos VALUES (DEFAULT,$1, 'cond','.','.',10000,0,0,'.;.','.-.')",[id_materia],(error,resp)=>{
+        if(error) res.send('HUBO UN ERROR CON LA BASE');
+        else res.send({'estado':3, 'detalles':'se creo curso condicional'});
     });
 }
