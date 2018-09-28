@@ -29,6 +29,10 @@ app.get('/', function (req, res) {
 });
 
 //params: ?usuario={nombre_de_usuario}&contrasena={contraseña}
+//Devuelve tipos:
+//  0 : Usuario inexistente
+//  1 : ALUMNO
+//  2 : DOCENTE
 app.get('/login',(req,res)=>{
   if (!req.query.usuario || !req.query.contrasena){
     res.send("Login mal realizado! Faltan datos!");
@@ -41,7 +45,7 @@ app.get('/login',(req,res)=>{
           db.query('SELECT * FROM obtenerDocenteConCredenciales($1,$2)',[req.query.usuario, req.query.contrasena],(err,resp_docentes)=>{
             if (err) res.send ('Hubo un error!');
             else{
-              if (resp_docentes.rowCount == 0) res.send({'tipo':'inexistente'});
+              if (resp_docentes.rowCount == 0) res.send({'tipo':0});
               else{
                 (resp_docentes.rows[0]).tipo = 2;
                 res.send(resp_docentes.rows[0]);
