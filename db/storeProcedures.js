@@ -132,6 +132,21 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'"
     );
+
+    pool.query("DROP FUNCTION IF EXISTS obtenerDatosDeInscripcionDelCurso(id_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerDatosDeInscripcionDelCurso(id_consultada int)\
+    RETURNS TABLE(vacantes int, regulares int, condicionales int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales\
+        FROM cursos\
+        WHERE cursos.id_curso = id_consultada;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
 }
 
 

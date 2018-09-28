@@ -118,8 +118,38 @@ router.get('/inscripciones/:padron',(req,res)=>{
 
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso".
 //params: ?curso={id_curso}&padron={padron_alumno}
-router.post('/inscribir/:id_curso/:padron', (req, res) => {
-    var padron_del_alumno = req.params.padron;
+router.post('/inscribir', (req, res) => {
+    if (!req.query.curso || !req.query.padron) res.send({'estado':-1, 'detalles':'Faltan Datos para inscribir'});
+    else{
+        db.query('SELECT * FROM obtenerDatosDeInscripcionDelCurso($1)',[req.query.curso],(error,resp_curso)=>{
+            if (error) res.send({'estado':-1, 'detalles':'error en la query del curso de la base'});
+            else if (resp_curso.rowCount == 0) res.send({'estado':-1, 'detalles':'el curso no existe!'});
+            else {
+                //Chequeo las vacantes del curso donde se quiere inscribir el alumno
+                var vacantes_disponibles = resp_curso.rows[0].vacantes;
+                var regularesActuales = resp_curso.rows[0].regulares;
+                if (vacantes_disponibles != 0){
+                    //hay lugar para regulares todavia en este curso
+                    regularesActuales++;
+                    vacantes_disponibles--;
+                    db.query('UPDATE cursos\
+                    SET inscriptos = $1, cupos_disponibles = $2\
+                    WHERE cursos.id_curso = $3',[regularesActuales,vacantes_disponibles,req.query.curso],(error,resp)=>{
+                        if (error) res.send({'estado':-1, 'detalles':'error en la query de actualizar el curso en la base'})
+                        db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[req.query.padron,req.query.curso,true]);
+                        res.send({'estado':1, 'detalles':'el alumno fue inscripto con exito!'});
+                    });
+
+                }
+                else{
+                    //Debo chequear si los otros cursos de la materia todavia tienen vacantes!
+                }
+            }
+        });
+    }
+    
+    
+    /*var padron_del_alumno = req.params.padron;
     var curso_a_inscribir = req.params.id_curso;
     db.query('SELECT * FROM cursos WHERE $1 = cursos.id_curso', [curso_a_inscribir], (error, respuesta) => {
         if (!error) {
@@ -151,6 +181,7 @@ router.post('/inscribir/:id_curso/:padron', (req, res) => {
         }
     });
     console.log("Finalizo la operacion de inscripcion!");
+    */
 });
   
 module.exports = router;
