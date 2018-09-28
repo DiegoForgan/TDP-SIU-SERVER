@@ -12,8 +12,8 @@ module.exports = function(pool){
 			\
 			insert into alumnos values('96803', 'luques', 'agustin','agusluques', 'contrasecreta', 1, 10);\
 			insert into alumnos values('10101', 'riquelme', 'juan roman','romi', 'capo', 10, 10);\
-			insert into alumnos values('12345678', 'Martins', 'Diego','12345678', 'gil', 99, 10);\
-			insert into alumnos values('38324264', 'Etcheverri', 'Franco','38324264', 'gil', 1, 10);\
+			insert into alumnos values('12345', 'Martins', 'Diego','12345678', 'gil', 99, 10);\
+			insert into alumnos values('95812', 'Etcheverri', 'Franco','38324264', 'gil', 1, 10);\
             ");
 
 	pool.query("DROP TABLE IF EXISTS materias_carrera;\
