@@ -537,7 +537,7 @@ $("#modalSelectDias").on('change', (event) => {
 	for (var i = 0; i < dias.length; i++) {
 		if(!$("#rowDia" + dias[i].id).length){
 			$("#rowDia").append("\
-				<div class='row' id='rowDia" + dias[i].id + "'>\
+				<div class='row well' id='rowDia" + dias[i].id + "'>\
 					<div class='col-lg-1'></div>\
 					<div class='col-lg-10'>\
 						<h4 align='center'>Dia " + dias[i].text + "</h4>\
