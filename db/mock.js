@@ -8,12 +8,53 @@ module.exports = function(pool){
 				usuario varchar(50) not null,\
 				contrasena varchar(20) not null,\
 				prioridad int not null,\
-				carrera int not null);\
+				carrera int not null,\
+				f_update timestamp not null);\
 			\
-			insert into alumnos values('96803', 'luques', 'agustin','agusluques', 'contrasecreta', 1, 10);\
-			insert into alumnos values('10101', 'riquelme', 'juan roman','romi', 'capo', 10, 10);\
-			insert into alumnos values('12345', 'Martins', 'Diego','12345678', 'gil', 99, 10);\
-			insert into alumnos values('95812', 'Etcheverri', 'Franco','38324264', 'gil', 1, 10);\
+			do $$\
+				declare dia_hoy timestamp := now();\
+			begin\
+			\
+				insert into alumnos values('96803', 'luques', 'agustin','agusluques', 'contrasecreta', 1, 10, dia_hoy);\
+				insert into alumnos values('10101', 'riquelme', 'juan roman','romi', 'capo', 10, 10, dia_hoy);\
+				insert into alumnos values('12345', 'Martins', 'Diego','12345678', 'gil', 99, 10, dia_hoy);\
+				insert into alumnos values('95812', 'Etcheverri', 'Franco','38324264', 'gil', 1, 10, dia_hoy);\
+            end;\
+            $$;\
+            ");
+
+	pool.query("DROP TABLE IF EXISTS periodos;\
+			\
+			create table periodos(\
+				id serial,\
+				descripcion varchar not null,\
+				activo boolean not null,\
+				fecha_cierre timestamp not null);\
+			\
+			insert into periodos values(DEFAULT, '1C-2018', FALSE, '2018-03-22 23:59:59');\
+			insert into periodos values(DEFAULT, '2C-2018', TRUE, '2018-08-15 23:59:59');\
+            ");
+
+	pool.query("DROP TABLE IF EXISTS prioridad_periodo;\
+			\
+			create table prioridad_periodo(\
+				prioridad int not null,\
+				id_periodo int not null,\
+				fecha_inicio timestamp not null);\
+			\
+			insert into prioridad_periodo values(1, 1, '2018-03-01 10:00:00');\
+			insert into prioridad_periodo values(1, 2, '2018-08-01 10:00:00');\
+			insert into prioridad_periodo values(2, 2, '2018-08-01 14:00:00');\
+			insert into prioridad_periodo values(3, 2, '2018-08-01 18:00:00');\
+			insert into prioridad_periodo values(4, 2, '2018-08-02 10:00:00');\
+            insert into prioridad_periodo values(5, 2, '2018-08-02 14:00:00');\
+			insert into prioridad_periodo values(6, 2, '2018-08-02 18:00:00');\
+			insert into prioridad_periodo values(7, 2, '2018-08-03 10:00:00');\
+			insert into prioridad_periodo values(8, 2, '2018-08-03 14:00:00');\
+            insert into prioridad_periodo values(9, 2, '2018-08-03 18:00:00');\
+			insert into prioridad_periodo values(10, 2, '2018-08-04 11:00:00');\
+			insert into prioridad_periodo values(11, 2, '2018-08-04 15:00:00');\
+			insert into prioridad_periodo values(12, 2, '2018-08-04 19:00:00');\
             ");
 
 	pool.query("DROP TABLE IF EXISTS materias_carrera;\
@@ -63,13 +104,14 @@ module.exports = function(pool){
 				inscriptos int not null,\
 				condicionales int not null,\
 				dias varchar not null,\
-				horarios varchar not null);\
+				horarios varchar not null,\
+				id_periodo int not null);\
 			\
-			insert into cursos values(DEFAULT, 1, '12345','PC','LAB C',2,0,0,'lunes','17:00-22:00');\
-			insert into cursos values(DEFAULT, 1, '12345','PC','LAB C',5,0,0,'lunes','17:00-22:00');\
-			insert into cursos values(DEFAULT, 2, '00000','PC;LH','201;LAB F',20,0,0,'lunes;jueves','18:00-22:00;19:00-21:00');\
-			insert into cursos values(DEFAULT, 3, '12345','PC;PC','400;400',3,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
-			insert into cursos values(DEFAULT, 2, '12345','PC;PC','400;400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00');\
+			insert into cursos values(DEFAULT, 1, '12345','PC','LAB C',2,0,0,'lunes','17:00-22:00', 2);\
+			insert into cursos values(DEFAULT, 1, '12345','PC','LAB C',5,0,0,'lunes','17:00-22:00', 2);\
+			insert into cursos values(DEFAULT, 2, '00000','PC;LH','201;LAB F',20,0,0,'lunes;jueves','18:00-22:00;19:00-21:00', 2);\
+			insert into cursos values(DEFAULT, 3, '12345','PC;PC','400;400',3,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00', 2);\
+			insert into cursos values(DEFAULT, 2, '12345','PC;PC','400;400',50,0,0,'lunes;miercoles','18:00-21:00;19:00-22:00', 2);\
 			\
 			");
 	pool.query("DROP TABLE IF EXISTS inscripciones;\

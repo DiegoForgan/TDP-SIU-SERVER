@@ -18,9 +18,19 @@ router.get('/', function (req, res) {
 // Si el padron NO EXISTE en la base de datos, devuelve un JSON con el campo prioridad y valor "undefined"
 router.get('/prioridad/:padron', function (req, res) {
     db.query('SELECT * FROM obtenerPrioridadDelAlumno($1)',[req.params.padron],(err,resp_padron)=>{
-        if (err) res.send('HUBO UN ERROR!');
-        else if (resp_padron.rowCount != 0) res.send(resp_padron.rows[0]);
-        else res.send({'prioridad':[]});
+        if (err) res.send(err);
+        else if (resp_padron.rowCount != 0){
+            var obj = [{
+                'prioridad': resp_padron.rows[0].prioridad,
+                'fecha_actualizacion': new Date(resp_padron.rows[0].f_update),
+                'fecha_inicio': new Date(resp_padron.rows[0].fecha_inicio),
+                'descripcion_periodo': resp_padron.rows[0].descripcion_periodo,
+                'fecha_cierre': new Date(resp_padron.rows[0].fecha_cierre)
+            }];
+            console.log(obj)
+            res.send(obj);  
+        } 
+        else res.send([{}]);
     });
 });
 
@@ -32,11 +42,15 @@ router.get('/oferta/:padron', function (req, res) {
 
     var padron = req.params.padron;
 
-    var filtro;
+    var filtro, filtro2, filtro3;
     if (req.query.filtro){
         filtro = '%' + req.query.filtro + '%';
+        filtro2 = req.query.filtro + '%';
+        filtro3 = '% ' + req.query.filtro + '%';
     }else{
         filtro = '%%';
+        filtro2 = '%%';
+        filtro3 = '%%';
     }
     // envio materias
     if (!req.query.id_materia) {
@@ -44,9 +58,9 @@ router.get('/oferta/:padron', function (req, res) {
                     FROM materias m\
                     INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
                     INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
-                    WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $2)\
+                    WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $3 or m.nombre ilike $4)\
                     ORDER BY m.nombre",
-                [padron, filtro],
+                [padron, filtro, filtro2, filtro3],
                 (error, respuesta) => {
                     if (!error) {
                         if (respuesta.rowCount != 0) {
@@ -65,10 +79,11 @@ router.get('/oferta/:padron', function (req, res) {
                     }
                 })
     }else{
-        db.query("SELECT c.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente\
+        db.query("SELECT c.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo\
                  FROM cursos c\
                  INNER JOIN docentes ON docentes.legajo = c.docente_a_cargo\
-                 WHERE docentes.apellido || ',' || docentes.nombre ilike $2 and c.id_materia = $1\
+                 INNER JOIN periodos p ON p.id = c.id_periodo\
+                 WHERE docentes.apellido || ',' || docentes.nombre ilike $2 and c.id_materia = $1 and p.activo\
                  ORDER BY c.id_curso ASC", [req.query.id_materia, filtro], (error, respuesta) => {
             if (!error) {
                 if (respuesta.rowCount != 0) {
@@ -80,7 +95,8 @@ router.get('/oferta/:padron', function (req, res) {
                             'aulas': separar(curso.aulas),
                             'vacantes': curso.cupos_disponibles,
                             'dias': separar(curso.dias),
-                            'horarios': separar(curso.horarios)
+                            'horarios': separar(curso.horarios),
+                            'periodo': curso.descripcion_periodo
                         };
                         listado.push(elemento);
                     });
@@ -95,13 +111,13 @@ router.get('/oferta/:padron', function (req, res) {
 });
 
 //Recibe los cursos disponibles para una determinada materia.
-router.get('/cursos/:id_materia',(req,res)=>{
-    db.query('SELECT * FROM obtenerListadoDeCursosPorMateria($1)',[req.params.id_materia],(err,resp_cursos)=>{
-        if (err) res.send('HUBO UN ERROR!');
-        else if (resp_cursos.rowCount != 0) res.send({'cursos': resp_cursos.rows});
-        else res.send({'cursos':[]});
-    });
-});
+// router.get('/cursos/:id_materia',(req,res)=>{
+//     db.query('SELECT * FROM obtenerListadoDeCursosPorMateria($1)',[req.params.id_materia],(err,resp_cursos)=>{
+//         if (err) res.send('HUBO UN ERROR!');
+//         else if (resp_cursos.rowCount != 0) res.send({'cursos': resp_cursos.rows});
+//         else res.send({'cursos':[]});
+//     });
+// });
 
 //Devuelve los cursos a los cuales se inscribio el alumno
 router.get('/inscripciones/:padron',(req,res)=>{
