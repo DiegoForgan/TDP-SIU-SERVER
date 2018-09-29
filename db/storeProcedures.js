@@ -61,7 +61,7 @@ module.exports = function(pool){
         FROM alumnos\
         INNER JOIN inscripciones ON alumnos.padron = inscripciones.padron\
         WHERE id_curso_consultado = inscripciones.id_curso\
-        ORDER BY apellido_y_nombre ASC;\
+        ORDER BY es_regular DESC, apellido_y_nombre ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
