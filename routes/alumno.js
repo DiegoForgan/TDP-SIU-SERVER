@@ -194,7 +194,7 @@ module.exports = router;
 
 function crearCursoCondicional(condicionales,id_materia,padron_alumno,req,res) {
     condicionales++;
-    db.query("INSERT INTO cursos VALUES (DEFAULT,$1, 'cond','.','.',10000,0,0,'.;.','.-.')",[id_materia],(error,resp)=>{
+    db.query("INSERT INTO cursos VALUES (DEFAULT,$1, 'cond','.','.',10000,0,0,'.;.','.-.',2)",[id_materia],(error,resp)=>{
         if(error) res.send('HUBO UN ERROR CON LA BASE');
         else res.send({'estado':3, 'detalles':'se creo curso condicional'});
     });
