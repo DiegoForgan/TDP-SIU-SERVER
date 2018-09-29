@@ -71,13 +71,15 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerPrioridadDelAlumno(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerPrioridadDelAlumno (padron_consultado text)\
-    RETURNS TABLE(prioridad int)\
+    RETURNS TABLE(prioridad int, f_update timestamp, fecha_inicio timestamp, descripcion_periodo varchar, fecha_cierre timestamp)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT alumnos.prioridad\
-        FROM alumnos\
-        WHERE padron_consultado = alumnos.padron;\
+        SELECT a.prioridad, a.f_update, pp.fecha_inicio, p.descripcion, p.fecha_cierre\
+        FROM alumnos a\
+        INNER JOIN prioridad_periodo pp ON pp.prioridad = a.prioridad\
+        INNER JOIN periodos p ON p.id = pp.id_periodo\
+        WHERE padron_consultado = a.padron and p.activo;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"

@@ -12,8 +12,8 @@ router.post('/alumnos', (req, res) => {
   db.query("TRUNCATE TABLE alumnos");
   for (var i = 0; i < req.body.listaAlumnos.length; i++) {
 	var alumno = req.body.listaAlumnos[i]
-	db.query("INSERT INTO alumnos(padron, apellido, nombre, usuario, contrasena, prioridad, carrera)\
-			VALUES($1, $2, $3, $4, $5, $6, $7)", 
+	db.query("INSERT INTO alumnos(padron, apellido, nombre, usuario, contrasena, prioridad, carrera, f_update)\
+			VALUES($1, $2, $3, $4, $5, $6, $7, now())", 
 			[alumno.padron, alumno.apellido, alumno.nombre, alumno.usuario, alumno.contrasena, alumno.prioridad, alumno.carrera]);
   
   }
