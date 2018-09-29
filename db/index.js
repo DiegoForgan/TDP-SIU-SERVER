@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
-var cargarBase = require('./mock');
+var crearTablas = require('./tablas');
+var cargarDatos = require('./mock');
 
 var cargarStoreProcedures = require('./storeProcedures');
 
@@ -14,7 +15,8 @@ const pool = new Pool({
 });
 
 // carga la base de datos con mocks
-cargarBase(pool);
+crearTablas(pool);
+cargarDatos(pool);
 
 //carga las funciones para consultarle a la base de datos
 cargarStoreProcedures(pool);
