@@ -87,11 +87,11 @@ router.get('/oferta/:padron', function (req, res) {
                 })
     }else{
         // envio cursos
-        db.query("SELECT c.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo\
+        db.query("SELECT c.*, docentes.apellido || ', ' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo\
                  FROM cursos c\
                  INNER JOIN docentes ON docentes.legajo = c.docente_a_cargo\
                  INNER JOIN periodos p ON p.id = c.id_periodo\
-                 WHERE docentes.apellido || ',' || docentes.nombre ilike $2 and c.id_materia = $1 and p.activo\
+                 WHERE docentes.apellido || ', ' || docentes.nombre ilike $2 and c.id_materia = $1 and p.activo\
                  ORDER BY c.id_curso ASC", [req.query.id_materia, filtro], (error, respuesta) => {
             if (!error) {
                 if (respuesta.rowCount != 0) {
