@@ -87,7 +87,7 @@ router.get('/oferta/:padron', function (req, res) {
                 })
     }else{
         // envio cursos
-        db.query("SELECT c.*, docentes.apellido || ', ' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo\
+        db.query("SELECT c.*, docentes.apellido || ', ' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo, row_number() over (order by c.id_curso asc) as nro_curso\
                  FROM cursos c\
                  INNER JOIN docentes ON docentes.legajo = c.docente_a_cargo\
                  INNER JOIN periodos p ON p.id = c.id_periodo\
@@ -98,6 +98,7 @@ router.get('/oferta/:padron', function (req, res) {
                     (respuesta.rows).forEach(curso => {
                         var elemento = {
                             'id': curso.id_curso,
+                            'nro_curso': curso.nro_curso,
                             'docente': curso.nombre_docente,
                             'sede': separar(curso.sede),
                             'aulas': separar(curso.aulas),
