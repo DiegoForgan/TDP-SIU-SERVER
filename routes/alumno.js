@@ -34,7 +34,7 @@ router.get('/prioridad/:padron', function (req, res) {
     });
 });
 
-//Devuelve la oferta academica POR AHORA sin importar en que carrera estas inscripto.
+//Devuelve la oferta academica.
 //params: ?id_materia={id_materia}&filtro={filtro}
 router.get('/oferta/:padron', function (req, res) {
     console.log("Un alumno consulto la oferta academica");
@@ -59,6 +59,13 @@ router.get('/oferta/:padron', function (req, res) {
                     INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
                     INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
                     WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $3 or m.nombre ilike $4)\
+                        AND m.id not in (\
+                            select m.id\
+                            from inscripciones i\
+                            inner join cursos c on c.id_curso = i.id_curso\
+                            inner join materias m on m.id = c.id_materia\
+                            where i.padron = $1\
+                        )\
                     ORDER BY m.nombre",
                 [padron, filtro, filtro2, filtro3],
                 (error, respuesta) => {
@@ -79,17 +86,19 @@ router.get('/oferta/:padron', function (req, res) {
                     }
                 })
     }else{
-        db.query("SELECT c.*, docentes.apellido || ',' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo\
+        // envio cursos
+        db.query("SELECT c.*, docentes.apellido || ', ' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo, row_number() over (order by c.id_curso asc) as nro_curso\
                  FROM cursos c\
                  INNER JOIN docentes ON docentes.legajo = c.docente_a_cargo\
                  INNER JOIN periodos p ON p.id = c.id_periodo\
-                 WHERE docentes.apellido || ',' || docentes.nombre ilike $2 and c.id_materia = $1 and p.activo\
+                 WHERE docentes.apellido || ', ' || docentes.nombre ilike $2 and c.id_materia = $1 and p.activo\
                  ORDER BY c.id_curso ASC", [req.query.id_materia, filtro], (error, respuesta) => {
             if (!error) {
                 if (respuesta.rowCount != 0) {
                     (respuesta.rows).forEach(curso => {
                         var elemento = {
                             'id': curso.id_curso,
+                            'nro_curso': curso.nro_curso,
                             'docente': curso.nombre_docente,
                             'sede': separar(curso.sede),
                             'aulas': separar(curso.aulas),
