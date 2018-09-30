@@ -99,6 +99,7 @@ module.exports = function(pool){
 			INSERT INTO cursos VALUES(DEFAULT, 2, '0003','PC;PC','400;400',30,0,0,'martes;viernes','09:00-13:00;09:00-13:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 6, '0011','PC;PC','411;411',60,0,0,'martes;jueves','19:00-22:00;19:00-22:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 6, '0010','PC;PC','411;411',35,0,0,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 10, 'cond','PC;PC','411;411',3,0,0,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
 			\
 			");
 
@@ -121,7 +122,7 @@ module.exports = function(pool){
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('75.09', 'Analisis de la Informacion', 6);\
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('75.40', 'Algoritmos Y Programacion I', 6);\
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('75.42', 'Taller de Programacion I', 6);\
-			INSERT INTO materias(codigo, nombre, creditos) VALUES('00.00', 'Materia Prueba', 100);\
+			INSERT INTO materias(codigo, nombre, creditos) VALUES('00.00', 'Materia Con Condicionales', 100);\
 			\
 			");
 }
