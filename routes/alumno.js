@@ -169,9 +169,30 @@ router.post('/inscribir', (req, res) => {
                     SET inscriptos = $1, cupos_disponibles = $2\
                     WHERE cursos.id_curso = $3',[regularesActuales,vacantes_disponibles,req.query.curso],(error,resp)=>{
                         if (error) res.send({'estado':-1, 'detalles':'error en la query de actualizar el curso en la base'})
-                        db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[req.query.padron,req.query.curso,true]);
-                        res.send({'estado':1, 'detalles':'el alumno fue inscripto con exito!'});
+                        else db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[req.query.padron,req.query.curso,true]);
                     });
+                    res.send({'estado':1, 'detalles':'el alumno fue inscripto con exito!'});
+                    //Veo si con esta inscripcion se lleno este curso y por lo tanto debo ver los otros.
+                    if(vacantes_disponibles == 0){    
+                        //Debo chequear si los otros cursos de la materia todavia tienen vacantes!
+                        db.query('SELECT * FROM getOtrosCursosDeLaMismaMateria($1,$2)',[req.query.curso,id_materia],(error,resp_cursos)=>{
+                            if (error) res.send({'estado':-1, 'detalles':'error en la query del curso de la base'});
+                            else if (resp_cursos.rowCount != 0){
+                                var todos_llenos = true;
+                                (resp_cursos.rows).forEach(curso => {
+                                    if (curso.vacantes != 0) {
+                                        todos_llenos = false;
+                                    }
+                                });
+                                if(todos_llenos){
+                                //No hay mas opcion que crear el curso condicional para los proximos alumnos!
+                                crearCursoCondicional(condicionales,id_materia,req.query.padron,req,res);
+                                }
+                            }
+                            //No hay otros cursos y por lo tanto se crea la el curso nuevo.
+                            else{crearCursoCondicional(condicionales,id_materia,req.query.padron,req,res);}
+                        });
+                    }
                 }
                 else{
                     //Debo chequear si los otros cursos de la materia todavia tienen vacantes!
@@ -203,8 +224,5 @@ module.exports = router;
 
 function crearCursoCondicional(condicionales,id_materia,padron_alumno,req,res) {
     condicionales++;
-    db.query("INSERT INTO cursos VALUES (DEFAULT,$1, 'cond','.','.',10000,0,0,'.;.','.-.',2)",[id_materia],(error,resp)=>{
-        if(error) res.send('HUBO UN ERROR CON LA BASE');
-        else res.send({'estado':3, 'detalles':'se creo curso condicional'});
-    });
+    db.query("INSERT INTO cursos VALUES (DEFAULT,$1, 'cond','.','.',10000,0,0,'.;.','.-.',2)",[id_materia]);
 }
