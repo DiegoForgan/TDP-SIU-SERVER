@@ -21,8 +21,7 @@ module.exports = function(pool){
 				contrasena varchar(20) not null,\
 				prioridad int not null,\
 				carrera int not null,\
-				f_update timestamp not null,\
-				email varchar(200) not null);"
+				f_update timestamp not null);"
             );
 
     //CREO LA TABLA DE PERIODOS DE INSCRIPCION

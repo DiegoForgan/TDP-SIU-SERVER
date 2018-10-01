@@ -4,45 +4,45 @@ module.exports = function(pool){
 				declare dia_hoy timestamp := now();\
 			begin\
 			\
-				INSERT INTO alumnos VALUES('00001', 'Gonzalez', 'Juan','alumno1', '12345', 5, 10, dia_hoy,'juangonzalez@gmail.com');\
-				INSERT INTO alumnos VALUES('00002', 'Fernandez', 'Federico','alumno2', '12345', 4, 10, dia_hoy, 'federicofernandez@gmail.com');\
-				INSERT INTO alumnos VALUES('00003', 'Messi', 'Lionel','alumno3', '12345', 1, 10, dia_hoy, 'liomessi@gmail.com');\
-				INSERT INTO alumnos VALUES('00004', 'Ronaldo', 'Cristiano','alumno4', '12345', 2, 10, dia_hoy,'ronaldocris@gmail.com');\
-				INSERT INTO alumnos VALUES('00005', 'Redondo', 'Fernando','alumno5', '12345', 8, 10, dia_hoy,'redondofernando@gmail.com');\
-				INSERT INTO alumnos VALUES('00006', 'Carlos', 'Roberto','alumno6', '12345', 6, 10, dia_hoy,'robertocarlos@gmail.com');\
-				INSERT INTO alumnos VALUES('00007', 'Di Maria', 'Angel','alumno7', '12345', 7, 10, dia_hoy,'angeldimaria@gmail.com');\
-				INSERT INTO alumnos VALUES('00008', 'Mascherano', 'Javier','alumno8', '12345', 8, 10, dia_hoy,'javiermasche@gmail.com');\
-				INSERT INTO alumnos VALUES('00009', 'Batistuta', 'Gabriel','alumno9', '12345', 9, 10, dia_hoy,'batygabriel@gmail.com');\
-				INSERT INTO alumnos VALUES('00010', 'Riquelme', 'Juan Roman','alumno10', '12345', 10, 10, dia_hoy,'riquelmejr@gmail.com');\
-				INSERT INTO alumnos VALUES('00011', 'Robben', 'Arjen','alumno11', '12345', 11, 10, dia_hoy,'robben@gmail.com');\
-				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, 10, dia_hoy,'sergioramos@gmail.com');\
-				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, 10, dia_hoy,'agustinluques@gmail.com');\
-				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','diego', '12345', 10, 10, dia_hoy,'diegoforgan@gmail.com');\
-				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, 10, dia_hoy,'francoetcheverri@gmail.com');\
-				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 5, 10, dia_hoy,'federicobalina@gmail.com');\
+				INSERT INTO alumnos VALUES('00001', 'Gonzalez', 'Juan','alumno1', '12345', 5, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00002', 'Fernandez', 'Federico','alumno2', '12345', 4, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00003', 'Messi', 'Lionel','alumno3', '12345', 1, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00004', 'Ronaldo', 'Cristiano','alumno4', '12345', 2, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00005', 'Redondo', 'Fernando','alumno5', '12345', 8, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00006', 'Carlos', 'Roberto','alumno6', '12345', 6, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00007', 'Di Maria', 'Angel','alumno7', '12345', 7, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00008', 'Mascherano', 'Javier','alumno8', '12345', 8, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00009', 'Batistuta', 'Gabriel','alumno9', '12345', 9, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00010', 'Riquelme', 'Juan Roman','alumno10', '12345', 10, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00011', 'Robben', 'Arjen','alumno11', '12345', 11, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','38888888', '12345', 10, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 1, 10, dia_hoy);\
             end;\
             $$;\
             ");
 
 	pool.query("\
 			INSERT INTO periodos VALUES(DEFAULT, '1C-2018', FALSE, '2018-03-22 23:59:59');\
-			INSERT INTO periodos VALUES(DEFAULT, '2C-2018', TRUE, '2018-08-15 23:59:59');\
+			INSERT INTO periodos VALUES(DEFAULT, '2C-2018', TRUE, '2018-10-15 23:59:59');\
             ");
 
 	pool.query("\
 			INSERT INTO prioridad_periodo VALUES(1, 1, '2018-03-01 10:00:00');\
-			INSERT INTO prioridad_periodo VALUES(1, 2, '2018-08-01 10:00:00');\
-			INSERT INTO prioridad_periodo VALUES(2, 2, '2018-08-01 14:00:00');\
-			INSERT INTO prioridad_periodo VALUES(3, 2, '2018-08-01 18:00:00');\
-			INSERT INTO prioridad_periodo VALUES(4, 2, '2018-08-02 10:00:00');\
-            INSERT INTO prioridad_periodo VALUES(5, 2, '2018-08-02 14:00:00');\
-			INSERT INTO prioridad_periodo VALUES(6, 2, '2018-08-02 18:00:00');\
-			INSERT INTO prioridad_periodo VALUES(7, 2, '2018-08-03 10:00:00');\
-			INSERT INTO prioridad_periodo VALUES(8, 2, '2018-08-03 14:00:00');\
-            INSERT INTO prioridad_periodo VALUES(9, 2, '2018-08-03 18:00:00');\
-			INSERT INTO prioridad_periodo VALUES(10, 2, '2018-08-04 11:00:00');\
-			INSERT INTO prioridad_periodo VALUES(11, 2, '2018-08-04 15:00:00');\
-			INSERT INTO prioridad_periodo VALUES(12, 2, '2018-08-04 19:00:00');\
+			INSERT INTO prioridad_periodo VALUES(1, 2, '2018-10-01 11:00:00');\
+			INSERT INTO prioridad_periodo VALUES(2, 2, '2018-10-01 14:00:00');\
+			INSERT INTO prioridad_periodo VALUES(3, 2, '2018-10-01 18:00:00');\
+			INSERT INTO prioridad_periodo VALUES(4, 2, '2018-10-02 10:00:00');\
+            INSERT INTO prioridad_periodo VALUES(5, 2, '2018-10-02 14:00:00');\
+			INSERT INTO prioridad_periodo VALUES(6, 2, '2018-10-02 18:00:00');\
+			INSERT INTO prioridad_periodo VALUES(7, 2, '2018-10-03 10:00:00');\
+			INSERT INTO prioridad_periodo VALUES(8, 2, '2018-10-03 14:00:00');\
+            INSERT INTO prioridad_periodo VALUES(9, 2, '2018-10-03 18:00:00');\
+			INSERT INTO prioridad_periodo VALUES(10, 2, '2018-10-04 11:00:00');\
+			INSERT INTO prioridad_periodo VALUES(11, 2, '2018-10-04 15:00:00');\
+			INSERT INTO prioridad_periodo VALUES(12, 2, '2018-10-04 19:00:00');\
             ");
 
 	pool.query("\
@@ -57,6 +57,7 @@ module.exports = function(pool){
 			INSERT INTO materias_carrera VALUES(10, 8);\
 			INSERT INTO materias_carrera VALUES(10, 9);\
 			INSERT INTO materias_carrera VALUES(10, 10);\
+			INSERT INTO materias_carrera VALUES(10, 11);\
 			\
             ");
 
@@ -106,6 +107,7 @@ module.exports = function(pool){
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0015','PC;PC','507;507',30,0,0,'miercoles;miercoles','16:00-22:00;16:00-22:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,0,0,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,0,0,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',1,0,0,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			\
 			");
 
@@ -115,6 +117,21 @@ module.exports = function(pool){
 			INSERT INTO aulas(aula) VALUES('LAB F');\
 			INSERT INTO aulas(aula) VALUES('201');\
 			INSERT INTO aulas(aula) VALUES('400');\
+			INSERT INTO aulas(aula) VALUES('403');\
+			INSERT INTO aulas(aula) VALUES('310');\
+			INSERT INTO aulas(aula) VALUES('203');\
+			INSERT INTO aulas(aula) VALUES('303');\
+			INSERT INTO aulas(aula) VALUES('221');\
+			INSERT INTO aulas(aula) VALUES('105');\
+			INSERT INTO aulas(aula) VALUES('107');\
+			INSERT INTO aulas(aula) VALUES('403');\
+			INSERT INTO aulas(aula) VALUES('302');\
+			INSERT INTO aulas(aula) VALUES('500');\
+			INSERT INTO aulas(aula) VALUES('411');\
+			INSERT INTO aulas(aula) VALUES('LAB E');\
+			INSERT INTO aulas(aula) VALUES('422');\
+			INSERT INTO aulas(aula) VALUES('507');\
+			INSERT INTO aulas(aula) VALUES('E7');\
 			\
 			");
 
@@ -129,6 +146,7 @@ module.exports = function(pool){
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('75.40', 'Algoritmos Y Programacion I', 6);\
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('75.42', 'Taller de Programacion I', 6);\
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('00.00', 'Materia Con Condicionales', 100);\
+			INSERT INTO materias(codigo, nombre, creditos) VALUES('99.99', 'Materia Para Llenar', 100);\
 			\
 			");
 }

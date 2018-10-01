@@ -95,6 +95,24 @@ router.get('/info', (req, res) => {
                                     res.send(response);
                                 }
     )
-})
+});
+
+//periodo beta
+router.get('/periodoBETA', (req, res) => {
+    db.query("SELECT \
+                p.activo\
+            FROM periodos p\
+            WHERE p.id = 2", null, (err, response)=>{
+        res.send(response.rows);
+    })
+});
+
+router.put('/periodoBETA', (req, res) => {
+    db.query("UPDATE periodos\
+            SET activo = $1\
+            WHERE id = 2", [req.body.activar], (err, response)=>{
+        res.send("ok");
+    })
+});
 
 module.exports = router;
