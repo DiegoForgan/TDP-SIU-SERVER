@@ -57,7 +57,7 @@ module.exports = function(pool){
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT alumnos.padron, alumnos.apellido || ',' || alumnos.nombre AS apellido_y_nombre, alumnos.prioridad, inscripciones.es_regular\
+        SELECT alumnos.padron, alumnos.apellido || ', ' || alumnos.nombre AS apellido_y_nombre, alumnos.prioridad, inscripciones.es_regular\
         FROM alumnos\
         INNER JOIN inscripciones ON alumnos.padron = inscripciones.padron\
         WHERE id_curso_consultado = inscripciones.id_curso\
