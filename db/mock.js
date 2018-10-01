@@ -19,7 +19,7 @@ module.exports = function(pool){
 				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, 10, dia_hoy,'agustinluques@gmail.com');\
 				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','38888888', '12345', 10, 10, dia_hoy,'diegoforgan@gmail.com');\
 				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, 10, dia_hoy,'francoetcheverri@gmail.com');\
-				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 5, 10, dia_hoy,'federicobalina@gmail.com');\
+				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 1, 10, dia_hoy,'federicobalina@gmail.com');\
             end;\
             $$;\
             ");
@@ -57,6 +57,7 @@ module.exports = function(pool){
 			INSERT INTO materias_carrera VALUES(10, 8);\
 			INSERT INTO materias_carrera VALUES(10, 9);\
 			INSERT INTO materias_carrera VALUES(10, 10);\
+			INSERT INTO materias_carrera VALUES(10, 11);\
 			\
             ");
 
@@ -106,6 +107,7 @@ module.exports = function(pool){
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0015','PC;PC','507;507',30,0,0,'miercoles;miercoles','16:00-22:00;16:00-22:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,0,0,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,0,0,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',1,0,0,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			\
 			");
 
@@ -144,6 +146,7 @@ module.exports = function(pool){
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('75.40', 'Algoritmos Y Programacion I', 6);\
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('75.42', 'Taller de Programacion I', 6);\
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('00.00', 'Materia Con Condicionales', 100);\
+			INSERT INTO materias(codigo, nombre, creditos) VALUES('99.99', 'Materia Para Llenar', 100);\
 			\
 			");
 }
