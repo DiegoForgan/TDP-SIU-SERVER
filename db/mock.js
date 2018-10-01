@@ -4,21 +4,22 @@ module.exports = function(pool){
 				declare dia_hoy timestamp := now();\
 			begin\
 			\
-				INSERT INTO alumnos VALUES('00001', 'Gonzalez', 'Juan','alumno1', '12345', 1, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00002', 'Fernandez', 'Federico','alumno2', '12345', 2, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00003', 'Messi', 'Lionel','alumno3', '12345', 3, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00004', 'Ronaldo', 'Cristiano','alumno4', '12345', 4, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00005', 'Redondo', 'Fernando','alumno5', '12345', 5, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00006', 'Carlos', 'Roberto','alumno6', '12345', 6, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00007', 'Di Maria', 'Angel','alumno7', '12345', 7, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00008', 'Mascherano', 'Javier','alumno8', '12345', 8, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00009', 'Batistuta', 'Gabriel','alumno9', '12345', 9, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00010', 'Riquelme', 'Juan Roman','alumno10', '12345', 10, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00011', 'Robben', 'Arjen','alumno11', '12345', 11, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('96803', 'luques', 'agustin','agusluques', 'contrasecreta', 6, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','diego', '12345', 4, 10, dia_hoy);\
-				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','franco', '12345', 5, 10, dia_hoy);\
+				INSERT INTO alumnos VALUES('00001', 'Gonzalez', 'Juan','alumno1', '12345', 5, 10, dia_hoy,'juangonzalez@gmail.com');\
+				INSERT INTO alumnos VALUES('00002', 'Fernandez', 'Federico','alumno2', '12345', 4, 10, dia_hoy, 'federicofernandez@gmail.com');\
+				INSERT INTO alumnos VALUES('00003', 'Messi', 'Lionel','alumno3', '12345', 1, 10, dia_hoy, 'liomessi@gmail.com');\
+				INSERT INTO alumnos VALUES('00004', 'Ronaldo', 'Cristiano','alumno4', '12345', 2, 10, dia_hoy,'ronaldocris@gmail.com');\
+				INSERT INTO alumnos VALUES('00005', 'Redondo', 'Fernando','alumno5', '12345', 8, 10, dia_hoy,'redondofernando@gmail.com');\
+				INSERT INTO alumnos VALUES('00006', 'Carlos', 'Roberto','alumno6', '12345', 6, 10, dia_hoy,'robertocarlos@gmail.com');\
+				INSERT INTO alumnos VALUES('00007', 'Di Maria', 'Angel','alumno7', '12345', 7, 10, dia_hoy,'angeldimaria@gmail.com');\
+				INSERT INTO alumnos VALUES('00008', 'Mascherano', 'Javier','alumno8', '12345', 8, 10, dia_hoy,'javiermasche@gmail.com');\
+				INSERT INTO alumnos VALUES('00009', 'Batistuta', 'Gabriel','alumno9', '12345', 9, 10, dia_hoy,'batygabriel@gmail.com');\
+				INSERT INTO alumnos VALUES('00010', 'Riquelme', 'Juan Roman','alumno10', '12345', 10, 10, dia_hoy,'riquelmejr@gmail.com');\
+				INSERT INTO alumnos VALUES('00011', 'Robben', 'Arjen','alumno11', '12345', 11, 10, dia_hoy,'robben@gmail.com');\
+				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, 10, dia_hoy,'sergioramos@gmail.com');\
+				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, 10, dia_hoy,'agustinluques@gmail.com');\
+				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','diego', '12345', 10, 10, dia_hoy,'diegoforgan@gmail.com');\
+				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, 10, dia_hoy,'francoetcheverri@gmail.com');\
+				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 5, 10, dia_hoy,'federicobalina@gmail.com');\
             end;\
             $$;\
             ");
@@ -100,6 +101,11 @@ module.exports = function(pool){
 			INSERT INTO cursos VALUES(DEFAULT, 6, '0011','PC;PC','411;411',60,0,0,'martes;jueves','19:00-22:00;19:00-22:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 6, '0010','PC;PC','411;411',35,0,0,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 10, 'cond','PC;PC','411;411',3,0,0,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 7, '0008','PC;PC','LAB E;LAB E',40,0,0,'lunes;jueves','18:30-21:30;18:30-21:30', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 7, '0012','PC;PC','422;422',40,0,0,'lunes;miercoles','19:00-22:00;19:00-22:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 8, '0015','PC;PC','507;507',30,0,0,'miercoles;miercoles','16:00-22:00;16:00-22:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,0,0,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,0,0,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			\
 			");
 
