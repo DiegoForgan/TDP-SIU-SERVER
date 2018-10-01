@@ -17,7 +17,7 @@ module.exports = function(pool){
 				INSERT INTO alumnos VALUES('00011', 'Robben', 'Arjen','alumno11', '12345', 11, 10, dia_hoy,'robben@gmail.com');\
 				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, 10, dia_hoy,'sergioramos@gmail.com');\
 				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, 10, dia_hoy,'agustinluques@gmail.com');\
-				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','diego', '12345', 10, 10, dia_hoy,'diegoforgan@gmail.com');\
+				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','38888888', '12345', 10, 10, dia_hoy,'diegoforgan@gmail.com');\
 				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, 10, dia_hoy,'francoetcheverri@gmail.com');\
 				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 5, 10, dia_hoy,'federicobalina@gmail.com');\
             end;\
@@ -26,23 +26,23 @@ module.exports = function(pool){
 
 	pool.query("\
 			INSERT INTO periodos VALUES(DEFAULT, '1C-2018', FALSE, '2018-03-22 23:59:59');\
-			INSERT INTO periodos VALUES(DEFAULT, '2C-2018', TRUE, '2018-08-15 23:59:59');\
+			INSERT INTO periodos VALUES(DEFAULT, '2C-2018', TRUE, '2018-10-15 23:59:59');\
             ");
 
 	pool.query("\
 			INSERT INTO prioridad_periodo VALUES(1, 1, '2018-03-01 10:00:00');\
-			INSERT INTO prioridad_periodo VALUES(1, 2, '2018-08-01 10:00:00');\
-			INSERT INTO prioridad_periodo VALUES(2, 2, '2018-08-01 14:00:00');\
-			INSERT INTO prioridad_periodo VALUES(3, 2, '2018-08-01 18:00:00');\
-			INSERT INTO prioridad_periodo VALUES(4, 2, '2018-08-02 10:00:00');\
-            INSERT INTO prioridad_periodo VALUES(5, 2, '2018-08-02 14:00:00');\
-			INSERT INTO prioridad_periodo VALUES(6, 2, '2018-08-02 18:00:00');\
-			INSERT INTO prioridad_periodo VALUES(7, 2, '2018-08-03 10:00:00');\
-			INSERT INTO prioridad_periodo VALUES(8, 2, '2018-08-03 14:00:00');\
-            INSERT INTO prioridad_periodo VALUES(9, 2, '2018-08-03 18:00:00');\
-			INSERT INTO prioridad_periodo VALUES(10, 2, '2018-08-04 11:00:00');\
-			INSERT INTO prioridad_periodo VALUES(11, 2, '2018-08-04 15:00:00');\
-			INSERT INTO prioridad_periodo VALUES(12, 2, '2018-08-04 19:00:00');\
+			INSERT INTO prioridad_periodo VALUES(1, 2, '2018-10-01 11:00:00');\
+			INSERT INTO prioridad_periodo VALUES(2, 2, '2018-10-01 14:00:00');\
+			INSERT INTO prioridad_periodo VALUES(3, 2, '2018-10-01 18:00:00');\
+			INSERT INTO prioridad_periodo VALUES(4, 2, '2018-10-02 10:00:00');\
+            INSERT INTO prioridad_periodo VALUES(5, 2, '2018-10-02 14:00:00');\
+			INSERT INTO prioridad_periodo VALUES(6, 2, '2018-10-02 18:00:00');\
+			INSERT INTO prioridad_periodo VALUES(7, 2, '2018-10-03 10:00:00');\
+			INSERT INTO prioridad_periodo VALUES(8, 2, '2018-10-03 14:00:00');\
+            INSERT INTO prioridad_periodo VALUES(9, 2, '2018-10-03 18:00:00');\
+			INSERT INTO prioridad_periodo VALUES(10, 2, '2018-10-04 11:00:00');\
+			INSERT INTO prioridad_periodo VALUES(11, 2, '2018-10-04 15:00:00');\
+			INSERT INTO prioridad_periodo VALUES(12, 2, '2018-10-04 19:00:00');\
             ");
 
 	pool.query("\
