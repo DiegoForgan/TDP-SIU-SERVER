@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/DiegoForgan/TDP-SIU-SERVER#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "path": "^0.12.7",
+    "pg": "^7.4.3"
   }
 }
