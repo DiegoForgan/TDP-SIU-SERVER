@@ -217,7 +217,7 @@ router.post('/inscribir', (req, res) => {
                 }
             }
         });
-    }*/
+    }
 });
   
 module.exports = router;
