@@ -191,13 +191,13 @@ function cargarCursos(termina){
 
 						var divEditar = document.createElement("a");
 						divEditar.className = "btn btn-primary btnAccion";
+						divEditar.setAttribute("data-toggle", "modal");
+						divEditar.setAttribute("data-target", "#modalCurso");
+						divEditar.setAttribute("data-accion", "editar");
+						divEditar.setAttribute("data-id", data[i].id_curso);
 						var spanEditar = document.createElement("span");
 						spanEditar.className = "glyphicon glyphicon-edit";
 						spanEditar.setAttribute("aria-hidden", "true");
-						spanEditar.setAttribute("data-toggle", "modal");
-						spanEditar.setAttribute("data-target", "#modalCurso");
-						spanEditar.setAttribute("data-accion", "editar");
-						spanEditar.setAttribute("data-id", data[i].id_curso);
 						tdAcciones.append(divEditar)
 						divEditar.append(spanEditar);
 
@@ -599,19 +599,89 @@ function cambiarPantalla(numero){
 		case 1:
 			$("#importacionPantalla").show();
 			$("#abmCursosPantalla").hide();
+			$("#periodosPantalla").hide();
 
 			$("#importacionMenu").addClass("active");
 			$("#abmCursosMenu").removeClass("active");
+			$("#periodosPantalla").removeClass("active");
 			break;
 		case 2:
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").show();
+			$("#periodosPantalla").hide();
 
 			$("#importacionMenu").removeClass("active");
 			$("#abmCursosMenu").addClass("active");
+			$("#periodosPantalla").removeClass("active");
 			break;
+		case 3:
+			$("#importacionPantalla").hide();
+			$("#abmCursosPantalla").hide();
+			$("#periodosPantalla").show();
+
+			$("#importacionMenu").removeClass("active");
+			$("#abmCursosMenu").removeClass("active");
+			$("#periodosPantalla").addClass("active");
+			break;
+
 	}
 }
+
+//eliminar luego de sprint1
+$.ajax({
+	url: '../admin/periodoBETA/',
+	type: 'GET',
+	success: (data)=>{
+		$.unblockUI();
+		if(data[0].activo){
+			$('#modificarPeriodo').bootstrapToggle('on');
+		}else{
+			$('#modificarPeriodo').bootstrapToggle('off');
+		}
+		$('#modificarPeriodo').change(function() {
+		    //console.log($(this).prop('checked'));
+		    $.ajax({
+				url: '../admin/periodoBETA/',
+				type: 'PUT',
+				data: {
+					activar: $(this).prop('checked')
+				},
+				success: (data)=>{
+					$.unblockUI();
+					swal({
+					  type: 'success',
+					  title: 'Ok',
+					  text: 'Se ha modificado el periodo'
+					});
+
+					
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+			        $.unblockUI();
+			        swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al intentar modificar info de periodo'
+					});
+			        console.log(xhr.responseText);
+			        console.log(thrownError);
+			  	}
+			});
+		});
+
+		
+	},
+	error: function (xhr, ajaxOptions, thrownError) {
+        $.unblockUI();
+        swal({
+		  type: 'error',
+		  title: 'Oops...',
+		  text: 'Ha ocurrido un error al intentar traer info de periodo'
+		});
+        console.log(xhr.responseText);
+        console.log(thrownError);
+  	}
+});
 
 //comentar linea, solo para desarrollo
 cambiarPantalla(2);

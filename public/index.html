@@ -5,12 +5,14 @@
 
 	<link rel="stylesheet" href="resources/css/bootstrap.css"></style>
 	<link rel="stylesheet" href="resources/css/select2.min.css"></style>
+	<link rel="stylesheet" href="resources/css/bootstrap-toggle.min.css"></style>
 
 	<script type="text/javascript" src="resources/js/jquery-3.3.1.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap.js"></script>
 	<script type="text/javascript" src="resources/js/blockui.js"></script>
 	<script type="text/javascript" src="resources/js/swal.js"></script>
 	<script type="text/javascript" src="resources/js/select2.min.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap-toggle.min.js"></script>
 
 	<style type="text/css">
 		.btnAccion{
@@ -32,8 +34,8 @@
 	    <ul class="nav navbar-nav">
 	      <li class="active" id="importacionMenu" onclick="cambiarPantalla(1);"><a>Importación</a></li>
 	      <li id="abmCursosMenu" onclick="cambiarPantalla(2);"><a>Cursos</a></li>
-	      <!--<li><a>Page 2</a></li>
-	      <li><a>Page 3</a></li>-->
+	      <li id="periodosInscripcion" onclick="cambiarPantalla(3);"><a>Periodos Inscripción (BETA)</a></li>
+	      <!--<li><a>Page 3</a></li>-->
 	    </ul>
 	  </div>
 	</nav>
@@ -107,6 +109,20 @@
 			    <span class="input-group-btn">
 	       			<button class="btn btn-success" type="button" data-toggle="modal" data-target="#modalCurso" data-accion="borrar">Agregar Curso</button>
 	    		</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- Pantalla periodos -->
+	<div id="periodosPantalla" class="container">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Abrir/cerrar Periodo de Inscripción</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-2">
+				<input type="checkbox" id="modificarPeriodo" checked data-toggle="toggle">
 			</div>
 		</div>
 	</div>

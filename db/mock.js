@@ -115,6 +115,21 @@ module.exports = function(pool){
 			INSERT INTO aulas(aula) VALUES('LAB F');\
 			INSERT INTO aulas(aula) VALUES('201');\
 			INSERT INTO aulas(aula) VALUES('400');\
+			INSERT INTO aulas(aula) VALUES('403');\
+			INSERT INTO aulas(aula) VALUES('310');\
+			INSERT INTO aulas(aula) VALUES('203');\
+			INSERT INTO aulas(aula) VALUES('303');\
+			INSERT INTO aulas(aula) VALUES('221');\
+			INSERT INTO aulas(aula) VALUES('105');\
+			INSERT INTO aulas(aula) VALUES('107');\
+			INSERT INTO aulas(aula) VALUES('403');\
+			INSERT INTO aulas(aula) VALUES('302');\
+			INSERT INTO aulas(aula) VALUES('500');\
+			INSERT INTO aulas(aula) VALUES('411');\
+			INSERT INTO aulas(aula) VALUES('LAB E');\
+			INSERT INTO aulas(aula) VALUES('422');\
+			INSERT INTO aulas(aula) VALUES('507');\
+			INSERT INTO aulas(aula) VALUES('E7');\
 			\
 			");
 
