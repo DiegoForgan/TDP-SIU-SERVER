@@ -170,6 +170,46 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'"
     );
+
+
+    //Devuelve datos relevantes para saber si el alumno se puede inscribir al curso tales como: vacantes, inscriptos_regulares, inscriptos_condicionales y la materia.
+    pool.query("DROP FUNCTION IF EXISTS getDatosDeInscripcion(id_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  getDatosDeInscripcion(id_consultada int)\
+    RETURNS TABLE(materia int, vacantes bigint, regulares bigint, condicionales bigint)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT max(m.id),\
+        max(c.cupos_disponibles) - sum(case when i.es_regular then 1 else 0 end),\
+        sum(case when i.es_regular then 1 else 0 end), sum(case when not i.es_regular then 1 else 0 end)\
+        FROM inscripciones i\
+        INNER JOIN cursos c ON c.id_curso = i.id_curso\
+        INNER JOIN materias m ON c.id_materia = m.id\
+        WHERE i.id_curso = id_consultada\
+        GROUP BY i.id_curso;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    pool.query("DROP FUNCTION IF EXISTS vacantesDeLaMateria(id_materia_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  vacantesDeLaMateria(id_materia_consultada int)\
+    RETURNS TABLE(restantes bigint)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT (select sum(cursos.cupos_disponibles) from cursos where cursos.id_materia = id_materia_consultada) - sum(case when i.es_regular then 1 else 0 end)\
+        FROM inscripciones i\
+        INNER JOIN cursos c ON c.id_curso = i.id_curso\
+        INNER JOIN materias m ON c.id_materia = m.id\
+        WHERE m.id = id_materia_consultada\
+        GROUP BY m.id;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
 }
 
 
