@@ -125,11 +125,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerDocenteConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
     \
     CREATE OR REPLACE FUNCTION  obtenerDocenteConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
-    RETURNS TABLE(legajo varchar(10), apellido varchar(200), nombre varchar(200))\
+    RETURNS TABLE(legajo varchar(10), apellido varchar(200), nombre varchar(200), email varchar(200))\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT docentes.legajo,docentes.apellido, docentes.nombre\
+        SELECT docentes.legajo,docentes.apellido, docentes.nombre, docentes.email\
         FROM docentes\
         WHERE usuario_consultado = docentes.usuario AND contrasena_consultada = docentes.contrasena;\
     END; $$\
