@@ -255,7 +255,8 @@ function clickEstudiantes() {
 						usuario: splittedLine[3].trim(),
 						contrasena: splittedLine[4].trim(),
 						prioridad: splittedLine[5].trim(),
-						carrera: splittedLine[6].trim()
+						carrera: splittedLine[6].trim(),
+						email: splittedLine[7].trim()
 					}
 					listaAlumnos.push(data);
 				}
@@ -314,7 +315,8 @@ function clickDocentes() {
 					apellido: splittedLine[1].trim(),
 					nombre: splittedLine[2].trim(),
 					usuario: splittedLine[3].trim(),
-					contrasena: splittedLine[4].trim()
+					contrasena: splittedLine[4].trim(),
+					email: splittedLine[5].trim()
 				}
 				listaDocentes.push(data);
 			}

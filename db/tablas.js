@@ -7,7 +7,8 @@ module.exports = function(pool){
 				apellido varchar(200) not null,\
 				nombre varchar(200) not null,\
 				usuario varchar(50) not null,\
-                contrasena varchar(20) not null);"
+				contrasena varchar(20) not null,\
+				email varchar(200) not null);"
             );
 
     //CREO LA TABLA DE ALUMNOS EN LA BASE DE DATOS
@@ -21,7 +22,8 @@ module.exports = function(pool){
 				contrasena varchar(20) not null,\
 				prioridad int not null,\
 				carrera int not null,\
-				f_update timestamp not null);"
+				f_update timestamp not null,\
+				email varchar(200) not null);"
             );
 
     //CREO LA TABLA DE PERIODOS DE INSCRIPCION
