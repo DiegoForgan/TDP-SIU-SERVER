@@ -109,11 +109,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerAlumnoConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
     \
     CREATE OR REPLACE FUNCTION  obtenerAlumnoConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
-    RETURNS TABLE(padron varchar(10), apellido varchar(200), nombre varchar(200), prioridad int, carrera int)\
+    RETURNS TABLE(padron varchar(10), apellido varchar(200), nombre varchar(200), prioridad int, carrera int, email varchar(200))\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT alumnos.padron,alumnos.apellido, alumnos.nombre , alumnos.prioridad , alumnos.carrera\
+        SELECT alumnos.padron,alumnos.apellido, alumnos.nombre , alumnos.prioridad , alumnos.carrera, alumnos.email\
         FROM alumnos\
         WHERE usuario_consultado = alumnos.usuario AND contrasena_consultada = alumnos.contrasena;\
     END; $$\
