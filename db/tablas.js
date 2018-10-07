@@ -71,8 +71,6 @@ module.exports = function(pool){
 				sede varchar not null,\
 				aulas varchar not null,\
 				cupos_disponibles int not null,\
-				inscriptos int not null,\
-				condicionales int not null,\
 				dias varchar not null,\
 				horarios varchar not null,\
                 id_periodo int not null);"
