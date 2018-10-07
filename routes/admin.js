@@ -12,9 +12,9 @@ router.post('/alumnos', (req, res) => {
   db.query("TRUNCATE TABLE alumnos");
   for (var i = 0; i < req.body.listaAlumnos.length; i++) {
 	var alumno = req.body.listaAlumnos[i]
-	db.query("INSERT INTO alumnos(padron, apellido, nombre, usuario, contrasena, prioridad, carrera, f_update)\
-			VALUES($1, $2, $3, $4, $5, $6, $7, now())", 
-			[alumno.padron, alumno.apellido, alumno.nombre, alumno.usuario, alumno.contrasena, alumno.prioridad, alumno.carrera]);
+	db.query("INSERT INTO alumnos(padron, apellido, nombre, usuario, contrasena, prioridad, carrera, f_update, email)\
+			VALUES($1, $2, $3, $4, $5, $6, $7, now(), $8)", 
+			[alumno.padron, alumno.apellido, alumno.nombre, alumno.usuario, alumno.contrasena, alumno.prioridad, alumno.carrera, alumno.email]);
   
   }
   res.send("ok");
@@ -25,9 +25,9 @@ router.post('/docentes', (req, res) => {
     db.query("TRUNCATE TABLE docentes");
     for (var i = 0; i < req.body.listaDocentes.length; i++) {
         var docente = req.body.listaDocentes[i]
-        db.query("INSERT INTO docentes(legajo, apellido, nombre, usuario, contrasena)\
-        		VALUES($1, $2, $3, $4, $5)", 
-        		[docente.legajo, docente.apellido, docente.nombre, docente.usuario, docente.contrasena]);
+        db.query("INSERT INTO docentes(legajo, apellido, nombre, usuario, contrasena, email)\
+        		VALUES($1, $2, $3, $4, $5, $6)", 
+        		[docente.legajo, docente.apellido, docente.nombre, docente.usuario, docente.contrasena, docente.email]);
 
         }
     res.send("ok");
