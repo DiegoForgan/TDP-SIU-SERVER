@@ -90,7 +90,7 @@ module.exports = function(pool){
 	pool.query("\
 			INSERT INTO cursos VALUES(DEFAULT, 1, '0019','PC;PC','400;400',3,'martes;jueves','14:00-18:00;14:00-18:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 1, '0018','PC;PC','403;403',2,'lunes;miercoles','09:00-13:00;09:00-13:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 1, '0020','PC;PC','201;310',1,'lunes;miercoles','09:00-13:00;09:00-13:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 1, '0020','PC;PC','201;310',2,'lunes;miercoles','09:00-13:00;09:00-13:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 3, '0001','PC;PC','203;203',2,'lunes;lunes','17:00-23:00;17:00-23:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 4, '0001','PC;PC','303;303',30,'martes;martes','16:00-22:00;16:00-22:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 5, '0001','PC;PC','221;303',55,'lunes;jueves','16:00-19:00;16:00-19:00', 2);\
@@ -107,7 +107,7 @@ module.exports = function(pool){
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0015','PC;PC','507;507',30,'miercoles;miercoles','16:00-22:00;16:00-22:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',1,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',2,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			\
 			");
 
