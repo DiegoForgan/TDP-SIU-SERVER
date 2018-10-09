@@ -7,18 +7,38 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS verCursosAMiCargo(legajo_del_docente varchar(10));\
     \
     CREATE OR REPLACE FUNCTION verCursosAMiCargo(legajo_del_docente varchar(10))\
-    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes int, regulares int, condicionales int, alumnos_totales int)\
+    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes bigint, regulares bigint, condicionales bigint, alumnos_totales bigint)\
     AS $$\
+    DECLARE\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.id_curso, materias.codigo, materias.nombre,\
-        cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales,\
-        cursos.inscriptos + cursos.condicionales\
-        FROM cursos\
-        INNER JOIN materias ON cursos.id_materia = materias.id\
-        INNER JOIN inscripciones ON cursos.id_curso = inscripciones.id_curso\
-        WHERE legajo_del_docente = cursos.docente_a_cargo\
-        ORDER BY materias.codigo ASC;\
+        SELECT \
+            sumas.id_curso,\
+            sumas.codigo,\
+            sumas.nombre,\
+            sumas.vacantes - sumas.regulares - sumas.condicionales as vacantes,\
+            sumas.regulares,\
+            sumas.condicionales,\
+            sumas.regulares + sumas.condicionales as alumnos_totales\
+        FROM (\
+            SELECT \
+                cursos.id_curso as id_curso,\
+                materias.codigo as codigo,\
+                materias.nombre as nombre,\
+                cursos.cupos_disponibles as vacantes,\
+                sum(case when es_regular then 1 else 0 end) as regulares,\
+                sum(case when es_regular = false then 1 else 0 end) as condicionales\
+            FROM cursos\
+            INNER JOIN materias ON cursos.id_materia = materias.id\
+            INNER JOIN inscripciones ON cursos.id_curso = inscripciones.id_curso\
+            WHERE '0001' = cursos.docente_a_cargo\
+            GROUP BY\
+                cursos.id_curso,\
+                materias.codigo,\
+                materias.nombre,\
+                cursos.cupos_disponibles\
+            ORDER BY materias.codigo ASC\
+            ) as sumas;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
