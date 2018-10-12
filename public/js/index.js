@@ -782,3 +782,7 @@ $('select').on('select2:select', function(e){
     $t.append($elm);
     $t.trigger('change.select2');
 });
+
+// date.picker
+$('#jrr').datepicker({
+});
