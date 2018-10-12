@@ -244,21 +244,33 @@ function clickEstudiantes() {
 	reader.onload = function(e) {
 		var lines = reader.result.split('\n');
 		var listaAlumnos = [];
+		var cantidadCorrectaLineas = [], mailsCorrectosLineas = [];
+		var cantidadCorrecta, mailsCorrectos, cantidadIngresados = 0;
 		try {
 			for (var i = 0; i <= lines.length; i++) {
 				if (lines[i]){
-					var splittedLine = lines[i].split(',');
-					var data = {
-						padron: splittedLine[0].trim(),
-						apellido: splittedLine[1].trim(),
-						nombre: splittedLine[2].trim(),
-						usuario: splittedLine[3].trim(),
-						contrasena: splittedLine[4].trim(),
-						prioridad: splittedLine[5].trim(),
-						carrera: splittedLine[6].trim(),
-						email: splittedLine[7].trim()
+					cantidadCorrecta = /^[^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,]*$/.test(lines[i]); // chequea que haya 8 campos separados por coma
+					if (cantidadCorrecta){
+						var splittedLine = lines[i].split(',');
+						var data = {
+							padron: splittedLine[0].trim(),
+							apellido: splittedLine[1].trim(),
+							nombre: splittedLine[2].trim(),
+							usuario: splittedLine[3].trim(),
+							contrasena: splittedLine[4].trim(),
+							prioridad: splittedLine[5].trim(),
+							carrera: splittedLine[6].trim(),
+							email: splittedLine[7].trim()
+						}
+						if (/^[^@]*@[^\.]*\..*$/.test(data.email)) {
+							listaAlumnos.push(data);
+							cantidadIngresados++;
+						}else{
+							mailsCorrectosLineas.push(i);
+						}	
+					} else{
+						cantidadCorrectaLineas.push(i);
 					}
-					listaAlumnos.push(data);
 				}
 			}
 		} catch(err){
@@ -276,11 +288,17 @@ function clickEstudiantes() {
 				"listaAlumnos": listaAlumnos
 			},
 			success: (data)=>{
+				var textoCantidad = cantidadCorrectaLineas.length != 0 ? cantidadCorrectaLineas.join(", ") : '-';
+				var textoMails = mailsCorrectosLineas.length != 0 ? mailsCorrectosLineas.join(", ") : '-';
 				$.unblockUI();
 				swal({
 				  type: 'success',
 				  title: 'Guardado!',
-				  text: 'Se han guardado los alumnos'
+				  html: '<h3> Se han guardado ' + cantidadIngresados + ' alumnos</h3><br>\
+			  			<ul style="text-align: left">\
+				  			<li>Las siguientes lineas no tienen la cantidad de campos correctos: <b>' + textoCantidad + '</b></li>\
+							<li>Las siguientes lineas tienen mails incorrectos: <b>' + textoMails + '</b></li>\
+						</ul>'
 				});
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
@@ -306,19 +324,32 @@ function clickDocentes() {
 	reader.onload = function(e) {
 		var lines = reader.result.split('\n');
 		var listaDocentes = [];
+		var cantidadCorrectaLineas = [], mailsCorrectosLineas = [];
+		var cantidadCorrecta, mailsCorrectos, cantidadIngresados = 0;
 		for (var i = 0; i <= lines.length; i++) {
 			if (lines[i]){
-				var splittedLine = lines[i].split(',');
-				
-				var data = {
-					legajo: splittedLine[0].trim(),
-					apellido: splittedLine[1].trim(),
-					nombre: splittedLine[2].trim(),
-					usuario: splittedLine[3].trim(),
-					contrasena: splittedLine[4].trim(),
-					email: splittedLine[5].trim()
+				cantidadCorrecta = /^[^,]*,[^,]*,[^,]*,[^,]*,[^,]*,[^,]*$/.test(lines[i]); // chequea que haya 6 campos separados por coma
+				if (cantidadCorrecta){
+					var splittedLine = lines[i].split(',');
+					
+					var data = {
+						legajo: splittedLine[0].trim(),
+						apellido: splittedLine[1].trim(),
+						nombre: splittedLine[2].trim(),
+						usuario: splittedLine[3].trim(),
+						contrasena: splittedLine[4].trim(),
+						email: splittedLine[5].trim()
+					}
+					if (/^[^@]*@[^\.]*\..*$/.test(data.email)) {
+						listaDocentes.push(data);
+						cantidadIngresados++;
+					}else{
+						mailsCorrectosLineas.push(i);
+					}
+					
+				} else{
+					cantidadCorrectaLineas.push(i);
 				}
-				listaDocentes.push(data);
 			}
 		}
 		$.ajax({
@@ -328,11 +359,17 @@ function clickDocentes() {
 				"listaDocentes": listaDocentes
 			},
 			success: (data)=>{
+				var textoCantidad = cantidadCorrectaLineas.length != 0 ? cantidadCorrectaLineas.join(", ") : '-';
+				var textoMails = mailsCorrectosLineas.length != 0 ? mailsCorrectosLineas.join(", ") : '-';
 				$.unblockUI();
 				swal({
 				  type: 'success',
 				  title: 'Guardado!',
-				  text: 'Se han guardado los docentes'
+				  html: '<h3> Se han guardado ' + cantidadIngresados + ' docentes</h3><br>\
+			  			<ul style="text-align: left">\
+				  			<li>Las siguientes lineas no tienen la cantidad de campos correctos: <b>' + textoCantidad + '</b></li>\
+							<li>Las siguientes lineas tienen mails incorrectos: <b>' + textoMails + '</b></li>\
+						</ul>'
 				});
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
