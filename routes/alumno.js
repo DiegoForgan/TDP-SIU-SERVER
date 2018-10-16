@@ -205,7 +205,7 @@ router.post('/inscribir', (req, res) => {
 //PRE CONDICION: EL PERIODO DE DESINSCRIPCION ES EL CORRECTO
 //para poder desinscribir, la URL debe ser alummno/desinscribir?curso={id_curso}&padron={nro_padron}
 router.delete('/desinscribir',(req,res)=>{
-    if (!req.query.curso || !req.query.padron) res.send('no me especificas el curso!');
+    if (!req.query.curso || !req.query.padron) res.send({'Estado':false});
     else {
         db.query('DELETE FROM inscripciones\
         WHERE inscripciones.id_curso = $1 AND inscripciones.padron = $2',[req.query.curso, req.query.padron]);
