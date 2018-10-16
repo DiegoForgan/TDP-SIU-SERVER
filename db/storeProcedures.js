@@ -184,6 +184,75 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //Devuelve datos relevantes para saber si el alumno se puede inscribir al curso tales como: vacantes, inscriptos_regulares, inscriptos_condicionales y la materia.
     pool.query("DROP FUNCTION IF EXISTS getDatosDeInscripcion(id_consultada int);\
     \
@@ -196,15 +265,50 @@ module.exports = function(pool){
         max(c.cupos_disponibles) - sum(case when i.es_regular then 1 else 0 end),\
         sum(case when i.es_regular then 1 else 0 end), sum(case when not i.es_regular then 1 else 0 end),\
         max(c.docente_a_cargo)\
-        FROM inscripciones i\
-        INNER JOIN cursos c ON c.id_curso = i.id_curso\
+        FROM cursos c\
+        INNER JOIN inscripciones i ON c.id_curso = i.id_curso\
         INNER JOIN materias m ON c.id_materia = m.id\
-        WHERE i.id_curso = id_consultada\
-        GROUP BY i.id_curso;\
+        WHERE c.id_curso = id_consultada\
+        GROUP BY c.id_curso;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
     );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
     pool.query("DROP FUNCTION IF EXISTS vacantesDeLaMateria(id_materia_consultada int);\
     \
