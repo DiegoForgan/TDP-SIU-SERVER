@@ -91,7 +91,7 @@ module.exports = function(pool){
                 aula varchar(200) not null);"
 			);
 			
-	pool.query("DROP TABLE IF EXISTS aulas;\
+	pool.query("DROP TABLE IF EXISTS examenesfinales;\
 	\
 	create table examenesfinales(\
 				id_final SERIAL,\
