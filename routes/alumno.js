@@ -129,91 +129,109 @@ router.get('/inscripciones/:padron',(req,res)=>{
 });
 
 
-//Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso".
-//params: ?curso={id_curso}&padron={padron_alumno}
+//Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso"
+// o al final cuyo id es "id_final"
+//params: ?curso={id_curso}&padron={padron_alumno} para inscripcion a CURSOS
+//params: ?final={id_final}&padron={padron_alumno} para inscripcion a FINALES
 //Devuelve el estado de la inscripcion con un detalle
 //ESTADOS POSIBLES:
 /*
     -1 : IMPLICA UN ERROR EN LA BASE DE DATOS!
      1 : EL ALUMNO FUE INSCRIPTO EN EL CURSO QUE QUERIA DE FORMA REGULAR!
      2 : EL ALUMNO NO FUE INSCRIPTO YA QUE HAY MAS CURSOS PARA LA MATERIA DESEADA 
-        (SE DEVUELVEN LOS CURSOS DISPONIBLES EN EL ITEM "cursos_disponibles")
-     3 : SE CREA UN CURSO CONDICIONAL YA QUE NO HAY MAS VACANTES DISPONIBLES EN NINGUN CURSO
 */
 router.post('/inscribir', (req, res) => {
-    if (!req.query.curso || !req.query.padron) res.send({'estado':-1, 'detalles':'Faltan Datos para inscribir'});
-    else{
-        db.query('SELECT * FROM getDatosDeInscripcion($1)',[req.query.curso],(error,resp_curso)=>{
-            if (error) res.send(error);//{'estado':-1, 'detalles':'error en la query del curso de la base'});
-            //no aparece en la lista de inscriptos ninguna entrada
-            else if (resp_curso.rowCount == 0) {
-                db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[req.query.padron,req.query.curso,true]);
-                res.send({'estado':1, 'detalles':'el alumno fue inscripto con exito!'});
-                //SOLUCIONAR BUG DE MATERIA CONO UNA SOLA VACANTE QUE NO GENERA EL CURSO CONDICIONAL!
-                //Se soluciona sin tocar codigo poniendo siempre cursos con 2 vacantes por lo menos!
-                //Cuando debe anotarlo con el flag condicional FALSE, anota al primero como TRUE
-            }
-            else {
-                //Chequeo las vacantes del curso donde se quiere inscribir el alumno
-                var vacantes_disponibles = resp_curso.rows[0].vacantes;
-                var condicionales = resp_curso.rows[0].condicionales;
-                var id_materia = resp_curso.rows[0].materia;
-                var es_inscripcion_regular = true;
-                var estado_inscripcion = resp_curso.rows[0].legajo;
-                
-                if (estado_inscripcion == 'cond') es_inscripcion_regular = false;
-                
-                if (vacantes_disponibles != 0){
-                    vacantes_disponibles--;
+    if (req.query.curso && req.query.padron) inscribirACurso(req, res);
+    else if (req.query.final && req.query.padron) inscribirAFinal(req,res);
+    else res.send({'estado':-1, 'detalles':'Faltan parametros en el endpoint!'});
+});
 
-                    db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)',[req.query.padron,req.query.curso,es_inscripcion_regular]);
-                    res.send({'estado':1, 'detalles':'el alumno fue inscripto con exito!'});
-                    //Veo si con esta inscripcion se lleno este curso y por lo tanto debo ver los otros.
-                    if(vacantes_disponibles == 0){    
-                        //Debo chequear si los otros cursos de la materia todavia tienen vacantes!
-                        db.query('SELECT * FROM vacantesDeLaMateria($1)',[id_materia],(error,resp_cursos)=>{
-                            if (error) res.send({'estado':-1, 'detalles':'error en la query del curso de la base'});
-                            else if (resp_cursos.rowCount == 0 || resp_cursos.rows[0].restantes <= 0){
-                                //No hay mas opcion que crear el curso condicional para los proximos alumnos!
-                                console.log('creamos el condicional porque el proximo lo necesita!');
-                                crearCursoCondicional(condicionales,id_materia,req.query.padron,req,res);
-                            }
-                        });
-                    }
-                }else{
+
+//ruta que desinscribe a un alumno de un curso o un final
+//PRE CONDICION: EL PERIODO DE DESINSCRIPCION ES EL CORRECTO
+//params: ?curso={id_curso}&padron={nro_padron} para CURSOS
+//params: ?final={id_final}&padron={nro_padron} para FINALES
+router.delete('/desinscribir',(req,res)=>{
+    if (req.query.curso && req.query.padron) desinscribirDeUnCurso(req,res);
+    else if (req.query.final && req.query.padron) desinscribirDeUnFinal(req,res);
+    else res.send({'estado':false, 'detalle':'faltan parámetros en el endpoint!'});
+});
+  
+module.exports = router;
+
+
+function desinscribirDeUnCurso(req, res) {
+    db.query('DELETE FROM inscripciones\
+        WHERE inscripciones.id_curso = $1 AND inscripciones.padron = $2', [req.query.curso, req.query.padron]);
+    res.send({ 'estado': true });
+}
+
+function desinscribirDeUnFinal(req,res){
+    res.send('Te queres desinscribir de un final!');
+}
+
+function inscribirAFinal(req, res) {
+    res.send('Te queres inscribir al final!');
+}
+
+function inscribirACurso(req, res) {
+    db.query('SELECT * FROM getDatosDeInscripcion($1)', [req.query.curso], (error, resp_curso) => {
+        if (error)
+            res.send(error); //{'estado':-1, 'detalles':'error en la query del curso de la base'});
+        //no aparece en la lista de inscriptos ninguna entrada
+        else if (resp_curso.rowCount == 0) {
+            db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)', [req.query.padron, req.query.curso, true]);
+            res.send({ 'estado': 1, 'detalles': 'el alumno fue inscripto con exito!' });
+            //SOLUCIONAR BUG DE MATERIA CONO UNA SOLA VACANTE QUE NO GENERA EL CURSO CONDICIONAL!
+            //Se soluciona sin tocar codigo poniendo siempre cursos con 2 vacantes por lo menos!
+            //Cuando debe anotarlo con el flag condicional FALSE, anota al primero como TRUE
+        }
+        else {
+            //Chequeo las vacantes del curso donde se quiere inscribir el alumno
+            var vacantes_disponibles = resp_curso.rows[0].vacantes;
+            var condicionales = resp_curso.rows[0].condicionales;
+            var id_materia = resp_curso.rows[0].materia;
+            var es_inscripcion_regular = true;
+            var estado_inscripcion = resp_curso.rows[0].legajo;
+            if (estado_inscripcion == 'cond')
+                es_inscripcion_regular = false;
+            if (vacantes_disponibles != 0) {
+                vacantes_disponibles--;
+                db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)', [req.query.padron, req.query.curso, es_inscripcion_regular]);
+                res.send({ 'estado': 1, 'detalles': 'el alumno fue inscripto con exito!' });
+                //Veo si con esta inscripcion se lleno este curso y por lo tanto debo ver los otros.
+                if (vacantes_disponibles == 0) {
                     //Debo chequear si los otros cursos de la materia todavia tienen vacantes!
-                    db.query('SELECT * FROM vacantesDeLaMateria($1)',[id_materia],(error,resp_cursos)=>{
-                        if (error) res.send({'estado':-1, 'detalles':'error en la query del curso de la base'});
-                        else if (resp_cursos.rowCount == 0 || resp_cursos.rows[0].restantes > 0){
-                            console.log('Hay mas cursos para llenar!');
-                            res.send({'estado':2, 'detalles': 'Todavia quedan cursos de la materia por llenar!'});
-                        }
-                        else{
+                    db.query('SELECT * FROM vacantesDeLaMateria($1)', [id_materia], (error, resp_cursos) => {
+                        if (error)
+                            res.send({ 'estado': -1, 'detalles': 'error en la query del curso de la base' });
+                        else if (resp_cursos.rowCount == 0 || resp_cursos.rows[0].restantes <= 0) {
                             //No hay mas opcion que crear el curso condicional para los proximos alumnos!
-                            console.log('se creo el curso condicional!');
-                            crearCursoCondicional(condicionales,id_materia,req.query.padron,req,res);
+                            console.log('creamos el condicional porque el proximo lo necesita!');
+                            crearCursoCondicional(condicionales, id_materia, req.query.padron, req, res);
                         }
                     });
                 }
             }
-        });
-    }
-});
-
-
-//ruta que desinscribe a un alumno de un curso
-//PRE CONDICION: EL PERIODO DE DESINSCRIPCION ES EL CORRECTO
-//para poder desinscribir, la URL debe ser alummno/desinscribir?curso={id_curso}&padron={nro_padron}
-router.delete('/desinscribir',(req,res)=>{
-    if (!req.query.curso || !req.query.padron) res.send({'Estado':false});
-    else {
-        db.query('DELETE FROM inscripciones\
-        WHERE inscripciones.id_curso = $1 AND inscripciones.padron = $2',[req.query.curso, req.query.padron]);
-        res.send({'Estado' : true});
-    }
-});
-  
-module.exports = router;
+            else {
+                //Debo chequear si los otros cursos de la materia todavia tienen vacantes!
+                db.query('SELECT * FROM vacantesDeLaMateria($1)', [id_materia], (error, resp_cursos) => {
+                    if (error)
+                        res.send({ 'estado': -1, 'detalles': 'error en la query del curso de la base' });
+                    else if (resp_cursos.rowCount == 0 || resp_cursos.rows[0].restantes > 0) {
+                        console.log('Hay mas cursos para llenar!');
+                        res.send({ 'estado': 2, 'detalles': 'Todavia quedan cursos de la materia por llenar!' });
+                    }
+                    else {
+                        //No hay mas opcion que crear el curso condicional para los proximos alumnos!
+                        console.log('se creo el curso condicional!');
+                        crearCursoCondicional(condicionales, id_materia, req.query.padron, req, res);
+                    }
+                });
+            }
+        }
+    });
+}
 
 function crearCursoCondicional(condicionales,id_materia,padron_alumno,req,res) {
     condicionales++;

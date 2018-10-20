@@ -94,9 +94,17 @@ module.exports = function(pool){
 	pool.query("DROP TABLE IF EXISTS examenesfinales;\
 	\
 	create table examenesfinales(\
-				id_final SERIAL,\
-				id_curso int not null,\
-				fecha_examen date not null,\
-				horario_examen time not null);"
-    	    );
+			id_final SERIAL,\
+			id_curso int not null,\
+			fecha_examen date not null,\
+			horario_examen time not null);"
+			);
+			
+	pool.query("DROP TABLE IF EXISTS inscripcionesfinal;\
+	\
+	create table inscripcionesfinal(\
+			padron varchar(10) not null,\
+			id_final int not null,\
+			es_regular boolean not null);"
+        );
 }
