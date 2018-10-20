@@ -88,26 +88,26 @@ module.exports = function(pool){
 			");
  
 	pool.query("\
-			INSERT INTO cursos VALUES(DEFAULT, 1, '0019','PC;PC','400;400',30,0,0,'martes;jueves','14:00-18:00;14:00-18:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 1, '0018','PC;PC','403;403',30,0,0,'lunes;miercoles','09:00-13:00;09:00-13:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 1, '0020','PC;PC','201;310',30,0,0,'lunes;miercoles','09:00-13:00;09:00-13:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 3, '0001','PC;PC','203;203',60,0,0,'lunes;lunes','17:00-23:00;17:00-23:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 4, '0001','PC;PC','303;303',30,0,0,'martes;martes','16:00-22:00;16:00-22:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 5, '0001','PC;PC','221;303',55,0,0,'lunes;jueves','16:00-19:00;16:00-19:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 5, '0009','PC;PC','105;107',20,0,0,'lunes;jueves','19:00-22:00;19:00-22:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 2, '0004','PC;PC','403;302',35,0,0,'martes;jueves','07:00-11:00;07:00-11:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 2, '0005','PC;PC','302;500',35,0,0,'martes;jueves','14:00-18:00;14:00-18:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 2, '0016','PC;PC','500;500',35,0,0,'lunes;miercoles','13:00-17:00;13:00-17:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 2, '0003','PC;PC','400;400',30,0,0,'martes;viernes','09:00-13:00;09:00-13:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 6, '0011','PC;PC','411;411',60,0,0,'martes;jueves','19:00-22:00;19:00-22:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 6, '0010','PC;PC','411;411',35,0,0,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 10, 'cond','PC;PC','411;411',3,0,0,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 7, '0008','PC;PC','LAB E;LAB E',40,0,0,'lunes;jueves','18:30-21:30;18:30-21:30', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 7, '0012','PC;PC','422;422',40,0,0,'lunes;miercoles','19:00-22:00;19:00-22:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 8, '0015','PC;PC','507;507',30,0,0,'miercoles;miercoles','16:00-22:00;16:00-22:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,0,0,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,0,0,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
-			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',1,0,0,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 1, '0019','PC;PC','400;400',3,'martes;jueves','14:00-18:00;14:00-18:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 1, '0018','PC;PC','403;403',2,'lunes;miercoles','09:00-13:00;09:00-13:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 1, '0020','PC;PC','201;310',2,'lunes;miercoles','09:00-13:00;09:00-13:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 3, '0001','PC;PC','203;203',2,'lunes;lunes','17:00-23:00;17:00-23:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 4, '0001','PC;PC','303;303',30,'martes;martes','16:00-22:00;16:00-22:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 5, '0001','PC;PC','221;303',55,'lunes;jueves','16:00-19:00;16:00-19:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 5, '0009','PC;PC','105;107',20,'lunes;jueves','19:00-22:00;19:00-22:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 2, '0004','PC;PC','403;302',35,'martes;jueves','07:00-11:00;07:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 2, '0005','PC;PC','302;500',35,'martes;jueves','14:00-18:00;14:00-18:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 2, '0016','PC;PC','500;500',35,'lunes;miercoles','13:00-17:00;13:00-17:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 2, '0003','PC;PC','400;400',30,'martes;viernes','09:00-13:00;09:00-13:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 6, '0011','PC;PC','411;411',60,'martes;jueves','19:00-22:00;19:00-22:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 6, '0010','PC;PC','411;411',35,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 10, 'cond','PC;PC','411;411',3,'viernes;viernes','19:00-23:00;19:00-23:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 7, '0008','PC;PC','LAB E;LAB E',40,'lunes;jueves','18:30-21:30;18:30-21:30', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 7, '0012','PC;PC','422;422',40,'lunes;miercoles','19:00-22:00;19:00-22:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 8, '0015','PC;PC','507;507',30,'miercoles;miercoles','16:00-22:00;16:00-22:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',2,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			\
 			");
 

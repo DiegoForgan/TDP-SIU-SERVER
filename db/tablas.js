@@ -71,8 +71,6 @@ module.exports = function(pool){
 				sede varchar not null,\
 				aulas varchar not null,\
 				cupos_disponibles int not null,\
-				inscriptos int not null,\
-				condicionales int not null,\
 				dias varchar not null,\
 				horarios varchar not null,\
                 id_periodo int not null);"
@@ -91,5 +89,22 @@ module.exports = function(pool){
 			create table aulas(\
 				id SERIAL,\
                 aula varchar(200) not null);"
-            );
+			);
+			
+	pool.query("DROP TABLE IF EXISTS examenesfinales;\
+	\
+	create table examenesfinales(\
+			id_final SERIAL,\
+			id_curso int not null,\
+			fecha_examen date not null,\
+			horario_examen time not null);"
+			);
+			
+	pool.query("DROP TABLE IF EXISTS inscripcionesfinal;\
+	\
+	create table inscripcionesfinal(\
+			padron varchar(10) not null,\
+			id_final int not null,\
+			es_regular boolean not null);"
+        );
 }

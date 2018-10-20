@@ -1,53 +1,100 @@
 module.exports = function(pool){
+    
+    
+    //AGUSTIN: ACA ES LA FUNCION QUE NO SE COMO RESOLVER, PORQUE NO SE COMO DEVOLVER LAS VACANTES, LOS REGULARES Y LOS CONDICIONALES DE CADA CURSO EN UNA SOLA QUERY.
+    
     //Esta query devuelve los cursos existentes a cargo del docente en la base de datos
     pool.query("DROP FUNCTION IF EXISTS verCursosAMiCargo(legajo_del_docente varchar(10));\
     \
     CREATE OR REPLACE FUNCTION verCursosAMiCargo(legajo_del_docente varchar(10))\
-    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes int, regulares int, condicionales int, alumnos_totales int)\
+    RETURNS TABLE(id_curso int, codigo varchar(6),nombre varchar(40), vacantes bigint, regulares bigint, condicionales bigint, alumnos_totales bigint)\
     AS $$\
+    DECLARE\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.id_curso, materias.codigo, materias.nombre, cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales, cursos.inscriptos + cursos.condicionales\
-        FROM cursos\
-        INNER JOIN materias ON cursos.id_materia = materias.id\
-        WHERE legajo_del_docente = cursos.docente_a_cargo\
-        ORDER BY materias.codigo ASC;\
+        SELECT \
+            sumas.id_curso,\
+            sumas.codigo,\
+            sumas.nombre,\
+            sumas.vacantes - sumas.regulares - sumas.condicionales as vacantes,\
+            sumas.regulares,\
+            sumas.condicionales,\
+            sumas.regulares + sumas.condicionales as alumnos_totales\
+        FROM (\
+            SELECT \
+                cursos.id_curso as id_curso,\
+                materias.codigo as codigo,\
+                materias.nombre as nombre,\
+                cursos.cupos_disponibles as vacantes,\
+                sum(case when es_regular then 1 else 0 end) as regulares,\
+                sum(case when es_regular = false then 1 else 0 end) as condicionales\
+            FROM cursos\
+            INNER JOIN materias ON cursos.id_materia = materias.id\
+            INNER JOIN inscripciones ON cursos.id_curso = inscripciones.id_curso\
+            WHERE '0001' = cursos.docente_a_cargo\
+            GROUP BY\
+                cursos.id_curso,\
+                materias.codigo,\
+                materias.nombre,\
+                cursos.cupos_disponibles\
+            ORDER BY materias.codigo ASC\
+            ) as sumas;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
     );
 
-    //Esta query devuelve el listado de todas las materias que hay en la base de datos
-    pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeMaterias();\
-    \
-    CREATE OR REPLACE FUNCTION obtenerListadoDeMaterias ()\
-    RETURNS TABLE(id_materia int, codigo varchar(6), nombre varchar(40), creditos int)\
-    AS $$\
-    BEGIN\
-    RETURN QUERY\
-        SELECT materias.id, materias.codigo, materias.nombre, materias.creditos FROM materias;\
-    END; $$\
-    \
-    LANGUAGE 'plpgsql'"
-    );
-
-    //Esta consulta toma el identificador de la materia y me devuelve todos los cursos que hay actualmente para esa materia.
-    pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeCursosPorMateria(id_consultada int);\
-    \
-    CREATE OR REPLACE FUNCTION  obtenerListadoDeCursosPorMateria (id_consultada int)\
-    RETURNS TABLE(id_curso int,docente text,  sede varchar, aulas varchar, vacantes integer, dias varchar, horarios varchar)\
-    AS $$\
-    BEGIN\
-    RETURN QUERY\
-        SELECT cursos.id_curso, docentes.apellido || ',' || docentes.nombre AS nombre_docente , cursos.sede, cursos.aulas,cursos.cupos_disponibles, cursos.dias, cursos.horarios\
-        FROM cursos\
-        INNER JOIN docentes ON cursos.docente_a_cargo = docentes.legajo\
-        WHERE id_consultada = cursos.id_materia;\
-    END; $$\
-    \
-    LANGUAGE 'plpgsql'"
-    );
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //Esta funcion devuelve el listado de alumnos de un determinado curso
     //TODO: Que ordene a los regulares primero
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeAlumnosPorCurso(id_curso_consultado int);\
@@ -89,11 +136,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerCursosDondeMeInscribi(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerCursosDondeMeInscribi (padron_consultado text)\
-    RETURNS TABLE(codigo varchar(6), nombre varchar(40), docente text, sede varchar, aulas varchar, dias varchar, horarios varchar)\
+    RETURNS TABLE(id_curso int, codigo varchar(6), nombre varchar(40), docente text, sede varchar, aulas varchar, dias varchar, horarios varchar)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT materias.codigo,materias.nombre, docentes.apellido || ',' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
+        SELECT inscripciones.id_curso, materias.codigo, materias.nombre, docentes.apellido || ', ' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
         FROM inscripciones\
         INNER JOIN cursos ON cursos.id_curso = inscripciones.id_curso\
         INNER JOIN materias ON materias.id = cursos.id_materia\
@@ -137,35 +184,161 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
-    //Devuelve datos relevantes para saber si el alumno se puede inscribir al curso tales como: vacantes, inscriptos_regulares, inscriptos_condicionales y la materia.
-    pool.query("DROP FUNCTION IF EXISTS obtenerDatosDeInscripcionDelCurso(id_consultada int);\
+    //Dado un id de curso, devuelve finales asociados.
+    pool.query("DROP FUNCTION IF EXISTS getFinalesDeUnCurso(id_consultada int);\
     \
-    CREATE OR REPLACE FUNCTION  obtenerDatosDeInscripcionDelCurso(id_consultada int)\
-    RETURNS TABLE(vacantes int, regulares int, condicionales int, materia int)\
+    CREATE OR REPLACE FUNCTION  getFinalesDeUnCurso(id_consultada int)\
+    RETURNS TABLE(id_final int, fecha date, hora time)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.cupos_disponibles, cursos.inscriptos, cursos.condicionales, cursos.id_materia\
-        FROM cursos\
-        WHERE cursos.id_curso = id_consultada;\
+        SELECT examenesfinales.id_final, examenesfinales.fecha_examen, examenesfinales.horario_examen\
+        FROM examenesfinales\
+        WHERE examenesfinales.id_curso = id_consultada;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    //Devuelve datos relevantes para saber si el alumno se puede inscribir al curso tales como: vacantes, inscriptos_regulares, inscriptos_condicionales y la materia.
+    pool.query("DROP FUNCTION IF EXISTS getDatosDeInscripcion(id_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  getDatosDeInscripcion(id_consultada int)\
+    RETURNS TABLE(materia int, vacantes bigint, regulares bigint, condicionales bigint, legajo text)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT max(m.id),\
+        max(c.cupos_disponibles) - sum(case when i.es_regular then 1 else 0 end),\
+        sum(case when i.es_regular then 1 else 0 end), sum(case when not i.es_regular then 1 else 0 end),\
+        max(c.docente_a_cargo)\
+        FROM cursos c\
+        INNER JOIN inscripciones i ON c.id_curso = i.id_curso\
+        INNER JOIN materias m ON c.id_materia = m.id\
+        WHERE c.id_curso = id_consultada\
+        GROUP BY c.id_curso;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
     );
 
 
-    // Devuelve el resto de los cursos (si hay mas de uno) de la materia deseada
-    pool.query("DROP FUNCTION IF EXISTS getOtrosCursosDeLaMismaMateria(id_curso_consultado int,id_materia_consultada int);\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+    pool.query("DROP FUNCTION IF EXISTS vacantesDeLaMateria(id_materia_consultada int);\
     \
-    CREATE OR REPLACE FUNCTION  getOtrosCursosDeLaMismaMateria(id_curso_consultado int,id_materia_consultada int)\
-    RETURNS TABLE(id int, docente text ,sede varchar, aulas varchar, vacantes int,dias varchar,horarios varchar)\
+    CREATE OR REPLACE FUNCTION  vacantesDeLaMateria(id_materia_consultada int)\
+    RETURNS TABLE(restantes bigint)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT cursos.id_curso, docentes.apellido || ',' || docentes.nombre, cursos.sede, cursos.aulas, cursos.cupos_disponibles, cursos.dias, cursos.horarios\
-        FROM cursos\
-        INNER JOIN docentes ON cursos.docente_a_cargo = docentes.legajo\
-        WHERE cursos.id_curso != id_curso_consultado AND cursos.id_materia = id_materia_consultada;\
+        SELECT (select sum(cursos.cupos_disponibles) from cursos where cursos.id_materia = id_materia_consultada) - sum(case when i.es_regular then 1 else 0 end)\
+        FROM inscripciones i\
+        INNER JOIN cursos c ON c.id_curso = i.id_curso\
+        INNER JOIN materias m ON c.id_materia = m.id\
+        WHERE m.id = id_materia_consultada\
+        GROUP BY m.id;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
