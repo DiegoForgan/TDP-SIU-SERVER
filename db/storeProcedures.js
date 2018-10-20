@@ -184,6 +184,22 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    //Dado un id de curso, devuelve finales asociados.
+    pool.query("DROP FUNCTION IF EXISTS getFinalesDeUnCurso(id_consultada int);\
+    \
+    CREATE OR REPLACE FUNCTION  getFinalesDeUnCurso(id_consultada int)\
+    RETURNS TABLE(id_final int, fecha date, hora time)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT examenesfinales.id_final, examenesfinales.fecha_examen, examenesfinales.horario_examen\
+        FROM examenesfinales\
+        WHERE examenesfinales.id_curso = id_consultada;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
     
     
     
