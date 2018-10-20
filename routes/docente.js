@@ -49,5 +49,16 @@ router.post('/finales', (req,res)=>{
     }
 });
 
+//Se debe aclarar el id_final para poder eliminarlo de la tabla
+//No chequea si la fecha existe
+router.delete('/finales', (req,res)=>{
+    if(!req.query.final) res.send({'estado':false});
+    else{
+        db.query('DELETE FROM examenesfinales\
+        WHERE examenesfinales.id_final = $1',[req.query.final]);
+        res.send({'estado':true});
+    }
+});
+
 
 module.exports = router;
