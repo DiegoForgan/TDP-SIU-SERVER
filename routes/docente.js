@@ -71,7 +71,7 @@ router.get('/finales/:id_curso', (req,res)=>{
             }
             else{
                 if (fechas_obtenidas.rowCount == 0) res.send({'fechas':[]});
-                else res.send(fechas_obtenidas);
+                else res.send({'fechas':fechas_obtenidas.rows});
             }
         })
     }
