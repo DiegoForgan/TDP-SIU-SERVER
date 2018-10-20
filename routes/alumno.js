@@ -165,7 +165,9 @@ function desinscribirDeUnFinal(req,res){
 }
 
 function inscribirAFinal(req, res) {
-    res.send('Te queres inscribir al final!');
+    db.query('INSERT INTO inscripcionesfinal (padron, id_final, es_regular) VALUES ($1,$2,$3)'
+    ,[req.query.padron,req.query.final,true]);
+    res.send({'estado':true});
 }
 
 function desinscribirDeUnCurso(req, res) {
