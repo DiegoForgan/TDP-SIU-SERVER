@@ -723,7 +723,7 @@ $.ajax({
 });
 
 //comentar linea, solo para desarrollo
-cambiarPantalla(2);
+cambiarPantalla(3);
 
 // maneja el input
 $(".input-file-estudiantes").before(
@@ -784,5 +784,118 @@ $('select').on('select2:select', function(e){
 });
 
 // date.picker
-$('#jrr').datepicker({
+$('#inputFechaInscripcionCursadasInicio,\
+	#inputFechaInscripcionCursadasFin,\
+	#inputFechaDesinscripcionCursadasInicio,\
+	#inputFechaDesinscripcionCursadasFin,\
+	#inputFechaCursadasInicio,\
+	#inputFechaCursadasFin,\
+	#inputFechaFinalesInicio,\
+	#inputFechaFinalesFin').datepicker({
 });
+
+// maneja los periodos
+function okPeriodo(numero){
+	switch(numero){
+		case 1:
+			if ($("#inputFechaInscripcionCursadasInicio").val() 
+				&& $("#inputFechaInscripcionCursadasFin").val() 
+				&& $("#inputFechaInscripcionCursadasInicio").val() < $("#inputFechaInscripcionCursadasFin").val()){
+				$("#divInscripcionCursadas").addClass("divInhabilitado");
+				$("#divDesinscripcionCursadas").removeClass("divInhabilitado");
+			} else{
+				swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio</p>'
+				});
+			}
+			break;
+		case 2:
+			if ($("#inputFechaDesinscripcionCursadasInicio").val() 
+				&& $("#inputFechaDesinscripcionCursadasFin").val() 
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() < $("#inputFechaDesinscripcionCursadasFin").val()
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() > $("#inputFechaInscripcionCursadasFin").val()){
+				$("#divDesinscripcionCursadas").addClass("divInhabilitado");
+				$("#divCursadas").removeClass("divInhabilitado");
+			} else{
+				swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio<br>La fecha de inicio debe ser mayor a la de fin de la etapa anterior</p>'
+				});
+			}
+			break;
+		case 3:
+			if ($("#inputFechaCursadasInicio").val() 
+				&& $("#inputFechaCursadasFin").val() 
+				&& $("#inputFechaCursadasInicio").val() < $("#inputFechaCursadasFin").val()
+				&& $("#inputFechaCursadasInicio").val() > $("#inputFechaDesinscripcionCursadasFin").val()){
+				$("#divCursadas").addClass("divInhabilitado");
+				$("#divFinales").removeClass("divInhabilitado");
+			} else{
+				swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio<br>La fecha de inicio debe ser mayor a la de fin de la etapa anterior</p>'
+				});
+			}
+			break;
+		case 4:
+			if ($("#inputFechaFinalesInicio").val() 
+				&& $("#inputFechaFinalesFin").val() 
+				&& $("#inputFechaFinalesInicio").val() < $("#inputFechaFinalesFin").val()
+				&& $("#inputFechaFinalesInicio").val() > $("#inputFechaCursadasFin").val()){
+				$.blockUI({message:"Guardando.."})
+				$.ajax({
+						url: '../admin/periodos/',
+						type: 'POST',
+						data: {
+							fechaInicioInscripcionCursadas: $("#inputFechaInscripcionCursadasInicio").val() ,
+							fechaFinInscripcionCursadas: $("#inputFechaInscripcionCursadasFin").val() ,
+							fechaInicioDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasInicio").val() ,
+							fechaFinDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasFin").val() ,
+							fechaInicioCursadas: $("#inputFechaCursadasInicio").val() ,
+							fechaFinCursadas: $("#inputFechaCursadasFin").val() ,
+							fechaInicioFinales: $("#inputFechaFinalesInicio").val() ,
+							fechaFinFinales: $("#inputFechaFinalesFin").val() 
+						},
+						success: (data)=>{
+							$.unblockUI();
+							swal({
+							  type: 'success',
+							  title: 'Guardado!',
+							  text: 'Se han guardado los periodos'
+							});
+							$("#divFinales").addClass("divInhabilitado");
+							$("#divInscripcionCursadas").removeClass("divInhabilitado");
+						},
+						error: function (xhr, ajaxOptions, thrownError) {
+					        $.unblockUI();
+					        swal({
+							  type: 'error',
+							  title: 'Oops...',
+							  text: 'Ha ocurrido un error al intentar guardar periodos'
+							});
+					        console.log(xhr.responseText);
+					        console.log(thrownError);
+					        $("#divFinales").addClass("divInhabilitado");
+							$("#divInscripcionCursadas").removeClass("divInhabilitado");
+				      	}
+					});
+			} else{
+				swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio<br>La fecha de inicio debe ser mayor a la de fin de la etapa anterior</p>'
+				});
+			}
+			break;
+	}
+}
+
+
+
+
+
+
