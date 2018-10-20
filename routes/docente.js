@@ -37,4 +37,16 @@ router.get('/inscriptos/:id_curso',(req,res)=>{
 });
 
 
+//Se envia la informacion a traves de un JSON y por lo tanto obtengo los datos a traves de
+//req.body.{id}
+router.post('/finales', (req,res)=>{
+    if(!req.body.id_curso || !req.body.fecha || !req.body.hora) res.send({'estado': false, 'id_final': null});
+    else {
+        db.query('INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES($1,$2,$3)',[req.body.id_curso, req.body.fecha, req.body.hora]);
+        //FALTA QUE DEVUELVE EL ID DEL FINAL
+        res.send({'estado':true, 'id_final':null});
+    }
+});
+
+
 module.exports = router;
