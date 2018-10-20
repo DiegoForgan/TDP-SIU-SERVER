@@ -136,11 +136,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerCursosDondeMeInscribi(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerCursosDondeMeInscribi (padron_consultado text)\
-    RETURNS TABLE(codigo varchar(6), nombre varchar(40), docente text, sede varchar, aulas varchar, dias varchar, horarios varchar)\
+    RETURNS TABLE(id_curso int, codigo varchar(6), nombre varchar(40), docente text, sede varchar, aulas varchar, dias varchar, horarios varchar)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT materias.codigo,materias.nombre, docentes.apellido || ',' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
+        SELECT inscripciones.id_curso, materias.codigo, materias.nombre, docentes.apellido || ', ' || docentes.nombre, cursos.sede,cursos.aulas,cursos.dias,cursos.horarios\
         FROM inscripciones\
         INNER JOIN cursos ON cursos.id_curso = inscripciones.id_curso\
         INNER JOIN materias ON materias.id = cursos.id_materia\
