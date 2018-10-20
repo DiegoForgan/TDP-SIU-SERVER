@@ -160,18 +160,18 @@ router.delete('/desinscribir',(req,res)=>{
 module.exports = router;
 
 
-function desinscribirDeUnCurso(req, res) {
-    db.query('DELETE FROM inscripciones\
-        WHERE inscripciones.id_curso = $1 AND inscripciones.padron = $2', [req.query.curso, req.query.padron]);
-    res.send({ 'estado': true });
-}
-
 function desinscribirDeUnFinal(req,res){
     res.send('Te queres desinscribir de un final!');
 }
 
 function inscribirAFinal(req, res) {
     res.send('Te queres inscribir al final!');
+}
+
+function desinscribirDeUnCurso(req, res) {
+    db.query('DELETE FROM inscripciones\
+        WHERE inscripciones.id_curso = $1 AND inscripciones.padron = $2', [req.query.curso, req.query.padron]);
+    res.send({ 'estado': true });
 }
 
 function inscribirACurso(req, res) {
