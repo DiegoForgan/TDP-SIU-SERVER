@@ -165,9 +165,35 @@ function desinscribirDeUnFinal(req,res){
 }
 
 function inscribirAFinal(req, res) {
-    db.query('INSERT INTO inscripcionesfinal (padron, id_final, es_regular) VALUES ($1,$2,$3)'
-    ,[req.query.padron,req.query.final,true]);
-    res.send({'estado':true});
+    db.query('SELECT * FROM examenesfinales WHERE examenesfinales.id_final = $1',[req.query.final],(err,existenciaDeFinal)=>{
+        if (err) {
+            res.send({
+                'estado': false,
+                'detalle': 'Hubo un error con la query de la base!'
+            })
+        }else if (existenciaDeFinal.rowCount == 0){
+            res.send({
+                'estado': false,
+                'detalle': 'El final al que te queres inscribir no existe!'
+            })
+        }else{
+            db.query('SELECT * FROM inscripcionesfinal WHERE inscripcionesfinal.padron = $1 AND inscripcionesfinal.id_final = $2',
+            [req.query.padron,req.query.final],(error,finalInscripto)=>{
+                if (error) { 
+                    res.send({'estado':false, 'detalle':'hubo un error en la query de la base'});
+                }
+                else if (finalInscripto.rowCount != 0){
+                    res.send({'estado':false, 'detalle':'Ya se encuentra inscripto a ese final'});
+                }
+                else{
+                    db.query('INSERT INTO inscripcionesfinal (padron, id_final, es_regular) VALUES ($1,$2,$3)'
+                    ,[req.query.padron,req.query.final,true]);
+                    res.send({'estado':true, 'detalle':'Inscripcion exitosa!'});
+                }
+            })
+        }
+
+    })
 }
 
 function desinscribirDeUnCurso(req, res) {
