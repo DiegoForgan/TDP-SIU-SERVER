@@ -161,7 +161,29 @@ module.exports = router;
 
 
 function desinscribirDeUnFinal(req,res){
-    res.send('Te queres desinscribir de un final!');
+    db.query('SELECT * FROM inscripcionesfinal WHERE inscripcionesfinal.padron = $1 AND inscripcionesfinal.id_final = $2',
+    [req.query.padron, req.query.final],(error,inscipcionExistente)=>{
+        if (error) {
+            res.send({
+                'estado': false,
+                'detalle': 'Hubo un error con la base de datos!'
+            })
+        }
+        else if (inscipcionExistente.rowCount == 0){
+            res.send({
+                'estado': false,
+                'detalle': 'No estas inscripto en este final!'
+            })
+        }else{
+            db.query('DELETE FROM inscripcionesfinal\
+            WHERE inscripcionesfinal.padron = $1 AND inscripcionesfinal.id_final = $2',
+            [req.query.padron, req.query.final]);
+            res.send({
+                'estado': true,
+                'detalle': 'Te desinscribiste de forma exitosa!'
+            })
+        }
+    })
 }
 
 function inscribirAFinal(req, res) {
