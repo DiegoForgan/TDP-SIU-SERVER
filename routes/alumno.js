@@ -218,6 +218,8 @@ function inscribirAFinal(req, res) {
     })
 }
 
+//Se supone que aca nunca va a elegir un curso al que no este inscripto ya que previamente ve sus inscripciones.
+//Por ese motivo no verifica eso previamente
 function desinscribirDeUnCurso(req, res) {
     db.query('DELETE FROM inscripciones\
         WHERE inscripciones.id_curso = $1 AND inscripciones.padron = $2', [req.query.curso, req.query.padron]);
