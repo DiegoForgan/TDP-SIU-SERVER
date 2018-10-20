@@ -60,5 +60,22 @@ router.delete('/finales', (req,res)=>{
     }
 });
 
+//Obtiene las fechas de final asociadas a un curso en particular
+router.get('/finales/:id_curso', (req,res)=>{
+    if(!req.params.id_curso) res.send({'fechas':[]});
+    else{
+        db.query('SELECT * FROM getFinalesDeUnCurso($1)',[req.params.id_curso],(error,fechas_obtenidas)=>{
+            if (error) {
+                console.log(error);
+                res.send({'fechas':[]});
+            }
+            else{
+                if (fechas_obtenidas.rowCount == 0) res.send({'fechas':[]});
+                else res.send(fechas_obtenidas);
+            }
+        })
+    }
+});
+
 
 module.exports = router;
