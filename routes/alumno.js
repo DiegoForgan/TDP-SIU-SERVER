@@ -140,6 +140,7 @@ router.get('/inscripciones/:padron',(req,res)=>{
 //params: ?padron{padron del alumno}
 router.get('/finales',(req,res)=>{
     db.query('SELECT * FROM obtenerFinalesDondeMeInscribi($1)',[req.query.padron],(err,resp_finales)=>{
+        console.log(resp_finales.rows)
         if (err){console.log(err); res.send({'finales':[]});}
         else if (resp_finales.rowCount != 0) res.send({'finales':resp_finales.rows});
         else res.send({'finales':[]});
