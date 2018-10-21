@@ -115,4 +115,23 @@ router.put('/periodoBETA', (req, res) => {
     })
 });
 
+//periodos
+router.get('/periodoActual', (req, res) => {
+    db.query("SELECT descripcion, activo\
+            FROM periodos\
+            ORDER BY id DESC\
+            LIMIT 1", null, (err, response) => {
+                res.send(response.rows);
+            });
+});
+
+router.post('/periodos', (req, res) => {
+    db.query("SELECT guardarFechasPeriodos($1, $2, $3, $4, $5, $6, $7, $8, $9)",
+            [req.body.periodo, req.body.fechaInicioInscripcionCursadas, req.body.fechaFinInscripcionCursadas,
+             req.body.fechaInicioDesinscripcionCursadas, req.body.fechaFinDesinscripcionCursadas,
+             req.body.fechaInicioCursadas, req.body.fechaFinCursadas,
+             req.body.fechaInicioFinales, req.body.fechaFinFinales])
+    res.send("ok");
+})
+
 module.exports = router;
