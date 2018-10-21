@@ -128,6 +128,16 @@ router.get('/inscripciones/:padron',(req,res)=>{
     });
 });
 
+//Devuelve los finales a los cuales se inscribio el alumno
+//params: ?padron{padron del alumno}
+router.get('/finales',(req,res)=>{
+    db.query('SELECT * FROM obtenerFinalesDondeMeInscribi($1)',[req.query.padron],(err,resp_finales)=>{
+        if (err){console.log(err); res.send({'finales':[]});}
+        else if (resp_finales.rowCount != 0) res.send({'finales':resp_finales.rows});
+        else res.send({'finales':[]});
+    });
+});
+
 
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso"
 // o al final cuyo id es "id_final"
