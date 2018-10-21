@@ -44,6 +44,74 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+    pool.query("DROP FUNCTION IF EXISTS guardarFechasPeriodos(\
+                    _periodo varchar,\
+                    _fechaInicioInscripcionCursadas timestamp,\
+                    _fechaFinInscripcionCursadas timestamp,\
+                    _fechaInicioDesinscripcionCursadas timestamp,\
+                    _fechaFinDesinscripcionCursadas timestamp,\
+                    _fechaInicioCursadas timestamp,\
+                    _fechaFinCursadas timestamp,\
+                    _fechaInicioFinales timestamp,\
+                    _fechaFinFinales timestamp);\
+    \
+    CREATE OR REPLACE FUNCTION guardarFechasPeriodos(\
+                    _periodo varchar,\
+                    _fechaInicioInscripcionCursadas timestamp,\
+                    _fechaFinInscripcionCursadas timestamp,\
+                    _fechaInicioDesinscripcionCursadas timestamp,\
+                    _fechaFinDesinscripcionCursadas timestamp,\
+                    _fechaInicioCursadas timestamp,\
+                    _fechaFinCursadas timestamp,\
+                    _fechaInicioFinales timestamp,\
+                    _fechaFinFinales timestamp)\
+    RETURNS void\
+    AS $$\
+    DECLARE\
+    BEGIN\
+        IF EXISTS (SELECT 1 FROM PERIODOS WHERE DESCRIPCION = _PERIODO AND ACTIVO)\
+        THEN\
+            UPDATE PERIODOS\
+            SET \
+                fechaInicioInscripcionCursadas = _fechaInicioInscripcionCursadas,\
+                fechaFinInscripcionCursadas = _fechaFinInscripcionCursadas,\
+                fechaInicioDesinscripcionCursadas = _fechaInicioDesinscripcionCursadas,\
+                fechaFinDesinscripcionCursadas = _fechaFinDesinscripcionCursadas,\
+                fechaInicioCursadas = _fechaInicioCursadas,\
+                fechaFinCursadas = _fechaFinCursadas,\
+                fechaInicioFinales = _fechaInicioFinales,\
+                fechaFinFinales = _fechaFinFinales\
+            WHERE DESCRIPCION = _PERIODO;\
+        ELSE\
+            UPDATE PERIODOS\
+            SET activo = FALSE;\
+            \
+            INSERT INTO PERIODOS(descripcion,\
+                activo,\
+                fechaInicioInscripcionCursadas,\
+                fechaFinInscripcionCursadas,\
+                fechaInicioDesinscripcionCursadas,\
+                fechaFinDesinscripcionCursadas,\
+                fechaInicioCursadas,\
+                fechaFinCursadas,\
+                fechaInicioFinales,\
+                fechaFinFinales)\
+            VALUES (\
+                _periodo,\
+                TRUE,\
+                _fechaInicioInscripcionCursadas,\
+                _fechaFinInscripcionCursadas,\
+                _fechaInicioDesinscripcionCursadas,\
+                _fechaFinDesinscripcionCursadas,\
+                _fechaInicioCursadas,\
+                _fechaFinCursadas,\
+                _fechaInicioFinales,\
+                _fechaFinFinales);\
+        END IF;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
     
     
     

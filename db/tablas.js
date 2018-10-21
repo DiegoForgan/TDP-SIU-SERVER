@@ -33,7 +33,14 @@ module.exports = function(pool){
 				id serial,\
 				descripcion varchar not null,\
 				activo boolean not null,\
-                fecha_cierre timestamp not null);"
+                fechaInicioInscripcionCursadas timestamp not null,\
+                fechaFinInscripcionCursadas timestamp not null,\
+             	fechaInicioDesinscripcionCursadas timestamp not null,\
+             	fechaFinDesinscripcionCursadas timestamp not null,\
+             	fechaInicioCursadas timestamp not null,\
+             	fechaFinCursadas timestamp not null,\
+             	fechaInicioFinales timestamp not null,\
+             	fechaFinFinales timestamp not null);"
             );
 
     pool.query("DROP TABLE IF EXISTS prioridad_periodo;\

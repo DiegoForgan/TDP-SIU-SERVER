@@ -654,6 +654,39 @@ function cambiarPantalla(numero){
 			$("#periodosPantalla").removeClass("active");
 			break;
 		case 3:
+			$.blockUI();
+			$.ajax({
+				url: '../admin/periodoActual/',
+				type: 'GET',
+				success: (data)=>{
+					$.unblockUI();
+					var info = data[0].descripcion.split('-');
+					if (data[0].activo) {
+						$('#cuatrimestrePeriodoActual').val(info[0]).trigger('change');
+						$('#inputAnioPeriodoActual').val(info[1]);
+						$("#inputPeriodoActual").val(data[0].descripcion);
+					}
+					$('#ultimoPeriodo').val(data[0].descripcion);
+					$('#inputAnioPeriodoActual').datepicker({
+						format: "yyyy",
+					    viewMode: "years", 
+					    minViewMode: "years"
+					});
+
+					
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+			        $.unblockUI();
+			        swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  text: 'Ha ocurrido un error al intentar traer info de periodo'
+					});
+			        console.log(xhr.responseText);
+			        console.log(thrownError);
+			  	}
+			});
+
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
 			$("#periodosPantalla").show();
@@ -792,7 +825,21 @@ $('#inputFechaInscripcionCursadasInicio,\
 	#inputFechaCursadasFin,\
 	#inputFechaFinalesInicio,\
 	#inputFechaFinalesFin').datepicker({
+		format: "yyyy-mm-dd",
+		autoclose: true
 });
+
+$('#cuatrimestrePeriodoActual').select2({
+	width:'100%',
+	minimumResultsForSearch: -1,
+	placeholder: "Cuatrimestre"
+});
+
+$('#cuatrimestrePeriodoActual,\
+	#inputAnioPeriodoActual').on('change', ()=>{
+		var strAux =  $('#cuatrimestrePeriodoActual').val() + '-' + $('#inputAnioPeriodoActual').val();
+		$('#inputPeriodoActual').val(strAux);
+	});
 
 // maneja los periodos
 function okPeriodo(numero){
@@ -842,53 +889,74 @@ function okPeriodo(numero){
 			}
 			break;
 		case 4:
-			if ($("#inputFechaFinalesInicio").val() 
-				&& $("#inputFechaFinalesFin").val() 
-				&& $("#inputFechaFinalesInicio").val() < $("#inputFechaFinalesFin").val()
-				&& $("#inputFechaFinalesInicio").val() > $("#inputFechaCursadasFin").val()){
-				$.blockUI({message:"Guardando.."})
-				$.ajax({
-						url: '../admin/periodos/',
-						type: 'POST',
-						data: {
-							fechaInicioInscripcionCursadas: $("#inputFechaInscripcionCursadasInicio").val() ,
-							fechaFinInscripcionCursadas: $("#inputFechaInscripcionCursadasFin").val() ,
-							fechaInicioDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasInicio").val() ,
-							fechaFinDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasFin").val() ,
-							fechaInicioCursadas: $("#inputFechaCursadasInicio").val() ,
-							fechaFinCursadas: $("#inputFechaCursadasFin").val() ,
-							fechaInicioFinales: $("#inputFechaFinalesInicio").val() ,
-							fechaFinFinales: $("#inputFechaFinalesFin").val() 
-						},
-						success: (data)=>{
-							$.unblockUI();
-							swal({
-							  type: 'success',
-							  title: 'Guardado!',
-							  text: 'Se han guardado los periodos'
-							});
-							$("#divFinales").addClass("divInhabilitado");
-							$("#divInscripcionCursadas").removeClass("divInhabilitado");
-						},
-						error: function (xhr, ajaxOptions, thrownError) {
-					        $.unblockUI();
-					        swal({
-							  type: 'error',
-							  title: 'Oops...',
-							  text: 'Ha ocurrido un error al intentar guardar periodos'
-							});
-					        console.log(xhr.responseText);
-					        console.log(thrownError);
-					        $("#divFinales").addClass("divInhabilitado");
-							$("#divInscripcionCursadas").removeClass("divInhabilitado");
-				      	}
+			var ultPeriodo = $('#ultimoPeriodo').val().split('-');
+			if ($('#cuatrimestrePeriodoActual').val() 
+				&& $('#inputAnioPeriodoActual').val()
+				&& ($('#inputAnioPeriodoActual').val() > ultPeriodo[1]
+					|| $('#inputAnioPeriodoActual').val() == ultPeriodo[1] && $('#cuatrimestrePeriodoActual').val()[0] >= ultPeriodo[0][0])) {
+				if ($("#inputFechaFinalesInicio").val() 
+					&& $("#inputFechaFinalesFin").val() 
+					&& $("#inputFechaFinalesInicio").val() < $("#inputFechaFinalesFin").val()
+					&& $("#inputFechaFinalesInicio").val() > $("#inputFechaCursadasFin").val()){
+					$.blockUI({message:"Guardando.."})
+					$.ajax({
+							url: '../admin/periodos/',
+							type: 'POST',
+							data: {
+								periodo: $('#inputPeriodoActual').val() ,
+								fechaInicioInscripcionCursadas: $("#inputFechaInscripcionCursadasInicio").val() ,
+								fechaFinInscripcionCursadas: $("#inputFechaInscripcionCursadasFin").val() ,
+								fechaInicioDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasInicio").val() ,
+								fechaFinDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasFin").val() ,
+								fechaInicioCursadas: $("#inputFechaCursadasInicio").val() ,
+								fechaFinCursadas: $("#inputFechaCursadasFin").val() ,
+								fechaInicioFinales: $("#inputFechaFinalesInicio").val() ,
+								fechaFinFinales: $("#inputFechaFinalesFin").val() 
+							},
+							success: (data)=>{
+								$.unblockUI();
+								swal({
+								  type: 'success',
+								  title: 'Guardado!',
+								  text: 'Se han guardado los periodos'
+								});
+								$("#inputFechaInscripcionCursadasInicio").val('')
+								$("#inputFechaInscripcionCursadasFin").val('')
+								$("#inputFechaDesinscripcionCursadasInicio").val('')
+								$("#inputFechaDesinscripcionCursadasFin").val('')
+								$("#inputFechaCursadasInicio").val('')
+								$("#inputFechaCursadasFin").val('')
+								$("#inputFechaFinalesInicio").val('')
+								$("#inputFechaFinalesFin").val('') 
+								$("#divFinales").addClass("divInhabilitado");
+								$("#divInscripcionCursadas").removeClass("divInhabilitado");
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+						        $.unblockUI();
+						        swal({
+								  type: 'error',
+								  title: 'Oops...',
+								  text: 'Ha ocurrido un error al intentar guardar periodos'
+								});
+						        console.log(xhr.responseText);
+						        console.log(thrownError);
+						        $("#divFinales").addClass("divInhabilitado");
+								$("#divInscripcionCursadas").removeClass("divInhabilitado");
+					      	}
+						});
+				} else{
+					swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio<br>La fecha de inicio debe ser mayor a la de fin de la etapa anterior</p>'
 					});
-			} else{
+				}
+			}else{
 				swal({
-				  type: 'error',
-				  title: 'Oops...',
-				  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio<br>La fecha de inicio debe ser mayor a la de fin de la etapa anterior</p>'
-				});
+					  type: 'error',
+					  title: 'Oops...',
+					  html: '<h3>Verificar que el periodo sea correcto</h3>'
+					});
 			}
 			break;
 	}
