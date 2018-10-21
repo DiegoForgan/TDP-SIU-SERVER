@@ -200,6 +200,28 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
 
+
+    //Esta consulta devuelve los cursos donde se inscribio el alumno
+    pool.query("DROP FUNCTION IF EXISTS obtenerFinalesDondeMeInscribi(padron_consultado text);\
+    \
+    CREATE OR REPLACE FUNCTION  obtenerFinalesDondeMeInscribi (padron_consultado text)\
+    RETURNS TABLE(id_final int, codigo varchar(6), nombre varchar(40), docente text, fecha date, horario time)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT inscripcionesfinal.id_final, materias.codigo, materias.nombre, docentes.apellido || ', ' || docentes.nombre, examenesfinales.fecha_examen, examenesfinales.horario_examen\
+        FROM inscripcionesfinal\
+        INNER JOIN examenesfinales ON examenesfinales.id_final = inscripcionesfinal.id_final\
+        INNER JOIN cursos ON examenesfinales.id_curso = cursos.id_curso\
+        INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
+        INNER JOIN materias ON cursos.id_materia = materias.id\
+        WHERE padron_consultado = inscripcionesfinal.padron\
+        ORDER BY materias.codigo ASC;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
     
     
     

@@ -128,6 +128,16 @@ router.get('/inscripciones/:padron',(req,res)=>{
     });
 });
 
+//Devuelve los finales a los cuales se inscribio el alumno
+//params: ?padron{padron del alumno}
+router.get('/finales',(req,res)=>{
+    db.query('SELECT * FROM obtenerFinalesDondeMeInscribi($1)',[req.query.padron],(err,resp_finales)=>{
+        if (err){console.log(err); res.send({'finales':[]});}
+        else if (resp_finales.rowCount != 0) res.send({'finales':resp_finales.rows});
+        else res.send({'finales':[]});
+    });
+});
+
 
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso"
 // o al final cuyo id es "id_final"
@@ -161,15 +171,65 @@ module.exports = router;
 
 
 function desinscribirDeUnFinal(req,res){
-    res.send('Te queres desinscribir de un final!');
+    db.query('SELECT * FROM inscripcionesfinal WHERE inscripcionesfinal.padron = $1 AND inscripcionesfinal.id_final = $2',
+    [req.query.padron, req.query.final],(error,inscipcionExistente)=>{
+        if (error) {
+            res.send({
+                'estado': false,
+                'detalle': 'Hubo un error con la base de datos!'
+            })
+        }
+        else if (inscipcionExistente.rowCount == 0){
+            res.send({
+                'estado': false,
+                'detalle': 'No estas inscripto en este final!'
+            })
+        }else{
+            db.query('DELETE FROM inscripcionesfinal\
+            WHERE inscripcionesfinal.padron = $1 AND inscripcionesfinal.id_final = $2',
+            [req.query.padron, req.query.final]);
+            res.send({
+                'estado': true,
+                'detalle': 'Te desinscribiste de forma exitosa!'
+            })
+        }
+    })
 }
 
 function inscribirAFinal(req, res) {
-    db.query('INSERT INTO inscripcionesfinal (padron, id_final, es_regular) VALUES ($1,$2,$3)'
-    ,[req.query.padron,req.query.final,true]);
-    res.send({'estado':true});
+    db.query('SELECT * FROM examenesfinales WHERE examenesfinales.id_final = $1',[req.query.final],(err,existenciaDeFinal)=>{
+        if (err) {
+            res.send({
+                'estado': false,
+                'detalle': 'Hubo un error con la query de la base!'
+            })
+        }else if (existenciaDeFinal.rowCount == 0){
+            res.send({
+                'estado': false,
+                'detalle': 'El final al que te queres inscribir no existe!'
+            })
+        }else{
+            db.query('SELECT * FROM inscripcionesfinal WHERE inscripcionesfinal.padron = $1 AND inscripcionesfinal.id_final = $2',
+            [req.query.padron,req.query.final],(error,finalInscripto)=>{
+                if (error) { 
+                    res.send({'estado':false, 'detalle':'hubo un error en la query de la base'});
+                }
+                else if (finalInscripto.rowCount != 0){
+                    res.send({'estado':false, 'detalle':'Ya se encuentra inscripto a ese final'});
+                }
+                else{
+                    db.query('INSERT INTO inscripcionesfinal (padron, id_final, es_regular) VALUES ($1,$2,$3)'
+                    ,[req.query.padron,req.query.final,true]);
+                    res.send({'estado':true, 'detalle':'Inscripcion exitosa!'});
+                }
+            })
+        }
+
+    })
 }
 
+//Se supone que aca nunca va a elegir un curso al que no este inscripto ya que previamente ve sus inscripciones.
+//Por ese motivo no verifica eso previamente
 function desinscribirDeUnCurso(req, res) {
     db.query('DELETE FROM inscripciones\
         WHERE inscripciones.id_curso = $1 AND inscripciones.padron = $2', [req.query.curso, req.query.padron]);
