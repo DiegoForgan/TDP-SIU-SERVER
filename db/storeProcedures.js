@@ -186,11 +186,25 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerPrioridadDelAlumno(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerPrioridadDelAlumno (padron_consultado text)\
-    RETURNS TABLE(prioridad int, f_update timestamp, fecha_inicio timestamp, descripcion_periodo varchar, fecha_cierre timestamp)\
+    RETURNS TABLE(prioridad int, f_update timestamp, fecha_inicio timestamp, descripcion_periodo varchar, fechaInicioInscripcionCursadas timestamp,\
+                    fechaFinInscripcionCursadas timestamp,\
+                    fechaInicioDesinscripcionCursadas timestamp,\
+                    fechaFinDesinscripcionCursadas timestamp,\
+                    fechaInicioCursadas timestamp,\
+                    fechaFinCursadas timestamp,\
+                    fechaInicioFinales timestamp,\
+                    fechaFinFinales timestamp)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT a.prioridad, a.f_update, pp.fecha_inicio, p.descripcion, p.fecha_cierre\
+        SELECT a.prioridad, a.f_update, pp.fecha_inicio, p.descripcion, p.fechaInicioInscripcionCursadas,\
+                    p.fechaFinInscripcionCursadas,\
+                    p.fechaInicioDesinscripcionCursadas,\
+                    p.fechaFinDesinscripcionCursadas,\
+                    p.fechaInicioCursadas,\
+                    p.fechaFinCursadas,\
+                    p.fechaInicioFinales,\
+                    p.fechaFinFinales\
         FROM alumnos a\
         INNER JOIN prioridad_periodo pp ON pp.prioridad = a.prioridad\
         INNER JOIN periodos p ON p.id = pp.id_periodo\
