@@ -77,5 +77,28 @@ router.get('/finales/:id_curso', (req,res)=>{
     }
 });
 
+router.get('/periodos', (req, res) =>{
+    db.query('SELECT * FROM periodos where activo',[],(err,resp_periodos)=>{
+        if (err) res.send(err);
+        else if (resp_periodos.rowCount != 0){
+            var obj = [{
+                'id': new Date(resp_periodos.rows[0].id),
+                'descripcion_periodo': resp_periodos.rows[0].descripcion,
+                'fechaInicioInscripcionCursadas': new Date(resp_periodos.rows[0].fechainicioinscripcioncursadas),
+                'fechaFinInscripcionCursadas': new Date(resp_periodos.rows[0].fechafininscripcioncursadas),
+                'fechaInicioDesinscripcionCursadas': new Date(resp_periodos.rows[0].fechainiciodesinscripcioncursadas),
+                'fechaFinDesinscripcionCursadas': new Date(resp_periodos.rows[0].fechafindesinscripcioncursadas),
+                'fechaInicioCursadas': new Date(resp_periodos.rows[0].fechainiciocursadas),
+                'fechaFinCursadas': new Date(resp_periodos.rows[0].fechafincursadas),
+                'fechaInicioFinales': new Date(resp_periodos.rows[0].fechainiciofinales),
+                'fechaFinFinales': new Date(resp_periodos.rows[0].fechafinfinales)
+            }];
+            console.log(obj)
+            res.send(obj);  
+        } 
+        else res.send([{}]);
+    });
+});
+
 
 module.exports = router;
