@@ -149,4 +149,61 @@ module.exports = function(pool){
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('99.99', 'Materia Para Llenar', 100);\
 			\
 			");
+
+	pool.query("\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(1, '12/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(1, '19/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(1, '15/02/2019', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(1, '22/02/2019', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(1, '28/02/2019', '09:00');\
+			\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(2, '12/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(2, '19/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(2, '15/02/2019', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(2, '22/02/2019', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(2, '28/02/2019', '09:00');\
+			\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(3, '12/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(3, '19/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(3, '15/02/2019', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(3, '22/02/2019', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(3, '28/02/2019', '09:00');\
+			\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(6, '11/12/2018', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(6, '18/12/2018', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(6, '14/02/2019', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(6, '21/02/2019', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(6, '27/02/2019', '19:00');\
+			\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(7, '11/12/2018', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(7, '18/12/2018', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(7, '14/02/2019', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(7, '21/02/2019', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(7, '27/02/2019', '19:00');\
+			\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(12, '04/12/2018', '18:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(12, '11/12/2018', '18:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(12, '18/12/2018', '18:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(12, '14/02/2019', '18:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(12, '21/02/2019', '18:00');\
+			\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '14/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '21/12/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '10/02/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '17/02/2019', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '24/02/2019', '09:00');\
+			");
+
+	pool.query("\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 3, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 5, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 16, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 17, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 31, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 33, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('38383', 3, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('38383', 16, true);\
+			\
+			");
+
 }
