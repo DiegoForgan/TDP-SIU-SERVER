@@ -20,12 +20,20 @@ router.get('/prioridad/:padron', function (req, res) {
     db.query('SELECT * FROM obtenerPrioridadDelAlumno($1)',[req.params.padron],(err,resp_padron)=>{
         if (err) res.send(err);
         else if (resp_padron.rowCount != 0){
+            console.log(resp_padron)
             var obj = [{
                 'prioridad': resp_padron.rows[0].prioridad,
                 'fecha_actualizacion': new Date(resp_padron.rows[0].f_update),
                 'fecha_inicio': new Date(resp_padron.rows[0].fecha_inicio),
                 'descripcion_periodo': resp_padron.rows[0].descripcion_periodo,
-                'fecha_cierre': new Date(resp_padron.rows[0].fecha_cierre)
+                'fechaInicioInscripcionCursadas': new Date(resp_padron.rows[0].fechainicioinscripcioncursadas),
+                'fechaFinInscripcionCursadas': new Date(resp_padron.rows[0].fechafininscripcioncursadas),
+                'fechaInicioDesinscripcionCursadas': new Date(resp_padron.rows[0].fechainiciodesinscripcioncursadas),
+                'fechaFinDesinscripcionCursadas': new Date(resp_padron.rows[0].fechafindesinscripcioncursadas),
+                'fechaInicioCursadas': new Date(resp_padron.rows[0].fechainiciocursadas),
+                'fechaFinCursadas': new Date(resp_padron.rows[0].fechafincursadas),
+                'fechaInicioFinales': new Date(resp_padron.rows[0].fechainiciofinales),
+                'fechaFinFinales': new Date(resp_padron.rows[0].fechafinfinales)
             }];
             console.log(obj)
             res.send(obj);  
