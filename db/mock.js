@@ -189,7 +189,7 @@ module.exports = function(pool){
 			\
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '14/12/2018', '09:00');\
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '21/12/2018', '09:00');\
-			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '10/02/2018', '09:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '10/02/2019', '09:00');\
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '17/02/2019', '09:00');\
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '24/02/2019', '09:00');\
 			");
