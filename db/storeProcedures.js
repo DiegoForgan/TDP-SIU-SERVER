@@ -297,8 +297,8 @@ module.exports = function(pool){
         INNER JOIN cursos ON examenesfinales.id_curso = cursos.id_curso\
         INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
         INNER JOIN materias ON cursos.id_materia = materias.id\
-        WHERE padron_consultado = inscripcionesfinal.padron\
-        ORDER BY materias.codigo ASC;\
+        WHERE padron_consultado = inscripcionesfinal.padron and examenesfinales.fecha_examen >= now()\
+        ORDER BY examenesfinales.fecha_examen ASC, materias.codigo ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
@@ -318,8 +318,8 @@ module.exports = function(pool){
         INNER JOIN cursos ON examenesfinales.id_curso = cursos.id_curso\
         INNER JOIN docentes ON docentes.legajo = cursos.docente_a_cargo\
         INNER JOIN materias ON cursos.id_materia = materias.id\
-        WHERE materia_consultada = materias.id\
-        ORDER BY materias.codigo ASC;\
+        WHERE materia_consultada = materias.id and examenesfinales.fecha_examen >= now()\
+        ORDER BY examenesfinales.fecha_examen ASC, materias.codigo ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
