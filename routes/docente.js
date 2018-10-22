@@ -82,7 +82,7 @@ router.get('/periodos', (req, res) =>{
         if (err) res.send(err);
         else if (resp_periodos.rowCount != 0){
             var obj = [{
-                'id': new Date(resp_periodos.rows[0].id),
+                'id': resp_periodos.rows[0].id,
                 'descripcion_periodo': resp_periodos.rows[0].descripcion,
                 'fechaInicioInscripcionCursadas': new Date(resp_periodos.rows[0].fechainicioinscripcioncursadas),
                 'fechaFinInscripcionCursadas': new Date(resp_periodos.rows[0].fechafininscripcioncursadas),
