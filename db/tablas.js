@@ -7,7 +7,8 @@ module.exports = function(pool){
 				apellido varchar(200) not null,\
 				nombre varchar(200) not null,\
 				usuario varchar(50) not null,\
-                contrasena varchar(20) not null);"
+				contrasena varchar(20) not null,\
+				email varchar(200) not null);"
             );
 
     //CREO LA TABLA DE ALUMNOS EN LA BASE DE DATOS
@@ -21,7 +22,8 @@ module.exports = function(pool){
 				contrasena varchar(20) not null,\
 				prioridad int not null,\
 				carrera int not null,\
-				f_update timestamp not null);"
+				f_update timestamp not null,\
+				email varchar(200) not null);"
             );
 
     //CREO LA TABLA DE PERIODOS DE INSCRIPCION
@@ -31,7 +33,14 @@ module.exports = function(pool){
 				id serial,\
 				descripcion varchar not null,\
 				activo boolean not null,\
-                fecha_cierre timestamp not null);"
+                fechaInicioInscripcionCursadas timestamp not null,\
+                fechaFinInscripcionCursadas timestamp not null,\
+             	fechaInicioDesinscripcionCursadas timestamp not null,\
+             	fechaFinDesinscripcionCursadas timestamp not null,\
+             	fechaInicioCursadas timestamp not null,\
+             	fechaFinCursadas timestamp not null,\
+             	fechaInicioFinales timestamp not null,\
+             	fechaFinFinales timestamp not null);"
             );
 
     pool.query("DROP TABLE IF EXISTS prioridad_periodo;\
@@ -69,8 +78,6 @@ module.exports = function(pool){
 				sede varchar not null,\
 				aulas varchar not null,\
 				cupos_disponibles int not null,\
-				inscriptos int not null,\
-				condicionales int not null,\
 				dias varchar not null,\
 				horarios varchar not null,\
                 id_periodo int not null);"
@@ -89,5 +96,22 @@ module.exports = function(pool){
 			create table aulas(\
 				id SERIAL,\
                 aula varchar(200) not null);"
-            );
+			);
+			
+	pool.query("DROP TABLE IF EXISTS examenesfinales;\
+	\
+	create table examenesfinales(\
+			id_final SERIAL,\
+			id_curso int not null,\
+			fecha_examen date not null,\
+			horario_examen time not null);"
+			);
+			
+	pool.query("DROP TABLE IF EXISTS inscripcionesfinal;\
+	\
+	create table inscripcionesfinal(\
+			padron varchar(10) not null,\
+			id_final int not null,\
+			es_regular boolean not null);"
+        );
 }

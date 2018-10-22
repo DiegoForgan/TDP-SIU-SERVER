@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="resources/css/bootstrap.css"></style>
 	<link rel="stylesheet" href="resources/css/select2.min.css"></style>
 	<link rel="stylesheet" href="resources/css/bootstrap-toggle.min.css"></style>
+	<link rel="stylesheet" href="resources/css/bootstrap-datepicker.css"></style>
 
 	<script type="text/javascript" src="resources/js/jquery-3.3.1.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap.js"></script>
@@ -13,6 +14,7 @@
 	<script type="text/javascript" src="resources/js/swal.js"></script>
 	<script type="text/javascript" src="resources/js/select2.min.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap-toggle.min.js"></script>
+	<script type="text/javascript" src="resources/js/bootstrap-datepicker.js"></script>
 
 	<style type="text/css">
 		.btnAccion{
@@ -20,6 +22,13 @@
 		}
 		.swal2-popup{
 			font-size: 1.6rem !important;
+		}
+		.divInhabilitado *{
+		    pointer-events: none;
+		    opacity: 0.4;
+		}
+		.divInhabilitado{
+			cursor: not-allowed;
 		}
 	</style>
 </head>
@@ -34,7 +43,7 @@
 	    <ul class="nav navbar-nav">
 	      <li class="active" id="importacionMenu" onclick="cambiarPantalla(1);"><a>Importación</a></li>
 	      <li id="abmCursosMenu" onclick="cambiarPantalla(2);"><a>Cursos</a></li>
-	      <li id="periodosInscripcion" onclick="cambiarPantalla(3);"><a>Periodos Inscripción (BETA)</a></li>
+	      <li id="periodosInscripcion" onclick="cambiarPantalla(3);"><a>Periodos Inscripción</a></li>
 	      <!--<li><a>Page 3</a></li>-->
 	    </ul>
 	  </div>
@@ -116,6 +125,100 @@
 	<!-- Pantalla periodos -->
 	<div id="periodosPantalla" class="container">
 		<div class="row">
+			<div class="col-lg-8">
+				<div class="col-lg-12">
+					<label>Periodo Actual
+						<input type="hidden" id="ultimoPeriodo">
+						<div class="row">
+							<div class="col-lg-4">
+								<select id="cuatrimestrePeriodoActual">
+									<option></option>
+									<option value="1C">1er Cuatrimestre</option>
+									<option value="2C">2do Cuatrimestre</option>
+								</select>
+							</div>
+							<div class="col-lg-4">
+								<input placeholder="Año" id="inputAnioPeriodoActual" type="text" class="form-control">
+							</div>
+							<div class="col-lg-4">
+						    	<input id="inputPeriodoActual" type="text" class="form-control" readonly>
+						    </div>
+					    </div>
+			    	</label>
+			    </div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-5" id="divInscripcionCursadas">
+				<div class="col-lg-12"><h3>Inscripción a cursadas</h3></div>
+				<div class="col-lg-6">
+					<label>Inicio
+				    	<input id="inputFechaInscripcionCursadasInicio" type="text" class="form-control">
+			    	</label>
+				</div>
+				<div class="col-lg-6">
+					<label>Fin
+				    	<input id="inputFechaInscripcionCursadasFin" type="text" class="form-control">
+			    	</label>
+				</div>
+			    <div class="col-lg-12" style="text-align: right;">
+				    <button class="btn btn-success" id="btnInscripcionCursadas" onclick="okPeriodo(1)">OK</button>
+				</div>
+			</div>
+			<div class="col-lg-2"></div>
+			<div class="col-lg-5 divInhabilitado" id="divDesinscripcionCursadas">
+				<div class="col-lg-12"><h3>Desinscripción a cursadas</h3></div>
+				<div class="col-lg-6">
+					<label>Inicio
+				    	<input id="inputFechaDesinscripcionCursadasInicio" type="text" class="form-control">
+			    	</label>
+				</div>
+				<div class="col-lg-6">
+					<label>Fin
+				    	<input id="inputFechaDesinscripcionCursadasFin" type="text" class="form-control">
+			    	</label>
+				</div>
+				<div class="col-lg-12" style="text-align: right;">
+				    <button class="btn btn-success" id="btnDesinscripcionCursadas" onclick="okPeriodo(2)">OK</button>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-5 divInhabilitado" id="divCursadas">
+				<div class="col-lg-12"><h3>Cursada</h3></div>
+				<div class="col-lg-6">
+					<label>Inicio
+				    	<input id="inputFechaCursadasInicio" type="text" class="form-control">
+			    	</label>
+				</div>
+				<div class="col-lg-6">
+					<label>Fin
+				    	<input id="inputFechaCursadasFin" type="text" class="form-control">
+			    	</label>
+				</div>
+				<div class="col-lg-12" style="text-align: right;">
+				    <button class="btn btn-success" id="btnCursadas" onclick="okPeriodo(3)">OK</button>
+				</div>
+			</div>
+			<div class="col-lg-2"></div>
+			<div class="col-lg-5 divInhabilitado" id="divFinales">
+				<div class="col-lg-12"><h3>Finales</h3></div>
+				<div class="col-lg-6">
+					<label>Inicio
+				    	<input id="inputFechaFinalesInicio" type="text" class="form-control">
+			    	</label>
+				</div>
+				<div class="col-lg-6">
+					<label>Fin
+				    	<input id="inputFechaFinalesFin" type="text" class="form-control">
+			    	</label>
+				</div>
+				<div class="col-lg-12" style="text-align: right;">
+				    <button class="btn btn-success" id="btnFinales" onclick="okPeriodo(4)">Guardar</button>
+				</div>
+			</div>
+		</div>
+		<!-- <div class="row">
 			<div class="col-lg-5">
 			    <h3>Abrir/cerrar Periodo de Inscripción</h3>
 			</div>
@@ -124,7 +227,10 @@
 			<div class="col-lg-2">
 				<input type="checkbox" id="modificarPeriodo" checked data-toggle="toggle">
 			</div>
-		</div>
+			
+			    <input id="jrr" type="text" class="form-control">
+			
+		</div> -->
 	</div>
 
 	<!-- Modal -->
