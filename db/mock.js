@@ -192,6 +192,9 @@ module.exports = function(pool){
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '10/02/2019', '09:00');\
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '17/02/2019', '09:00');\
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(13, '24/02/2019', '09:00');\
+			\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(4, '23/10/2018', '19:00');\
+			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(5, '23/10/2018', '19:00');\
 			");
 
 	pool.query("\
@@ -201,6 +204,7 @@ module.exports = function(pool){
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 17, true);\
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 31, true);\
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 33, true);\
+			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 36, true);\
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('38383', 3, true);\
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('38383', 16, true);\
 			\
