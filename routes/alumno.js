@@ -137,15 +137,43 @@ router.get('/inscripciones/:padron',(req,res)=>{
 });
 
 //Devuelve los finales a los cuales se inscribio el alumno
-//params: ?padron{padron del alumno}
+//Devuelve los finales asociados a una materia
+//params: ?padron={padron del alumno}
+//params: ?id_materia={id de la materia}
 router.get('/finales',(req,res)=>{
-    db.query('SELECT * FROM obtenerFinalesDondeMeInscribi($1)',[req.query.padron],(err,resp_finales)=>{
-        console.log(resp_finales.rows)
-        if (err){console.log(err); res.send({'finales':[]});}
-        else if (resp_finales.rowCount != 0) res.send({'finales':resp_finales.rows});
-        else res.send({'finales':[]});
-    });
+    if (req.query.padron) obtenerFinalesALosQueMeInscribi(req, res);
+    else if (req.query.id_materia) obtenerFinalesDeLaMateria(req, res);
+    else {res.send({'finales':[]})}
 });
+
+function obtenerFinalesALosQueMeInscribi(req, res) {
+    db.query('SELECT * FROM obtenerFinalesDondeMeInscribi($1)', [req.query.padron], (err, resp_finales) => {
+        console.log(resp_finales.rows);
+        if (err) {
+            console.log(err);
+            res.send({ 'finales': [] });
+        }
+        else if (resp_finales.rowCount != 0)
+            res.send({ 'finales': resp_finales.rows });
+        else
+            res.send({ 'finales': [] });
+    });
+}
+
+function obtenerFinalesDeLaMateria(req, res) {
+    db.query('SELECT * FROM obtenerFinalesDeLaMateria($1)', [req.query.id_materia], (error, oferta_finales)=>{
+        if (error){
+            console.log(error);
+            res.send({'finales':[]});
+        }
+        else if (oferta_finales.rowCount == 0){
+            res.send({'finales':[]});
+        }
+        else{
+            res.send({'finales': oferta_finales.rows});
+        }
+    });
+}
 
 
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso"
@@ -177,6 +205,8 @@ router.delete('/desinscribir',(req,res)=>{
 });
   
 module.exports = router;
+
+
 
 
 function desinscribirDeUnFinal(req,res){
