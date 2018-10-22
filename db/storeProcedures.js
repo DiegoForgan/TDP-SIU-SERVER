@@ -291,7 +291,7 @@ module.exports = function(pool){
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT inscripcionesfinal.id_final, materias.codigo, materias.nombre, docentes.apellido || ', ' || docentes.nombre, examenesfinales.fecha_examen, examenesfinales.horario_examen\
+        SELECT inscripcionesfinal.id_final, materias.codigo, materias.nombre, docentes.apellido || ', ' || docentes.nombre, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH:MM')\
         FROM inscripcionesfinal\
         INNER JOIN examenesfinales ON examenesfinales.id_final = inscripcionesfinal.id_final\
         INNER JOIN cursos ON examenesfinales.id_curso = cursos.id_curso\
