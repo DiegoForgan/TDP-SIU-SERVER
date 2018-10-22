@@ -270,11 +270,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS getFinalesDeUnCurso(id_consultada int);\
     \
     CREATE OR REPLACE FUNCTION  getFinalesDeUnCurso(id_consultada int)\
-    RETURNS TABLE(id_final int, fecha date, hora time)\
+    RETURNS TABLE(id_final int, fecha text, hora text)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT examenesfinales.id_final, examenesfinales.fecha_examen, examenesfinales.horario_examen\
+        SELECT examenesfinales.id_final, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH24:MI')\
         FROM examenesfinales\
         WHERE examenesfinales.id_curso = id_consultada;\
     END; $$\
@@ -287,11 +287,11 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS obtenerFinalesDondeMeInscribi(padron_consultado text);\
     \
     CREATE OR REPLACE FUNCTION  obtenerFinalesDondeMeInscribi (padron_consultado text)\
-    RETURNS TABLE(id_final int, codigo varchar(6), nombre varchar(40), docente text, fecha date, horario time)\
+    RETURNS TABLE(id_final int, codigo varchar(6), nombre varchar(40), docente text, fecha text, horario text)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT inscripcionesfinal.id_final, materias.codigo, materias.nombre, docentes.apellido || ', ' || docentes.nombre, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH:MM')\
+        SELECT inscripcionesfinal.id_final, materias.codigo, materias.nombre, docentes.apellido || ', ' || docentes.nombre, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH24:MI')\
         FROM inscripcionesfinal\
         INNER JOIN examenesfinales ON examenesfinales.id_final = inscripcionesfinal.id_final\
         INNER JOIN cursos ON examenesfinales.id_curso = cursos.id_curso\
