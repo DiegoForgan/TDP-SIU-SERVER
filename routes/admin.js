@@ -124,7 +124,7 @@ router.get('/periodoActual', (req, res) => {
                 res.send(response.rows);
             });
 });
-
+//para comit
 router.post('/periodos', (req, res) => {
     db.query("SELECT guardarFechasPeriodos($1, $2, $3, $4, $5, $6, $7, $8, $9)",
             [req.body.periodo, req.body.fechaInicioInscripcionCursadas, req.body.fechaFinInscripcionCursadas,
