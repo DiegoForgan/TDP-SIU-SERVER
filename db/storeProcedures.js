@@ -276,7 +276,8 @@ module.exports = function(pool){
     RETURN QUERY\
         SELECT examenesfinales.id_final, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH24:MI')\
         FROM examenesfinales\
-        WHERE examenesfinales.id_curso = id_consultada;\
+        WHERE examenesfinales.id_curso = id_consultada\
+        ORDER BY examenesfinales.fecha_examen ASC;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
