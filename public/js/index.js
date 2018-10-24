@@ -670,7 +670,8 @@ function cambiarPantalla(numero){
 					$('#inputAnioPeriodoActual').datepicker({
 						format: "yyyy",
 					    viewMode: "years", 
-					    minViewMode: "years"
+					    minViewMode: "years",
+					    language: "es"
 					});
 
 					
@@ -826,7 +827,8 @@ $('#inputFechaInscripcionCursadasInicio,\
 	#inputFechaFinalesInicio,\
 	#inputFechaFinalesFin').datepicker({
 		format: "yyyy-mm-dd",
-		autoclose: true
+		autoclose: true,
+	    language: "es"
 });
 
 $('#cuatrimestrePeriodoActual').select2({
