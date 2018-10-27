@@ -130,8 +130,9 @@ router.post('/periodos', (req, res) => {
             [req.body.periodo, req.body.fechaInicioInscripcionCursadas, req.body.fechaFinInscripcionCursadas,
              req.body.fechaInicioDesinscripcionCursadas, req.body.fechaFinDesinscripcionCursadas,
              req.body.fechaInicioCursadas, req.body.fechaFinCursadas,
-             req.body.fechaInicioFinales, req.body.fechaFinFinales])
-    res.send("ok");
+             req.body.fechaInicioFinales, req.body.fechaFinFinales], (err, response)=>{
+        res.send("ok");
+    })
 })
 
 module.exports = router;

@@ -203,6 +203,28 @@ router.delete('/desinscribir',(req,res)=>{
     else if (req.query.final && req.query.padron) desinscribirDeUnFinal(req,res);
     else res.send({'estado':false, 'detalle':'faltan parámetros en el endpoint!'});
 });
+
+
+//editar datos /perfil?padron=95812&mail=francoetcheverri@gmail.com&pswactual=12345&pswnueva=1234556
+// 1- cambio mail
+// 2- cambio mail y contra
+// 3- cambio contra
+// 4- la contra es incorrecta
+router.put('/perfil', (req, res) =>{
+    if (req.query.padron){
+        db.query('SELECT editarDatosAlumno($1, $2, $3, $4)', 
+            [req.query.padron, req.query.mail, req.query.pswactual, req.query.pswnueva], 
+            (err, response)=>{
+                if(!err){
+                    res.send({
+                        'result': response.rows[0].editardatosalumno
+                    });
+                }
+                
+            }
+        );
+    }
+});
   
 module.exports = router;
 

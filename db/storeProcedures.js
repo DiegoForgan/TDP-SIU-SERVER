@@ -164,7 +164,6 @@ module.exports = function(pool){
     
     
     //Esta funcion devuelve el listado de alumnos de un determinado curso
-    //TODO: Que ordene a los regulares primero
     pool.query("DROP FUNCTION IF EXISTS obtenerListadoDeAlumnosPorCurso(id_curso_consultado int);\
     \
     CREATE OR REPLACE FUNCTION  obtenerListadoDeAlumnosPorCurso (id_curso_consultado int)\
@@ -325,6 +324,100 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'"
     );
+
+    // esta funcion edita los datos de un alumno
+    pool.query("CREATE OR REPLACE FUNCTION editarDatosAlumno(\
+        _padron varchar(10), \
+        _mail varchar(200), \
+        _pswanterior varchar(20), \
+        _pswnueva varchar(20)\
+    )\
+    RETURNS int\
+    AS $$\
+        BEGIN \
+            IF EXISTS (select 1 from alumnos where padron = _padron)\
+            THEN\
+                IF (_pswanterior is NULL and _pswnueva is NULL and _mail is not NULL)\
+                THEN\
+                    UPDATE alumnos\
+                    SET email = _mail\
+                    WHERE padron = _padron;\
+                    \
+                    RETURN 1;\
+                ELSE\
+                    IF (_pswanterior = (SELECT contrasena FROM alumnos WHERE padron = _padron) and _pswnueva is not null and _mail is not null)\
+                    THEN\
+                        UPDATE alumnos\
+                        SET email = _mail,\
+                            contrasena = _pswnueva\
+                        WHERE padron = _padron;\
+                        \
+                        RETURN 2;\
+                    ELSE\
+                        IF (_pswanterior = (SELECT contrasena FROM alumnos WHERE padron = _padron) and _pswnueva is not null and _mail is null)\
+                        THEN\
+                            UPDATE alumnos\
+                            SET contrasena = _pswnueva\
+                            WHERE padron = _padron;\
+                            \
+                            RETURN 3;\
+                        ELSE\
+                            RETURN 4;\
+                        END IF;\
+                    END IF;\
+                END IF;\
+            END IF;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
+
+    // esta funcion edita los datos de un docente
+    pool.query("CREATE OR REPLACE FUNCTION editarDatosDocente(\
+        _legajo varchar(10), \
+        _mail varchar(200), \
+        _pswanterior varchar(20), \
+        _pswnueva varchar(20)\
+    )\
+    RETURNS int\
+    AS $$\
+        BEGIN \
+            IF EXISTS (select 1 from docentes where legajo = _legajo)\
+            THEN\
+                IF (_pswanterior is NULL and _pswnueva is NULL and _mail is not NULL)\
+                THEN\
+                    UPDATE docentes\
+                    SET email = _mail\
+                    WHERE legajo = _legajo;\
+                    \
+                    RETURN 1;\
+                ELSE\
+                    IF (_pswanterior = (SELECT contrasena FROM docentes WHERE legajo = _legajo) and _pswnueva is not null and _mail is not null)\
+                    THEN\
+                        UPDATE docentes\
+                        SET email = _mail,\
+                            contrasena = _pswnueva\
+                        WHERE legajo = _legajo;\
+                        \
+                        RETURN 2;\
+                    ELSE\
+                        IF (_pswanterior = (SELECT contrasena FROM docentes WHERE legajo = _legajo) and _pswnueva is not null and _mail is null)\
+                        THEN\
+                            UPDATE docentes\
+                            SET contrasena = _pswnueva\
+                            WHERE legajo = _legajo;\
+                            \
+                            RETURN 3;\
+                        ELSE\
+                            RETURN 4;\
+                        END IF;\
+                    END IF;\
+                END IF;\
+            END IF;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
 
     
     
