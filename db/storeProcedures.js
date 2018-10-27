@@ -31,7 +31,7 @@ module.exports = function(pool){
             FROM cursos\
             INNER JOIN materias ON cursos.id_materia = materias.id\
             INNER JOIN inscripciones ON cursos.id_curso = inscripciones.id_curso\
-            WHERE '0001' = cursos.docente_a_cargo\
+            WHERE legajo_del_docente = cursos.docente_a_cargo\
             GROUP BY\
                 cursos.id_curso,\
                 materias.codigo,\
