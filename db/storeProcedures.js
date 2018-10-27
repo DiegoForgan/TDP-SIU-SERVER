@@ -1,8 +1,6 @@
 module.exports = function(pool){
     
-    
-    //AGUSTIN: ACA ES LA FUNCION QUE NO SE COMO RESOLVER, PORQUE NO SE COMO DEVOLVER LAS VACANTES, LOS REGULARES Y LOS CONDICIONALES DE CADA CURSO EN UNA SOLA QUERY.
-    
+        
     //Esta query devuelve los cursos existentes a cargo del docente en la base de datos
     pool.query("DROP FUNCTION IF EXISTS verCursosAMiCargo(legajo_del_docente varchar(10));\
     \
@@ -30,7 +28,7 @@ module.exports = function(pool){
                 sum(case when es_regular = false then 1 else 0 end) as condicionales\
             FROM cursos\
             INNER JOIN materias ON cursos.id_materia = materias.id\
-            INNER JOIN inscripciones ON cursos.id_curso = inscripciones.id_curso\
+            LEFT JOIN inscripciones ON cursos.id_curso = inscripciones.id_curso\
             WHERE legajo_del_docente = cursos.docente_a_cargo\
             GROUP BY\
                 cursos.id_curso,\
