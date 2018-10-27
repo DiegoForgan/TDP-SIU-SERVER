@@ -121,5 +121,28 @@ router.put('/perfil', (req, res) =>{
     }
 });
 
+// alumno?padron={padron_del_alumno}
+router.get('/alumno', (req, res) =>{
+    if (req.query.padron){
+        db.query("SELECT padron, apellido, nombre, prioridad, carrera, email\
+                    FROM alumnos\
+                    WHERE padron = $1", 
+                [req.query.padron],
+                (err, response) => {
+                    if(!err){
+                        res.send(
+                        {
+                            'padron': response.rows[0].padron, 
+                            'apellido': response.rows[0].apellido, 
+                            'nombre': response.rows[0].nombre, 
+                            'prioridad': response.rows[0].prioridad, 
+                            'carrera': response.rows[0].carrera, 
+                            'email': response.rows[0].email
+                        })
+                    }
+                });
+    }
+})
+
 
 module.exports = router;
