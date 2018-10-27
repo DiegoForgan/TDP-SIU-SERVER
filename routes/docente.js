@@ -100,5 +100,26 @@ router.get('/periodos', (req, res) =>{
     });
 });
 
+//editar datos /perfil?legajo=95812&mail=francoetcheverri@gmail.com&pswactual=12345&pswnueva=1234556
+// 1- cambio mail
+// 2- cambio mail y contra
+// 3- cambio contra
+// 4- la contra es incorrecta
+router.put('/perfil', (req, res) =>{
+    if (req.query.legajo){
+        db.query('SELECT editarDatosDocente($1, $2, $3, $4)', 
+            [req.query.legajo, req.query.mail, req.query.pswactual, req.query.pswnueva], 
+            (err, response)=>{
+                if(!err){
+                    res.send({
+                        'result': response.rows[0].editardatosdocente
+                    });
+                }
+                
+            }
+        );
+    }
+});
+
 
 module.exports = router;
