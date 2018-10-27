@@ -15,7 +15,14 @@ module.exports = function(pool){
             INSERT INTO inscripciones VALUES('00008',4, false);\
             INSERT INTO inscripciones VALUES('00008',4, true);\
 			INSERT INTO inscripciones VALUES('00010',4, false);\
-			INSERT INTO inscripciones VALUES('00011',5, true);\
+            INSERT INTO inscripciones VALUES('00001',1, true);\
+            INSERT INTO inscripciones VALUES('00002',1, true);\
+            INSERT INTO inscripciones VALUES('00003',1, true);\
+            INSERT INTO inscripciones VALUES('00004',1, true);\
+            INSERT INTO inscripciones VALUES('00005',1, true);\
+            INSERT INTO inscripciones VALUES('00006',1, true);\
+            INSERT INTO inscripciones VALUES('00007',1, true);\
+            INSERT INTO inscripciones VALUES('00008',1, true);\
             INSERT INTO inscripciones VALUES('00012',6, false);"
         );
 }
