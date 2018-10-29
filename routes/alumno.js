@@ -225,6 +225,32 @@ router.put('/perfil', (req, res) =>{
         );
     }
 });
+
+router.get('/historial', (req, res) =>{
+    if (!req.query.padron) {
+        res.send({
+            'historial': []
+        });
+    }
+    else{
+        db.query('SELECT * FROM gethistorialdelalumno ($1)',[req.query.padron],(error,historial)=>{
+            if (error) {
+                console.log(error);
+                res.send({
+                    'historial': []
+                });
+            }
+            else if (historial.rowCount == 0){
+                res.send({
+                    'historial': []
+                });
+            }
+            else{
+                res.send(historial.rows);
+            }
+        })
+    }
+});
   
 module.exports = router;
 

@@ -113,5 +113,14 @@ module.exports = function(pool){
 			padron varchar(10) not null,\
 			id_final int not null,\
 			es_regular boolean not null);"
+		);
+		
+	pool.query("DROP TABLE IF EXISTS historialacademico;\
+	\
+	create table historialacademico(\
+			padron varchar(10) not null,\
+			id_materia int not null,\
+			nota int not null,\
+			fecha date not null);"
         );
 }
