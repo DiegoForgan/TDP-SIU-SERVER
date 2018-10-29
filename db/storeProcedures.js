@@ -144,7 +144,23 @@ module.exports = function(pool){
     
     
     
-    
+    //Esta funcion devuelve el listado del historial academico del alumno de acuerdo a su padron
+    pool.query("DROP FUNCTION IF EXISTS gethistorialdelalumno(padron_consultado text);\
+    \
+    CREATE OR REPLACE FUNCTION  gethistorialdelalumno (padron_consultado text)\
+    RETURNS TABLE(codigo varchar(6), nombre varchar(40),  nota int, fecha text)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT materias.codigo, materias.nombre, historialacademico.nota, to_char(historialacademico.fecha, 'dd/mm/yyyy')\
+        FROM historialacademico\
+        INNER JOIN materias ON materias.id = historialacademico.id_materia\
+        WHERE padron_consultado = historialacademico.padron\
+        ORDER BY historialacademico.fecha ASC;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
     
     
     
