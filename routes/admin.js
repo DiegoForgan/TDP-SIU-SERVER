@@ -14,10 +14,12 @@ router.post('/alumnos', (req, res) => {
 	var alumno = req.body.listaAlumnos[i]
 	db.query("INSERT INTO alumnos(padron, apellido, nombre, usuario, contrasena, prioridad, carrera, f_update, email)\
 			VALUES($1, $2, $3, $4, $5, $6, $7, now(), $8)", 
-			[alumno.padron, alumno.apellido, alumno.nombre, alumno.usuario, alumno.contrasena, alumno.prioridad, alumno.carrera, alumno.email]);
+			[alumno.padron, alumno.apellido, alumno.nombre, alumno.usuario, alumno.contrasena, alumno.prioridad, alumno.carrera, alumno.email], (err, response)=>{
+                if (!err) {res.send("ok");}
+                else res.send(err)  
+            });
   
   }
-  res.send("ok");
 });
 
 //carga docentes
@@ -27,10 +29,12 @@ router.post('/docentes', (req, res) => {
         var docente = req.body.listaDocentes[i]
         db.query("INSERT INTO docentes(legajo, apellido, nombre, usuario, contrasena, email)\
         		VALUES($1, $2, $3, $4, $5, $6)", 
-        		[docente.legajo, docente.apellido, docente.nombre, docente.usuario, docente.contrasena, docente.email]);
+        		[docente.legajo, docente.apellido, docente.nombre, docente.usuario, docente.contrasena, docente.email], (err, response)=>{
+                if (!err) {res.send("ok");}
+                else res.send(err)  
+            });
 
-        }
-    res.send("ok");
+    }
 });
 
 //carga cursos
@@ -55,21 +59,28 @@ router.get('/cursos', (req, res) => {
 });
 
 router.post('/cursos/', (req, res) => {
-    db.query('INSERT INTO cursos(id_materia, docente_a_cargo, sede, aulas, cupos_disponibles, dias, horarios, inscriptos, condicionales)\
-                VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9)', [req.body.materia, req.body.docente, req.body.sedes, req.body.aulas, req.body.cupos, req.body.dias, req.body.horarios, 0, 0]);
-    res.send("ok");
+    db.query('INSERT INTO cursos(id_materia, docente_a_cargo, sede, aulas, cupos_disponibles, dias, horarios, id_periodo)\
+                VALUES($1, $2, $3, $4, $5, $6, $7, $8)', [req.body.materia, req.body.docente, req.body.sedes, req.body.aulas, req.body.cupos, req.body.dias, req.body.horarios, 2], (err, response)=>{
+        if (!err) {res.send("ok");}
+        else res.send(err)  
+    });
+    
 });
 
 router.put('/cursos/:id', (req, res) => {
     db.query('UPDATE cursos\
                 SET dias = $2, aulas = $3, sede = $4, docente_a_cargo = $5, cupos_disponibles = $6, id_materia = $7, horarios = $8\
-                WHERE id_curso = $1', [req.params.id, req.body.dias, req.body.aulas, req.body.sedes, req.body.docente, req.body.cupos, req.body.materia, req.body.horarios]);
-    res.send("ok");
+                WHERE id_curso = $1', [req.params.id, req.body.dias, req.body.aulas, req.body.sedes, req.body.docente, req.body.cupos, req.body.materia, req.body.horarios], (err, response)=>{
+        if (!err) {res.send("ok");}
+        else res.send(err)  
+    });
 });
 
 router.delete('/cursos/:id', (req, res) => {
-    db.query("DELETE FROM cursos WHERE id_curso = $1", [req.params.id]);
-    res.send("ok");
+    db.query("DELETE FROM cursos WHERE id_curso = $1", [req.params.id], (err, response)=>{
+        if (!err) {res.send("ok");}
+        else res.send(err)  
+    });
 });
 
 //toda la info

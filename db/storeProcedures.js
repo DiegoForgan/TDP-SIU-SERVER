@@ -434,7 +434,37 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'");
 
     
-    
+    // esta funcion acepta un condicional
+    pool.query("CREATE OR REPLACE FUNCTION aceptarCondicionales(\
+        _padron varchar(10), \
+        _id_curso int \
+    )\
+    RETURNS int\
+    AS $$\
+        DECLARE\
+            vCurso_cond int;\
+        BEGIN \
+            SELECT i.id_curso INTO vCurso_cond \
+            FROM inscripciones i \
+            INNER JOIN cursos c ON c.id_curso = i.id_curso AND c.id_materia = (SELECT id_materia FROM cursos WHERE id_curso = _id_curso)\
+            WHERE i.padron = _padron AND c.docente_a_cargo = 'cond';\
+            \
+            IF (vCurso_cond is not null)\
+            THEN\
+                UPDATE inscripciones\
+                SET\
+                    id_curso = _id_curso,\
+                    es_regular = true\
+                WHERE padron = _padron AND id_curso = vCurso_cond;\
+                \
+                RETURN 1;\
+            ELSE\
+                RETURN 0;\
+            END IF;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
     
     
     
