@@ -142,7 +142,24 @@ router.get('/alumno', (req, res) =>{
                     }
                 });
     }
-})
+});
+
+// /condicional?padron={padron_del_alumno}?id_curso={id_curso}
+router.put('/condicional', (req, res)=>{
+    if (req.query.padron && req.query.id_curso){
+        db.query('SELECT aceptarCondicionales($1, $2)', 
+            [req.query.padron, req.query.id_curso], 
+            (err, response)=>{
+                if(!err){
+                    res.send({
+                        'result': response.rows[0].aceptarCondicionales
+                    });
+                }
+                
+            }
+        );
+    }
+});
 
 
 module.exports = router;
