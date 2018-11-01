@@ -283,13 +283,18 @@ module.exports = function(pool){
     pool.query("DROP FUNCTION IF EXISTS getFinalesDeUnCurso(id_consultada int);\
     \
     CREATE OR REPLACE FUNCTION  getFinalesDeUnCurso(id_consultada int)\
-    RETURNS TABLE(id_final int, fecha text, hora text)\
+    RETURNS TABLE(id_final int, fecha text, hora text, cantidad bigint)\
     AS $$\
     BEGIN\
     RETURN QUERY\
-        SELECT examenesfinales.id_final, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH24:MI')\
+        SELECT examenesfinales.id_final, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH24:MI'), count(i.*)\
         FROM examenesfinales\
+        LEFT JOIN inscripcionesfinal i on i.id_final = examenesfinales.id_final\
         WHERE examenesfinales.id_curso = id_consultada\
+        GROUP BY \
+            examenesfinales.id_final,\
+            examenesfinales.fecha_examen,\
+            examenesfinales.horario_examen\
         ORDER BY examenesfinales.fecha_examen ASC;\
     END; $$\
     \
