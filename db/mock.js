@@ -220,7 +220,21 @@ module.exports = function(pool){
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 7, 10, '19/08/2013');\
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 8, 9 , '20/08/2016');\
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 9, 6 , '21/08/2017');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('38383', 8, 5 , '21/08/2017');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('38383', 8, 4 , '21/08/2017');\
+			\
+			");
+
+	pool.query("\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Mecánica', 110);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Civil', 120);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Electricista', 130);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Industrial', 140);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Licenciatura en Análisis de Sistemas', 150);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Química', 160);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria en Petróleo', 170);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Naval', 180);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Electrónica', 190);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Informática', 248);\
 			\
 			");
 

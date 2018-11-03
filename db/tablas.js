@@ -122,5 +122,13 @@ module.exports = function(pool){
 			id_materia int not null,\
 			nota int not null,\
 			fecha date not null);"
-        );
+		);
+		
+	pool.query("DROP TABLE IF EXISTS carreras;\
+		\
+		create table carreras(\
+				id_carrera SERIAL,\
+				nombre varchar(40) not null,\
+				creditos_totales int not null);"
+		);
 }

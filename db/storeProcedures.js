@@ -161,6 +161,41 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'"
     );
+
+    //Esta funcion devuelve el avance de la carrera del alumno de acuerdo a su padron
+    pool.query("DROP FUNCTION IF EXISTS getcreditosobtenidos(padron_consultado text);\
+    \
+    CREATE OR REPLACE FUNCTION  getcreditosobtenidos (padron_consultado text)\
+    RETURNS TABLE(creditos_obtenidos bigint)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT SUM(materias.creditos)\
+        FROM historialacademico\
+        INNER JOIN materias ON materias.id = historialacademico.id_materia\
+        WHERE padron_consultado = historialacademico.padron AND historialacademico.nota >= 4\
+        GROUP BY historialacademico.padron;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
+
+    //Esta funcion devuelve el avance de la carrera del alumno de acuerdo a su padron
+    pool.query("DROP FUNCTION IF EXISTS getcreditosdelacarrera(padron_consultado text);\
+    \
+    CREATE OR REPLACE FUNCTION  getcreditosdelacarrera (padron_consultado text)\
+    RETURNS TABLE(creditos_totales int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT carreras.creditos_totales\
+        FROM alumnos\
+        INNER JOIN carreras ON alumnos.carrera = carreras.id_carrera\
+        WHERE padron_consultado = alumnos.padron;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
     
     
     
