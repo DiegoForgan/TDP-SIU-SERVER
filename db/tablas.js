@@ -21,7 +21,7 @@ module.exports = function(pool){
 				usuario varchar(50) not null,\
 				contrasena varchar(20) not null,\
 				prioridad int not null,\
-				carrera int not null,\
+				carrera varchar(50) not null,\
 				f_update timestamp not null,\
 				email varchar(200) not null);"
             );

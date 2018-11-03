@@ -226,6 +226,7 @@ router.put('/perfil', (req, res) =>{
     }
 });
 
+//params: ?padron={padron del alumno}&id_carrera={id_carrera}
 router.get('/historial', (req, res) =>{
     if (!req.query.padron) {
         res.send({
@@ -252,10 +253,10 @@ router.get('/historial', (req, res) =>{
     }
 });
 
-//params: ?padron={padron del alumno}
+//params: ?padron={padron del alumno}&id_carrera={id_carrera}
 router.get('/creditos', (req, res) =>{
-    if (!req.query.padron) {
-        console.log("no mando el padron!");
+    if (!req.query.padron || !req.query.id_carrera) {
+        console.log("no mando el padron o carrera!");
         res.send({
             'creditos_totales': '0',
             'creditos_obtenidos': '0',
@@ -263,7 +264,7 @@ router.get('/creditos', (req, res) =>{
         });
     }
     else {
-        db.query('SELECT * FROM getcreditosdelacarrera($1)',[req.query.padron],(error,creditos_totales)=>{
+        db.query('SELECT * FROM getcreditosdelacarrera($1, $2)',[req.query.padron, req.query.id_carrera],(error,creditos_totales)=>{
             if (error){
                 console.log(error);
                 res.send({
@@ -275,7 +276,7 @@ router.get('/creditos', (req, res) =>{
             else{
                 var creditos_totales = creditos_totales.rows[0].creditos_totales;
                 
-                db.query('SELECT * FROM getcreditosobtenidos($1)',[req.query.padron],(error,avance)=>{
+                db.query('SELECT * FROM getcreditosobtenidos($1, $2)',[req.query.padron, req.query.id_carrera],(error,avance)=>{
                     if (error){
                         console.log(error);
                         res.send({
