@@ -251,6 +251,55 @@ router.get('/historial', (req, res) =>{
         })
     }
 });
+
+//params: ?padron={padron del alumno}
+router.get('/creditos', (req, res) =>{
+    if (!req.query.padron) {
+        console.log("no mando el padron!");
+        res.send({
+            'creditos_totales': '0',
+            'creditos_obtenidos': '0',
+            'porcentaje': '0.00'
+        });
+    }
+    else {
+        db.query('SELECT * FROM getcreditosdelacarrera($1)',[req.query.padron],(error,creditos_totales)=>{
+            if (error){
+                console.log(error);
+                res.send({
+                    'creditos_totales': '0',
+                    'creditos_obtenidos': '0',
+                    'porcentaje': '0.00'
+                });
+            }
+            else{
+                var creditos_totales = creditos_totales.rows[0].creditos_totales;
+                
+                db.query('SELECT * FROM getcreditosobtenidos($1)',[req.query.padron],(error,avance)=>{
+                    if (error){
+                        console.log(error);
+                        res.send({
+                        'creditos_totales': '0',
+                        'creditos_obtenidos': '0',
+                        'porcentaje': '0'
+                        });
+                    }
+                    else{
+                        if (avance.rowCount == 0) creditos_obtenidos = 0;
+                        else creditos_obtenidos = avance.rows[0].creditos_obtenidos;
+                        
+                        var porcentaje = (creditos_obtenidos/creditos_totales)*100;
+                        res.send({
+                            'creditos_totales': creditos_totales.toString(),
+                            'creditos_obtenidos': creditos_obtenidos.toString(),
+                            'porcentaje': (porcentaje.toFixed(2)).toString()
+                        }); 
+                    }
+                })
+            }
+        })
+    }
+});
   
 module.exports = router;
 
