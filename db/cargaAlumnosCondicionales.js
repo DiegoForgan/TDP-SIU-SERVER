@@ -23,6 +23,8 @@ module.exports = function(pool){
             INSERT INTO inscripciones VALUES('00006',1, true);\
             INSERT INTO inscripciones VALUES('00007',1, true);\
             INSERT INTO inscripciones VALUES('00008',1, true);\
+            INSERT INTO inscripciones VALUES('95812',1, true);\
+            INSERT INTO inscripciones VALUES('95812',4, true);\
             INSERT INTO inscripciones VALUES('00012',6, false);"
         );
 }
