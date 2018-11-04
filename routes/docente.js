@@ -161,5 +161,16 @@ router.put('/condicional', (req, res)=>{
     }
 });
 
+//params ?id_final={id}
+router.get('/inscriptos',(req,res)=>{
+    if (!req.query.id_final){
+        console.log ('No hay ID de final!');
+        res.send({'inscriptos':[]});
+    }
+    else{
+        
+    }
+});
+
 
 module.exports = router;
