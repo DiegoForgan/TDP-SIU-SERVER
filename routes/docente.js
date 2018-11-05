@@ -161,5 +161,27 @@ router.put('/condicional', (req, res)=>{
     }
 });
 
+//params ?id_final={id}
+router.get('/inscriptos',(req,res)=>{
+    if (!req.query.id_final){
+        console.log ('No hay ID de final!');
+        res.send({'inscriptos':[]});
+    }
+    else{
+       db.query('SELECT * FROM getInscriptosFinal($1)',[req.query.id_final],(error,inscriptos)=>{
+           if (error) {
+               console.log(error);
+               res.send({'inscriptos':[]});
+           }
+           else if (inscriptos.rowCount == 0) {
+               res.send({'inscriptos':[]});
+           }
+           else{
+               res.send({'inscriptos':inscriptos.rows});
+           }
+       }) 
+    }
+});
+
 
 module.exports = router;

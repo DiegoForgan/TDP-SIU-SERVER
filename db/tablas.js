@@ -112,7 +112,8 @@ module.exports = function(pool){
 	create table inscripcionesfinal(\
 			padron varchar(10) not null,\
 			id_final int not null,\
-			es_regular boolean not null);"
+			es_regular boolean not null,\
+			nota_del_final int);"
 		);
 		
 	pool.query("DROP TABLE IF EXISTS historialacademico;\

@@ -199,6 +199,23 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'"
     );
     
+    //Esta funcion devuelve el listado de alumnos de un determinado final
+    pool.query("DROP FUNCTION IF EXISTS getInscriptosFinal(id_final_consultado int);\
+    \
+    CREATE OR REPLACE FUNCTION  getInscriptosFinal (id_final_consultado int)\
+    RETURNS TABLE(padron varchar(10), apellido_y_nombre text, es_regular boolean, nota int)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT alumnos.padron, alumnos.apellido || ', ' || alumnos.nombre AS apellido_y_nombre, inscripcionesfinal.es_regular, (CASE WHEN  inscripcionesfinal.nota_del_final >= 0 THEN inscripcionesfinal.nota_del_final ELSE -1 END)\
+        FROM inscripcionesfinal\
+        INNER JOIN alumnos ON alumnos.padron = inscripcionesfinal.padron\
+        WHERE id_final_consultado = inscripcionesfinal.id_final\
+        ORDER BY es_regular DESC, apellido_y_nombre ASC;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
     
     
     
