@@ -145,9 +145,9 @@ module.exports = function(pool){
     
     
     //Esta funcion devuelve el listado del historial academico del alumno de acuerdo a su padron
-    pool.query("DROP FUNCTION IF EXISTS gethistorialdelalumno(padron_consultado text);\
+    pool.query("DROP FUNCTION IF EXISTS gethistorialdelalumno(padron_consultado text, _id_carrera int);\
     \
-    CREATE OR REPLACE FUNCTION  gethistorialdelalumno (padron_consultado text)\
+    CREATE OR REPLACE FUNCTION  gethistorialdelalumno (padron_consultado text, _id_carrera int)\
     RETURNS TABLE(codigo varchar(6), nombre varchar(40),  nota int, fecha text)\
     AS $$\
     BEGIN\
@@ -155,6 +155,7 @@ module.exports = function(pool){
         SELECT materias.codigo, materias.nombre, historialacademico.nota, to_char(historialacademico.fecha, 'dd/mm/yyyy')\
         FROM historialacademico\
         INNER JOIN materias ON materias.id = historialacademico.id_materia\
+        INNER JOIN materias_carrera mc ON mc.id_materia = materias.id AND mc.id_carrera = _id_carrera\
         WHERE padron_consultado = historialacademico.padron\
         ORDER BY historialacademico.fecha ASC;\
     END; $$\
@@ -163,9 +164,9 @@ module.exports = function(pool){
     );
 
     //Esta funcion devuelve el avance de la carrera del alumno de acuerdo a su padron
-    pool.query("DROP FUNCTION IF EXISTS getcreditosobtenidos(padron_consultado text);\
+    pool.query("DROP FUNCTION IF EXISTS getcreditosobtenidos(padron_consultado text, _id_carrera int);\
     \
-    CREATE OR REPLACE FUNCTION  getcreditosobtenidos (padron_consultado text)\
+    CREATE OR REPLACE FUNCTION  getcreditosobtenidos (padron_consultado text, _id_carrera int)\
     RETURNS TABLE(creditos_obtenidos bigint)\
     AS $$\
     BEGIN\
@@ -173,6 +174,7 @@ module.exports = function(pool){
         SELECT SUM(materias.creditos)\
         FROM historialacademico\
         INNER JOIN materias ON materias.id = historialacademico.id_materia\
+        INNER JOIN materias_carrera mc on mc.id_materia = materias.id and mc.id_carrera = _id_carrera\
         WHERE padron_consultado = historialacademico.padron AND historialacademico.nota >= 4\
         GROUP BY historialacademico.padron;\
     END; $$\
@@ -181,17 +183,18 @@ module.exports = function(pool){
     );
 
     //Esta funcion devuelve el avance de la carrera del alumno de acuerdo a su padron
-    pool.query("DROP FUNCTION IF EXISTS getcreditosdelacarrera(padron_consultado text);\
+    pool.query("DROP FUNCTION IF EXISTS getcreditosdelacarrera(padron_consultado text, _id_carrera int);\
     \
-    CREATE OR REPLACE FUNCTION  getcreditosdelacarrera (padron_consultado text)\
+    CREATE OR REPLACE FUNCTION  getcreditosdelacarrera (padron_consultado text, _id_carrera int)\
     RETURNS TABLE(creditos_totales int)\
     AS $$\
     BEGIN\
     RETURN QUERY\
         SELECT carreras.creditos_totales\
-        FROM alumnos\
-        INNER JOIN carreras ON alumnos.carrera = carreras.id_carrera\
-        WHERE padron_consultado = alumnos.padron;\
+        FROM alumnos a\
+        INNER JOIN regexp_split_to_table(a.carrera, ';') carreraaux on true\
+        INNER JOIN carreras ON cast(carreraaux as int) = carreras.id_carrera\
+        WHERE padron_consultado = a.padron and carreras.id_carrera = _id_carrera;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"

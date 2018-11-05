@@ -43,7 +43,7 @@ router.get('/prioridad/:padron', function (req, res) {
 });
 
 //Devuelve la oferta academica.
-//params: ?id_materia={id_materia}&filtro={filtro}
+//params: ?id_materia={id_materia}&filtro={filtro}&id_carrera={id_carrera}
 router.get('/oferta/:padron', function (req, res) {
     console.log("Un alumno consulto la oferta academica");
     var listado = [];
@@ -65,7 +65,8 @@ router.get('/oferta/:padron', function (req, res) {
         db.query("SELECT m.*\
                     FROM materias m\
                     INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
-                    INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
+                    INNER JOIN alumnos a ON true\
+                    INNER JOIN regexp_split_to_table(a.carrera, ';') carreraaux on cast(carreraaux as int) = mc.id_carrera\
                     WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $3 or m.nombre ilike $4)\
                         AND m.id not in (\
                             select m.id\
@@ -73,9 +74,17 @@ router.get('/oferta/:padron', function (req, res) {
                             inner join cursos c on c.id_curso = i.id_curso\
                             inner join materias m on m.id = c.id_materia\
                             where i.padron = $1\
+                            \
+                            UNION\
+                            \
+                            SELECT materias.id\
+                            FROM historialacademico\
+                            INNER JOIN materias ON materias.id = historialacademico.id_materia\
+                            INNER JOIN materias_carrera mc ON mc.id_materia = materias.id AND mc.id_carrera = $5\
+                            WHERE $1 = historialacademico.padron\
                         )\
                     ORDER BY m.nombre",
-                [padron, filtro, filtro2, filtro3],
+                [padron, filtro, filtro2, filtro3, req.query.id_carrera],
                 (error, respuesta) => {
                     if (!error) {
                         if (respuesta.rowCount != 0) {
@@ -226,14 +235,15 @@ router.put('/perfil', (req, res) =>{
     }
 });
 
+//params: ?padron={padron del alumno}&id_carrera={id_carrera}
 router.get('/historial', (req, res) =>{
-    if (!req.query.padron) {
+    if (!req.query.padron || !req.query.id_carrera) {
         res.send({
             'historial': []
         });
     }
     else{
-        db.query('SELECT * FROM gethistorialdelalumno ($1)',[req.query.padron],(error,historial)=>{
+        db.query('SELECT * FROM gethistorialdelalumno ($1, $2)',[req.query.padron, req.query.id_carrera],(error,historial)=>{
             if (error) {
                 console.log(error);
                 res.send({
@@ -252,10 +262,10 @@ router.get('/historial', (req, res) =>{
     }
 });
 
-//params: ?padron={padron del alumno}
+//params: ?padron={padron del alumno}&id_carrera={id_carrera}
 router.get('/creditos', (req, res) =>{
-    if (!req.query.padron) {
-        console.log("no mando el padron!");
+    if (!req.query.padron || !req.query.id_carrera) {
+        console.log("no mando el padron o carrera!");
         res.send({
             'creditos_totales': '0',
             'creditos_obtenidos': '0',
@@ -263,7 +273,7 @@ router.get('/creditos', (req, res) =>{
         });
     }
     else {
-        db.query('SELECT * FROM getcreditosdelacarrera($1)',[req.query.padron],(error,creditos_totales)=>{
+        db.query('SELECT * FROM getcreditosdelacarrera($1, $2)',[req.query.padron, req.query.id_carrera],(error,creditos_totales)=>{
             if (error){
                 console.log(error);
                 res.send({
@@ -275,7 +285,7 @@ router.get('/creditos', (req, res) =>{
             else{
                 var creditos_totales = creditos_totales.rows[0].creditos_totales;
                 
-                db.query('SELECT * FROM getcreditosobtenidos($1)',[req.query.padron],(error,avance)=>{
+                db.query('SELECT * FROM getcreditosobtenidos($1, $2)',[req.query.padron, req.query.id_carrera],(error,avance)=>{
                     if (error){
                         console.log(error);
                         res.send({
