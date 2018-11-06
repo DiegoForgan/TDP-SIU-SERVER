@@ -238,9 +238,7 @@ router.put('/perfil', (req, res) =>{
 //params: ?padron={padron del alumno}&id_carrera={id_carrera}
 router.get('/historial', (req, res) =>{
     if (!req.query.padron || !req.query.id_carrera) {
-        res.send({
-            'historial': []
-        });
+        res.send([]);
     }
     else{
         db.query('SELECT * FROM gethistorialdelalumno ($1, $2)',[req.query.padron, req.query.id_carrera],(error,historial)=>{
