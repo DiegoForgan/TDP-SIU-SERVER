@@ -246,17 +246,13 @@ router.get('/historial', (req, res) =>{
         db.query('SELECT * FROM gethistorialdelalumno ($1, $2)',[req.query.padron, req.query.id_carrera],(error,historial)=>{
             if (error) {
                 console.log(error);
-                res.send({
-                    'historial': []
-                });
+                res.send([]);
             }
             else if (historial.rowCount == 0){
-                res.send({
-                    'historial': []
-                });
+                res.send([]);
             }
             else{
-                res.send({'historial':historial.rows});
+                res.send(historial.rows);
             }
         })
     }
