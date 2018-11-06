@@ -18,7 +18,7 @@ module.exports = function(pool){
 				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, '10', dia_hoy,'segioramos@gmail.com');\
 				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, '10;9', dia_hoy,'agustinluques@gmail.com');\
 				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','38888888', '12345', 10, '10', dia_hoy,'diegoforgan@gmail.com');\
-				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, '10', dia_hoy,'francoetcheverri@gmail.com');\
+				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, '10;9', dia_hoy,'francoetcheverri@gmail.com');\
 				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 1, '10', dia_hoy,'federicobalina@gmail.com');\
             end;\
             $$;\
