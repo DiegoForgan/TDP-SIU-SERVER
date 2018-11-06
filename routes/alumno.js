@@ -256,7 +256,7 @@ router.get('/historial', (req, res) =>{
                 });
             }
             else{
-                res.send(historial.rows);
+                res.send({'historial':historial.rows});
             }
         })
     }
