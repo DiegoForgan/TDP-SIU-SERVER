@@ -64,7 +64,7 @@ router.get('/oferta/:padron', function (req, res) {
     if (!req.query.id_materia) {
         db.query("SELECT m.*\
                     FROM materias m\
-                    INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
+                    INNER JOIN materias_carrera mc ON mc.id_materia = m.id AND mc.id_carrera = $5\
                     INNER JOIN alumnos a ON true\
                     INNER JOIN regexp_split_to_table(a.carrera, ';') carreraaux on cast(carreraaux as int) = mc.id_carrera\
                     WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $3 or m.nombre ilike $4)\
