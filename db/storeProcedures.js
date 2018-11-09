@@ -278,7 +278,7 @@ module.exports = function(pool){
         FROM alumnos a\
         INNER JOIN prioridad_periodo pp ON pp.prioridad = a.prioridad\
         INNER JOIN periodos p ON p.id = pp.id_periodo\
-        INNER JOIN historialacademico ha ON ha.padron = a.padron and not completo_encuesta\
+        LEFT JOIN historialacademico ha ON ha.padron = a.padron and not completo_encuesta\
         WHERE padron_consultado = a.padron and p.activo\
         GROUP BY a.prioridad, a.f_update, pp.fecha_inicio, p.descripcion, p.fechaInicioInscripcionCursadas,\
                     p.fechaFinInscripcionCursadas,\
