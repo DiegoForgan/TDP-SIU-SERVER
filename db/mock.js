@@ -211,17 +211,17 @@ module.exports = function(pool){
 			");
 
 	pool.query("\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 1, 10, '12/08/2017');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 2, 9 , '14/08/2015');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 3, 8 , '15/08/2014');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 4, 7 , '16/08/2018');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 5, 10, '17/08/2015');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 6, 4 , '18/08/2014');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 7, 10, '19/08/2013');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 8, 9 , '20/08/2016');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 9, 6 , '21/08/2017');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('38383', 8, 4 , '21/08/2017');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('96803', 8, 4 , '21/08/2015');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 1, 10, '12/08/2017', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 2, 9 , '14/08/2015', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 3, 8 , '15/08/2014', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 4, 7 , '16/08/2018', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 5, 10, '17/08/2015', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 6, 4 , '18/08/2014', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 7, 10, '19/08/2013', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 8, 9 , '20/08/2016', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 9, 6 , '21/08/2017', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('38383', 8, 4 , '21/08/2017', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('96803', 8, 4 , '21/08/2015', false, null);\
 			\
 			");
 

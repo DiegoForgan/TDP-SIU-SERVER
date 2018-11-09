@@ -122,7 +122,9 @@ module.exports = function(pool){
 			padron varchar(10) not null,\
 			id_materia int not null,\
 			nota int not null,\
-			fecha date not null);"
+			fecha date not null,\
+			completo_encuesta bool not null,\
+			resultados_encuesta text);"
 		);
 		
 	pool.query("DROP TABLE IF EXISTS carreras;\

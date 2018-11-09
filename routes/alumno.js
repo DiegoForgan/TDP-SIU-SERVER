@@ -33,9 +33,9 @@ router.get('/prioridad/:padron', function (req, res) {
                 'fechaInicioCursadas': new Date(resp_padron.rows[0].fechainiciocursadas),
                 'fechaFinCursadas': new Date(resp_padron.rows[0].fechafincursadas),
                 'fechaInicioFinales': new Date(resp_padron.rows[0].fechainiciofinales),
-                'fechaFinFinales': new Date(resp_padron.rows[0].fechafinfinales)
+                'fechaFinFinales': new Date(resp_padron.rows[0].fechafinfinales),
+                'encuestas': resp_padron.rows[0].encuestas,
             }];
-            console.log(obj)
             res.send(obj);  
         } 
         else res.send([{}]);
@@ -314,7 +314,6 @@ router.get('/regular', (req, res) =>{
     }
     else {
         db.query('SELECT esRegular($1)',[req.query.padron],(error,response)=>{
-            console.log("entro2")
             if (error){
                 console.log(error);
                 res.send({});
@@ -324,6 +323,60 @@ router.get('/regular', (req, res) =>{
                     'es_regular': response.rows[0].esregular
                 })
             }
+        })
+    }
+});
+
+//params: ?padron={padron del alumno}
+router.get('/encuestas', (req, res) =>{
+    if (!req.query.padron) {
+        console.log("no mando el padron!");
+        res.send([{}]);
+    }
+    else {
+        db.query('SELECT * FROM getEncuestas($1)',[req.query.padron],(error,response)=>{
+            if (error){
+                console.log(error);
+                res.send({});
+            }
+            else{
+                var listado = [];
+                if (response.rowCount != 0) {
+                    (response.rows).forEach(encuesta => {
+                        var elemento = {
+                            'id': encuesta.id_materia,
+                            'codigo': encuesta.codigo,
+                            'nombre': encuesta.nombre,
+                        };
+                        listado.push(elemento);
+                    });
+                    res.send(listado);
+                } else {
+                    res.send([{}])
+                }
+            }
+        })
+    }
+});
+
+//params: ?padron={padron del alumno}&id_materia={id}&respuesta={respuesta}
+router.post('/encuestas', (req, res) =>{
+    if (!req.query.padron && !req.query.repsuesta) {
+        console.log("no mando el padron o respuesta!");
+        res.send("error");
+    }
+    else {
+        db.query('UPDATE historialacademico\
+                    SET completo_encuesta = true,\
+                        resultados_encuesta = $3\
+                    WHERE padron = $1 and id_materia = $2',[req.query.padron, req.query.id_materia, req.query.respuesta],(error,response)=>{
+            if (error){
+                console.log(error);
+                res.send("error");
+            }
+            else{
+                    res.send("ok");
+                }             
         })
     }
 });
