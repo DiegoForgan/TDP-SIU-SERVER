@@ -22,11 +22,12 @@ var notificar = function(titulo, texto, destino){
 	
 
 	var postData = JSON.stringify({
-	    'notification' : {
+	    'data' : {
 	    	'title': titulo,
 	    	'text': texto
 	    },
-	    'to': '/topics/' + destino
+	    'to': '/topics/' + destino,
+	    'priority': 'high'
 	});
 
 	req.write(postData);
