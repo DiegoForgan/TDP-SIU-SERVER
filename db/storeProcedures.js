@@ -534,6 +534,39 @@ module.exports = function(pool){
     $$\
     \
     LANGUAGE 'plpgsql'");
+
+
+    // esta funcion devuelve si es regular o no
+    pool.query("CREATE OR REPLACE FUNCTION esRegular(\
+        _padron varchar(10)\
+    )\
+    RETURNS bool\
+    AS $$\
+        DECLARE\
+            fecha_hoy timestamp := now();\
+            ultimo_final timestamp;\
+            es_regular bool := false;\
+        BEGIN \
+            select max(fecha) into ultimo_final\
+            from historialacademico\
+            where padron = _padron;\
+            \
+            IF (ultimo_final is null)\
+            THEN\
+                SELECT true into es_regular;\
+            ELSE\
+                IF (date_part('day',fecha_hoy - ultimo_final) <= 730)\
+                THEN\
+                    SELECT true into es_regular;\
+                ELSE\
+                    SELECT false into es_regular;\
+                END IF;\
+            END IF;\
+            RETURN es_regular;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
     
     
     
