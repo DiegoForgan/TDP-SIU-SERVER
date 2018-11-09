@@ -261,7 +261,8 @@ module.exports = function(pool){
                     fechaInicioCursadas timestamp,\
                     fechaFinCursadas timestamp,\
                     fechaInicioFinales timestamp,\
-                    fechaFinFinales timestamp)\
+                    fechaFinFinales timestamp,\
+                    encuestas bigint)\
     AS $$\
     BEGIN\
     RETURN QUERY\
@@ -272,11 +273,21 @@ module.exports = function(pool){
                     p.fechaInicioCursadas,\
                     p.fechaFinCursadas,\
                     p.fechaInicioFinales,\
-                    p.fechaFinFinales\
+                    p.fechaFinFinales,\
+                    count(ha.*)\
         FROM alumnos a\
         INNER JOIN prioridad_periodo pp ON pp.prioridad = a.prioridad\
         INNER JOIN periodos p ON p.id = pp.id_periodo\
-        WHERE padron_consultado = a.padron and p.activo;\
+        INNER JOIN historialacademico ha ON ha.padron = a.padron and not completo_encuesta\
+        WHERE padron_consultado = a.padron and p.activo\
+        GROUP BY a.prioridad, a.f_update, pp.fecha_inicio, p.descripcion, p.fechaInicioInscripcionCursadas,\
+                    p.fechaFinInscripcionCursadas,\
+                    p.fechaInicioDesinscripcionCursadas,\
+                    p.fechaFinDesinscripcionCursadas,\
+                    p.fechaInicioCursadas,\
+                    p.fechaFinCursadas,\
+                    p.fechaInicioFinales,\
+                    p.fechaFinFinales;\
     END; $$\
     \
     LANGUAGE 'plpgsql'"
@@ -569,7 +580,22 @@ module.exports = function(pool){
     LANGUAGE 'plpgsql'");
     
     
-    
+    // esta funcion devuelve encuestas
+    pool.query("CREATE OR REPLACE FUNCTION getEncuestas(\
+        _padron varchar(10)\
+    )\
+    RETURNS TABLE(id_materia int, codigo varchar(6), nombre varchar(40))\
+    AS $$\
+        BEGIN \
+        RETURN QUERY\
+            select ha.id_materia, m.codigo,  m.nombre\
+            from historialacademico ha\
+            inner join materias m on m.id = ha.id_materia\
+            where padron = _padron and not completo_encuesta;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
     
     
     
