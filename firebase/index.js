@@ -11,7 +11,11 @@ var options = {
  	}
 };
 
-var req = https.request(options);
+var req = https.request(options, (res)=>{
+	res.on('data', (d) => {
+    process.stdout.write(d);
+  });
+});
 
 req.on('error', (e) => {
   console.error(e);

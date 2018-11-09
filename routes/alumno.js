@@ -304,6 +304,29 @@ router.get('/creditos', (req, res) =>{
         })
     }
 });
+
+
+//params: ?padron={padron del alumno}
+router.get('/regular', (req, res) =>{
+    if (!req.query.padron) {
+        console.log("no mando el padron!");
+        res.send({});
+    }
+    else {
+        db.query('SELECT esRegular($1)',[req.query.padron],(error,response)=>{
+            console.log("entro2")
+            if (error){
+                console.log(error);
+                res.send({});
+            }
+            else{
+                res.send({
+                    'es_regular': response.rows[0].esregular
+                })
+            }
+        })
+    }
+});
   
 module.exports = router;
 

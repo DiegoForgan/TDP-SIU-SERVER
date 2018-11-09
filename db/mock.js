@@ -221,6 +221,7 @@ module.exports = function(pool){
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 8, 9 , '20/08/2016');\
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('95812', 9, 6 , '21/08/2017');\
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('38383', 8, 4 , '21/08/2017');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha) VALUES('96803', 8, 4 , '21/08/2015');\
 			\
 			");
 

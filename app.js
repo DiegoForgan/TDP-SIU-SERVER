@@ -63,7 +63,14 @@ app.get('/login',(req,res)=>{
   }
 });
 
+app.get('/resetdb',(req,res)=>{
+  db.resetdb();
+  res.send("Base reseteada " + new Date());
+});
+
 app.listen(PORT, function () {
   console.log('Servido escuchando en el puerto: ' + PORT);
 });
 
+// var fb = require('./firebase')
+// fb.notificar("sale bermuda gil", "ferro no volves mas", "all")

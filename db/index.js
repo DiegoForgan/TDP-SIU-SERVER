@@ -16,19 +16,20 @@ const pool = new Pool({
     max: 1, //lo limito a 1 por temas de sincronismo pero lo ideal del pool seria trabajar con multiples
 });
 
-// carga la base de datos con mocks
-crearTablas(pool);
-cargarDatos(pool);
-
-//carga las funciones para consultarle a la base de datos
-cargarStoreProcedures(pool);
-
-
-cargaAlumnosCondicionales(pool);
 
 
 module.exports = {
   query: (text, params, callback) => {
     return pool.query(text, params, callback);
+  },
+  resetdb: () =>{
+ 	// carga la base de datos con mocks
+	crearTablas(pool);
+	cargarDatos(pool);
+
+	//carga las funciones para consultarle a la base de datos
+	cargarStoreProcedures(pool);
+
+	cargaAlumnosCondicionales(pool);
   }
 }
