@@ -188,7 +188,7 @@ function obtenerFinalesDeLaMateria(req, res) {
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso"
 // o al final cuyo id es "id_final"
 //params: ?curso={id_curso}&padron={padron_alumno} para inscripcion a CURSOS
-//params: ?final={id_final}&padron={padron_alumno} para inscripcion a FINALES
+//params: ?final={id_final}&padron={padron_alumno}&es_regular={regularOlibre} para inscripcion a FINALES
 //Devuelve el estado de la inscripcion con un detalle
 //ESTADOS POSIBLES:
 /*
@@ -198,7 +198,7 @@ function obtenerFinalesDeLaMateria(req, res) {
 */
 router.post('/inscribir', (req, res) => {
     if (req.query.curso && req.query.padron) inscribirACurso(req, res);
-    else if (req.query.final && req.query.padron) inscribirAFinal(req,res);
+    else if (req.query.final && req.query.padron && req.query.es_regular) inscribirAFinal(req,res);
     else res.send({'estado':-1, 'detalles':'Faltan parametros en el endpoint!'});
 });
 
@@ -435,7 +435,7 @@ function inscribirAFinal(req, res) {
                 }
                 else{
                     db.query('INSERT INTO inscripcionesfinal (padron, id_final, es_regular) VALUES ($1,$2,$3)'
-                    ,[req.query.padron,req.query.final,true]);
+                    ,[req.query.padron,req.query.final,req.query.es_regular]);
                     res.send({'estado':true, 'detalle':'Inscripcion exitosa!'});
                 }
             })
