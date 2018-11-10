@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var db = require('../db');
+var fb = require('../firebase');
 var separar = require('../auxiliares/separarValoresPuntoYComa');
 
 // middleware that is specific to this router
@@ -74,6 +75,33 @@ router.get('/finales/:id_curso', (req,res)=>{
                 else res.send({'fechas':fechas_obtenidas.rows});
             }
         })
+    }
+});
+
+//params: ?id_final={id_final}
+router.put('/finales', (req,res)=>{
+    if(!req.query.id_final) res.send({'estado':false});
+    else{
+        db.query('select * from cerrarFinal($1)',[req.query.id_final],
+            (err, response)=>{
+                if(!err){
+                    var date = new Date(response.rows[0].fecha);
+                    var date = date.getDate() + '/' + (date.getMonth() + 1) + '/' +  date.getFullYear();
+                    
+                    var titulo = "Final Cerrado";
+                    
+                    var texto = "Se ha cerrado el final de la materia " + response.rows[0].codigo + " - " + response.rows[0].nombre + " del día " + date
+                    
+                    var topic = "final" + req.query.id_final;
+                    
+                    fb.notificar(titulo, texto, topic)
+                    res.send({'estado':true});
+                }else{
+                    console.log(err);
+                    res.send({'estado':false});
+                }
+            }
+        );
     }
 });
 
