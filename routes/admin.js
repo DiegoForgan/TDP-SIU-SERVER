@@ -1,5 +1,6 @@
 var router = require('express').Router();
 const db = require('../db');
+const fb = require('../firebase');
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -144,6 +145,19 @@ router.post('/periodos', (req, res) => {
              req.body.fechaInicioFinales, req.body.fechaFinFinales], (err, response)=>{
         res.send("ok");
     })
+});
+
+router.post('/notificaciones', (req, res) => {
+    var titulo = req.body.titulo;
+    var texto = req.body.texto;
+
+    try {
+        fb.notificar(titulo, texto, "all");
+    } catch(e){
+        res.status(500).send(e);
+    } finally{
+        res.send("ok");
+    }
 })
 
 module.exports = router;
