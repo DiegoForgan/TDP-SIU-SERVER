@@ -688,8 +688,8 @@ module.exports = function(pool){
         sum(case when i.es_regular then 1 else 0 end), sum(case when not i.es_regular then 1 else 0 end),\
         max(c.docente_a_cargo)\
         FROM cursos c\
-        INNER JOIN inscripciones i ON c.id_curso = i.id_curso\
         INNER JOIN materias m ON c.id_materia = m.id\
+        LEFT JOIN inscripciones i ON c.id_curso = i.id_curso\
         WHERE c.id_curso = id_consultada\
         GROUP BY c.id_curso;\
     END; $$\
@@ -740,9 +740,9 @@ module.exports = function(pool){
     BEGIN\
     RETURN QUERY\
         SELECT (select sum(cursos.cupos_disponibles) from cursos where cursos.id_materia = id_materia_consultada) - sum(case when i.es_regular then 1 else 0 end)\
-        FROM inscripciones i\
-        INNER JOIN cursos c ON c.id_curso = i.id_curso\
+        FROM cursos c\
         INNER JOIN materias m ON c.id_materia = m.id\
+        LEFT JOIN inscripciones i ON c.id_curso = i.id_curso\
         WHERE m.id = id_materia_consultada\
         GROUP BY m.id;\
     END; $$\

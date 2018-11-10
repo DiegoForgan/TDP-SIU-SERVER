@@ -456,14 +456,6 @@ function inscribirACurso(req, res) {
     db.query('SELECT * FROM getDatosDeInscripcion($1)', [req.query.curso], (error, resp_curso) => {
         if (error)
             res.send(error); //{'estado':-1, 'detalles':'error en la query del curso de la base'});
-        //no aparece en la lista de inscriptos ninguna entrada
-        else if (resp_curso.rowCount == 0) {
-            db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)', [req.query.padron, req.query.curso, true]);
-            res.send({ 'estado': 1, 'detalles': 'el alumno fue inscripto con exito!' });
-            //SOLUCIONAR BUG DE MATERIA CONO UNA SOLA VACANTE QUE NO GENERA EL CURSO CONDICIONAL!
-            //Se soluciona sin tocar codigo poniendo siempre cursos con 2 vacantes por lo menos!
-            //Cuando debe anotarlo con el flag condicional FALSE, anota al primero como TRUE
-        }
         else {
             //Chequeo las vacantes del curso donde se quiere inscribir el alumno
             var vacantes_disponibles = resp_curso.rows[0].vacantes;
@@ -473,7 +465,7 @@ function inscribirACurso(req, res) {
             var estado_inscripcion = resp_curso.rows[0].legajo;
             if (estado_inscripcion == 'cond')
                 es_inscripcion_regular = false;
-            if (vacantes_disponibles != 0) {
+            if (vacantes_disponibles > 0) {
                 vacantes_disponibles--;
                 db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)', [req.query.padron, req.query.curso, es_inscripcion_regular]);
                 res.send({ 'estado': 1, 'detalles': 'el alumno fue inscripto con exito!' });
