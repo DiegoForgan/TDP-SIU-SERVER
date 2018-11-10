@@ -44,8 +44,8 @@
 	    <ul class="nav navbar-nav">
 	      <li class="active" id="importacionMenu" onclick="cambiarPantalla(1);"><a>Importación</a></li>
 	      <li id="abmCursosMenu" onclick="cambiarPantalla(2);"><a>Cursos</a></li>
-	      <li id="periodosInscripcion" onclick="cambiarPantalla(3);"><a>Periodos Inscripción</a></li>
-	      <!--<li><a>Page 3</a></li>-->
+	      <li id="periodosMenu" onclick="cambiarPantalla(3);"><a>Periodos Inscripción</a></li>
+	      <li id="notificacionesMenu" onclick="cambiarPantalla(4);"><a>Notificaciones</a></li>
 	    </ul>
 	  </div>
 	</nav>
@@ -75,7 +75,7 @@
 				</div>
 				<div class="form-group" style="text-align: right">
 					<span class="input-group-btn">
-						<button onclick="clickEstudiantes()" type="submit" class="btn btn-primary pull-right">Submit</button>
+						<button onclick="clickEstudiantes()" type="submit" class="btn btn-primary pull-right">Importar</button>
 					</span>
 				</div>
 			</div>
@@ -93,7 +93,7 @@
 				</div>
 				<div class="form-group" style="text-align: right">
 					<span class="input-group-btn">
-						<button onclick="clickDocentes()" type="submit" class="btn btn-primary pull-right">Submit</button>
+						<button onclick="clickDocentes()" type="submit" class="btn btn-primary pull-right">Importar</button>
 					</span>
 				</div>
 				
@@ -124,7 +124,7 @@
 	</div>
 
 	<!-- Pantalla periodos -->
-	<div id="periodosPantalla" class="container">
+	<div id="periodosPantalla" class="container" style="display: none;">
 		<div class="row">
 			<div class="col-lg-8">
 				<div class="col-lg-12">
@@ -232,6 +232,37 @@
 			    <input id="jrr" type="text" class="form-control">
 			
 		</div> -->
+	</div>
+
+	<!-- Pantalla importación -->
+	<div id="notificacionesPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Enviar notificaciones a todos</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="input-group input-group-lg" style="width: 100%">
+					<span class="input-group-addon" id="sizing-addon1">Título</span>
+					<textarea id="notificacionesTitulo" type="text" class="form-control" aria-describedby="sizing-addon1" style="width: 100%; height: 50px"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="input-group input-group-lg" style="width: 100%">
+					<span class="input-group-addon" id="sizing-addon2">Texto</span>
+					<textarea id="notificacionesTexto" type="text" class="form-control"  aria-describedby="sizing-addon2" style="width: 100%; height: 200px"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12" style="text-align: right;">
+				<button type="button" class="btn btn-success" onclick="enviarNotificacion();">Enviar Notificación</button>
+			</div>
+		</div>
+
 	</div>
 
 	<!-- Modal -->
