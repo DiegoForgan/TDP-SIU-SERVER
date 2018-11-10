@@ -183,5 +183,41 @@ router.get('/inscriptos',(req,res)=>{
     }
 });
 
+//params id_final={id_final}
+router.post('/notas',(req,res)=>{
+    if (req.query.id_final){
+        db.query('SELECT * FROM getInfoDeFinal($1)',[req.query.id_final],(error,informacion)=>{
+            if (error) {
+                console.log(error);
+                res.send('HUBO UN ERROR!');
+            }
+            else{
+                var listado_de_notas = JSON.parse(req.body.notas);
+                listado_de_notas.forEach(alumno => {
+                    if ((alumno.nota == 'D') || (alumno.nota == 'd')){
+                        cargarNota(alumno.padron, 2, informacion);
+                    }
+                    //Aca habria que ver que hacer con los ausentes!
+                    else if ((alumno.nota == 'A') || (alumno.nota == 'a')){
+        
+                    }
+                    else{
+                        cargarNota(alumno.padron, alumno.nota, informacion);
+                    }  
+                });
+                res.send({"notas":listado_de_notas});
+            }
+        })
+    }
+    else{
+        res.send('Faltan valores en el endpoint!');
+    }
+});
+
 
 module.exports = router;
+
+function cargarNota(padron, nota, informacion) {
+    db.query('INSERT INTO historialacademico (padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta)\
+    VALUES ($1,$2,$3,$4,$5,$6)', [padron, informacion.rows[0].id_materia, nota, informacion.rows[0].fecha, false, null]);
+}

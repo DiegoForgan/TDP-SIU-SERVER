@@ -278,7 +278,7 @@ module.exports = function(pool){
         FROM alumnos a\
         INNER JOIN prioridad_periodo pp ON pp.prioridad = a.prioridad\
         INNER JOIN periodos p ON p.id = pp.id_periodo\
-        LEFT JOIN historialacademico ha ON ha.padron = a.padron and not completo_encuesta\
+        LEFT JOIN historialacademico ha ON ha.padron = a.padron and not completo_encuesta and ha.nota >= 4\
         WHERE padron_consultado = a.padron and p.activo\
         GROUP BY a.prioridad, a.f_update, pp.fecha_inicio, p.descripcion, p.fechaInicioInscripcionCursadas,\
                     p.fechaFinInscripcionCursadas,\
@@ -591,7 +591,7 @@ module.exports = function(pool){
             select ha.id_materia, m.codigo,  m.nombre\
             from historialacademico ha\
             inner join materias m on m.id = ha.id_materia\
-            where padron = _padron and not completo_encuesta;\
+            where padron = _padron and not completo_encuesta and ha.nota >= 4;\
         END;\
     $$\
     \
@@ -609,7 +609,22 @@ module.exports = function(pool){
     
     
     
-    
+    //Devuelve datos relevantes para saber si el alumno se puede inscribir al curso tales como: vacantes, inscriptos_regulares, inscriptos_condicionales y la materia.
+    pool.query("DROP FUNCTION IF EXISTS getInfoDeFinal(id_final_consultado int);\
+    \
+    CREATE OR REPLACE FUNCTION  getInfoDeFinal(id_final_consultado int)\
+    RETURNS TABLE(id_materia int, fecha date)\
+    AS $$\
+    BEGIN\
+    RETURN QUERY\
+        SELECT cursos.id_materia, examenesfinales.fecha_examen\
+        FROM examenesfinales\
+        INNER JOIN cursos ON examenesfinales.id_curso = cursos.id_curso\
+        WHERE examenesfinales.id_final = id_final_consultado;\
+    END; $$\
+    \
+    LANGUAGE 'plpgsql'"
+    );
     
     
     
