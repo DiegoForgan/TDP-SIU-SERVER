@@ -104,7 +104,8 @@ module.exports = function(pool){
 			id_final SERIAL,\
 			id_curso int not null,\
 			fecha_examen date not null,\
-			horario_examen time not null);"
+			horario_examen time not null,\
+			abierto bool not null DEFAULT true);"
 			);
 			
 	pool.query("DROP TABLE IF EXISTS inscripcionesfinal;\
