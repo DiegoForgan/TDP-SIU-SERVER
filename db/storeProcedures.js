@@ -365,7 +365,7 @@ module.exports = function(pool){
         SELECT examenesfinales.id_final, to_char(examenesfinales.fecha_examen, 'dd/mm/yyyy'), to_char(examenesfinales.horario_examen, 'HH24:MI'), count(i.*)\
         FROM examenesfinales\
         LEFT JOIN inscripcionesfinal i on i.id_final = examenesfinales.id_final\
-        WHERE examenesfinales.id_curso = id_consultada\
+        WHERE examenesfinales.id_curso = id_consultada and abierto\
         GROUP BY \
             examenesfinales.id_final,\
             examenesfinales.fecha_examen,\
@@ -597,7 +597,27 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'");
     
-    
+    // esta funcion devuelve encuestas
+    pool.query("CREATE OR REPLACE FUNCTION cerrarFinal(\
+        _id_final int\
+    )\
+    RETURNS TABLE(fecha date, codigo varchar(6), nombre varchar(40))\
+    AS $$\
+        BEGIN \
+            update examenesfinales\
+            set abierto = false\
+            where id_final = _id_final and abierto;\
+            \
+            RETURN QUERY\
+            select e.fecha_examen, m.codigo, m.nombre\
+            from examenesfinales e\
+            inner join cursos c on c.id_curso = e.id_curso\
+            inner join materias m on c.id_materia = m.id\
+            where id_final = _id_final and not abierto;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
     
     
     
