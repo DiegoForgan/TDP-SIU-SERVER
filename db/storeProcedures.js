@@ -625,6 +625,35 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'"
     );
+
+    // esta funcion acepta un condicional
+    pool.query("CREATE OR REPLACE FUNCTION getcondicionalesdelamateria(\
+        _id_curso int \
+    )\
+    RETURNS TABLE(padron varchar(10), apellido_y_nombre text, prioridad int)\
+    AS $$\
+        DECLARE\
+            vId_materia int;\
+        BEGIN \
+            SELECT cursos.id_materia INTO vId_materia\
+            FROM cursos\
+            WHERE cursos.id_curso = _id_curso;\
+            \
+            IF (vId_materia is not null)\
+            THEN\
+            RETURN QUERY\
+                SELECT alumnos.padron, alumnos.apellido || ', ' || alumnos.nombre AS apellido_y_nombre, alumnos.prioridad\
+                FROM alumnos\
+                LEFT JOIN inscripciones ON inscripciones.padron = alumnos.padron\
+                INNER JOIN cursos ON cursos.id_curso = inscripciones.id_curso\
+                WHERE cursos.docente_a_cargo = 'cond' AND cursos.id_materia = vId_materia\
+                ORDER BY apellido_y_nombre ASC, alumnos.prioridad ASC;\
+            END IF;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
+
     
     
     

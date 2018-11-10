@@ -183,6 +183,27 @@ router.get('/inscriptos',(req,res)=>{
     }
 });
 
+
+router.get('/condicionales',(req,res)=>{
+    if (req.query.id_curso){
+        db.query('SELECT * FROM getcondicionalesdelamateria($1)',[req.query.id_curso],(error,listado)=>{
+            if (error) {
+                console.log(error);
+                res.send({'condicionales':[]});
+            }
+            else if (listado.rowCount == 0) {
+                res.send({'condicionales':[]});
+            }
+            else{
+                res.send({'condicionales':listado.rows});
+            }
+        })
+    }
+    else{
+        res.send({'condicionales':[]});
+    }
+});
+
 //params id_final={id_final}
 router.post('/notas',(req,res)=>{
     if (req.query.id_final){
