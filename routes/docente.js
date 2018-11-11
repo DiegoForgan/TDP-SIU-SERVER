@@ -237,13 +237,21 @@ router.post('/notas',(req,res)=>{
                 var listado_de_notas = JSON.parse(req.body.notas);
                 listado_de_notas.forEach(alumno => {
                     if ((alumno.nota == 'D') || (alumno.nota == 'd')){
+                        db.query('UPDATE inscripcionesfinal\
+                        SET nota_del_final = $1\
+                        WHERE id_final = $2 and padron = $3',[2,req.query.id_final,alumno.padron]);
                         cargarNota(alumno.padron, 2, informacion);
                     }
                     //Aca habria que ver que hacer con los ausentes!
                     else if ((alumno.nota == 'A') || (alumno.nota == 'a')){
-        
+                        db.query('UPDATE inscripcionesfinal\
+                        SET nota_del_final = $1\
+                        WHERE id_final = $2 and padron = $3',[-1,req.query.id_final,alumno.padron]);
                     }
                     else{
+                        db.query('UPDATE inscripcionesfinal\
+                        SET nota_del_final = $1\
+                        WHERE id_final = $2 and padron = $3',[alumno.nota,req.query.id_final,alumno.padron]);
                         cargarNota(alumno.padron, alumno.nota, informacion);
                     }  
                 });

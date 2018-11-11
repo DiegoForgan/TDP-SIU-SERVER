@@ -201,7 +201,7 @@ module.exports = function(pool){
     );
     
     //Esta funcion devuelve el listado de alumnos de un determinado final
-    //ACA HABRIA QUE HACER QUE TOME LA NOTA DEL HISTORIAL ACADEMICO
+    //ACA HABRIA QUE HACER QUE TOME LA NOTA DEL HISTORIAL ACADEMICO (POR AHORA SE MANTIENE DUPLICADO TODO!)
     pool.query("DROP FUNCTION IF EXISTS getInscriptosFinal(id_final_consultado int);\
     \
     CREATE OR REPLACE FUNCTION  getInscriptosFinal (id_final_consultado int)\
