@@ -179,6 +179,10 @@ router.put('/condicional', (req, res)=>{
             db.query('SELECT aceptarCondicionales($1, $2)', 
             [padron, req.query.id_curso])
         });
+        res.send({'result':true});
+    }
+    else{
+        res.send({'result':false});
     }
 });
 
