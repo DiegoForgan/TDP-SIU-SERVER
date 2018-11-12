@@ -65,7 +65,7 @@ router.delete('/finales', (req,res)=>{
                 
                 var texto = "Se ha cancelado el final de la materia " + response.rows[0].codigo + " - " + response.rows[0].nombre + " del día " + date
                 
-                var topic = "final" + req.query.id_final;
+                var topic = "final" + req.query.final;
                 
                 fb.notificar(titulo, texto, topic)
 
