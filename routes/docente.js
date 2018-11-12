@@ -218,7 +218,7 @@ router.put('/condicional', (req, res)=>{
             [padron, req.query.id_curso], (err, response) =>{
                 var titulo = "Ha sido aceptado!";
                 var texto = "Se lo ha aceptado como alumno regular en el curso " + req.query.id_curso;
-                var topic = "curso" + response.rows[0].aceptarcondicionales + "-" + padron;
+                var topic = padron;
                 console.log(topic)
                 fb.notificar(titulo, texto, topic);
             })
