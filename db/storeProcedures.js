@@ -598,7 +598,7 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'");
     
-    // esta funcion devuelve encuestas
+    // esta funcion cierra un final
     pool.query("CREATE OR REPLACE FUNCTION cerrarFinal(\
         _id_final int\
     )\
@@ -620,6 +620,32 @@ module.exports = function(pool){
     \
     LANGUAGE 'plpgsql'");
     
+    // esta funcion cancela un final
+    pool.query("CREATE OR REPLACE FUNCTION cancelarFinal(\
+        _id_final int\
+    )\
+    RETURNS TABLE(fecha date, codigo varchar(6), nombre varchar(40))\
+    AS $$\
+        DECLARE\
+            _fecha date;\
+            _codigo varchar(6);\
+            _nombre varchar(200);\
+        BEGIN \
+            select e.fecha_examen, m.codigo, m.nombre into _fecha, _codigo, _nombre\
+            from examenesfinales e\
+            inner join cursos c on c.id_curso = e.id_curso\
+            inner join materias m on c.id_materia = m.id\
+            where id_final = _id_final;\
+            \
+            DELETE FROM examenesfinales\
+            WHERE examenesfinales.id_final = _id_final;\
+            \
+            RETURN QUERY\
+            select _fecha, _codigo, _nombre;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
     
     
     
