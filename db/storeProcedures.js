@@ -538,9 +538,9 @@ module.exports = function(pool){
                     es_regular = true\
                 WHERE padron = _padron AND id_curso = vCurso_cond;\
                 \
-                RETURN 1;\
+                RETURN vCurso_cond;\
             ELSE\
-                RETURN 0;\
+                RETURN -1;\
             END IF;\
         END;\
     $$\

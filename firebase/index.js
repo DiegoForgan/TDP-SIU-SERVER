@@ -34,8 +34,8 @@ var notificar = function(titulo, texto, destino){
 	    'priority': 'high'
 	});
 
-	req.write(postData);
-	req.end();
+	//req.write(postData);
+	req.end(postData);
 }
 
 module.exports = {
