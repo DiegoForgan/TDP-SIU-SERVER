@@ -640,6 +640,9 @@ module.exports = function(pool){
             DELETE FROM examenesfinales\
             WHERE examenesfinales.id_final = _id_final;\
             \
+            DELETE FROM inscripcionesfinal\
+            WHERE inscripcionesfinal.id_final = _id_final;\
+            \
             RETURN QUERY\
             select _fecha, _codigo, _nombre;\
         END;\
