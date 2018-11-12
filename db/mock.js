@@ -108,6 +108,7 @@ module.exports = function(pool){
 			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',2,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 10, '0014','PC;PC','200;200',2,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			\
 			");
 

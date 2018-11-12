@@ -55,9 +55,27 @@ router.post('/finales', (req,res)=>{
 router.delete('/finales', (req,res)=>{
     if(!req.query.final) res.send({'estado':false});
     else{
-        db.query('DELETE FROM examenesfinales\
-        WHERE examenesfinales.id_final = $1',[req.query.final]);
-        res.send({'estado':true});
+        db.query('select * from cancelarFinal($1)',[req.query.final], (err, response) =>{
+            if (!err) {
+                console.log(response.rows[0])
+                var date = new Date(response.rows[0].fecha);
+                var date = date.getDate() + '/' + (date.getMonth() + 1) + '/' +  date.getFullYear();
+                
+                var titulo = "Final Cancelado";
+                
+                var texto = "Se ha cancelado el final de la materia " + response.rows[0].codigo + " - " + response.rows[0].nombre + " del día " + date
+                
+                var topic = "final" + req.query.final;
+                
+                fb.notificar(titulo, texto, topic)
+
+                res.send({'estado':true});
+            } else{
+                console.log(err)
+                res.send({'estado':false});
+            }
+        });
+        
     }
 });
 
@@ -197,7 +215,13 @@ router.put('/condicional', (req, res)=>{
     if (req.body.padrones && req.query.id_curso){
         req.body.padrones.forEach(padron => {
             db.query('SELECT aceptarCondicionales($1, $2)', 
-            [padron, req.query.id_curso])
+            [padron, req.query.id_curso], (err, response) =>{
+                var titulo = "Ha sido aceptado!";
+                var texto = "Se lo ha aceptado como alumno regular en el curso " + req.query.id_curso;
+                var topic = padron;
+                console.log(topic)
+                fb.notificar(titulo, texto, topic);
+            })
         });
         res.send({'result':true});
     }
