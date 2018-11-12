@@ -246,6 +246,14 @@ router.get('/inscriptos',(req,res)=>{
                res.send({'inscriptos':[]});
            }
            else{
+               (inscriptos.rows).forEach(alumno => {
+                   if(alumno.nota == 2){
+                       alumno.nota = 'D';
+                   }
+                   else if(alumno.nota == 20){
+                        alumno.nota = 'A';
+                   }
+               });
                res.send({'inscriptos':inscriptos.rows});
            }
        }) 
@@ -294,7 +302,7 @@ router.post('/notas',(req,res)=>{
                     else if ((alumno.nota == 'A') || (alumno.nota == 'a')){
                         db.query('UPDATE inscripcionesfinal\
                         SET nota_del_final = $1\
-                        WHERE id_final = $2 and padron = $3',[-1,req.query.id_final,alumno.padron]);
+                        WHERE id_final = $2 and padron = $3',[20,req.query.id_final,alumno.padron]);
                     }
                     else{
                         db.query('UPDATE inscripcionesfinal\
