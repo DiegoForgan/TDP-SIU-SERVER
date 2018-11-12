@@ -251,14 +251,14 @@ router.get('/condicionales',(req,res)=>{
 
 //params id_final={id_final}
 router.post('/notas',(req,res)=>{
-    if (req.query.id_final){
+    if (req.query.id_final && req.body.notas){
         db.query('SELECT * FROM getInfoDeFinal($1)',[req.query.id_final],(error,informacion)=>{
             if (error) {
                 console.log(error);
                 res.send('HUBO UN ERROR!');
             }
             else{
-                var listado_de_notas = JSON.parse(req.body.notas);
+                var listado_de_notas = req.body.notas;
                 listado_de_notas.forEach(alumno => {
                     if ((alumno.nota == 'D') || (alumno.nota == 'd')){
                         db.query('UPDATE inscripcionesfinal\
