@@ -11,19 +11,19 @@ var options = {
  	}
 };
 
-var req = https.request(options, (res)=>{
-	res.on('data', (d) => {
-    process.stdout.write(d);
-  });
-});
 
-req.on('error', (e) => {
-  console.error(e);
-});
 
 
 var notificar = function(titulo, texto, destino){
-	
+	var req = https.request(options, (res)=>{
+		res.on('data', (d) => {
+	    process.stdout.write(d);
+	  });
+	});
+
+	req.on('error', (e) => {
+	  console.error(e);
+	});
 
 	var postData = JSON.stringify({
 	    'data' : {
@@ -34,8 +34,8 @@ var notificar = function(titulo, texto, destino){
 	    'priority': 'high'
 	});
 
-	//req.write(postData);
-	req.end(postData);
+	req.write(postData);
+	req.end();
 }
 
 module.exports = {
