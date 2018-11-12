@@ -180,7 +180,15 @@ router.get('/alumno', (req, res) =>{
                 });
     }
     else{
-        res.send({});
+        res.send(
+            {
+                'padron': "", 
+                'apellido': "", 
+                'nombre': "", 
+                'prioridad': -1, 
+                'carrera': [], 
+                'email': ""
+            });
     }
 });
 
