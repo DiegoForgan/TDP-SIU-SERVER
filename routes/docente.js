@@ -152,23 +152,35 @@ router.put('/perfil', (req, res) =>{
 // alumno?padron={padron_del_alumno}
 router.get('/alumno', (req, res) =>{
     if (req.query.padron){
-        db.query("SELECT padron, apellido, nombre, prioridad, carrera, email\
+        db.query("SELECT alumnos.padron, alumnos.apellido, alumnos.nombre as nombre, alumnos.prioridad, carreras.nombre as carrera, alumnos.email\
                     FROM alumnos\
-                    WHERE padron = $1", 
+                    INNER JOIN regexp_split_to_table(alumnos.carrera, ';') carreraaux on true\
+                    INNER JOIN carreras ON cast(carreraaux as int) = carreras.id_carrera\
+                    WHERE alumnos.padron = $1", 
                 [req.query.padron],
                 (err, response) => {
                     if(!err){
+                        var carreras_del_alumno = '';
+                        (response.rows).forEach(elemento => {
+                            carreras_del_alumno += elemento.carrera + ",";
+                        });
+                        carreras_del_alumno = carreras_del_alumno.slice(0,-1);
+                        carreras_del_alumno = carreras_del_alumno.trim();
+                        carreras_del_alumno = carreras_del_alumno.split(",");
                         res.send(
                         {
                             'padron': response.rows[0].padron, 
                             'apellido': response.rows[0].apellido, 
                             'nombre': response.rows[0].nombre, 
                             'prioridad': response.rows[0].prioridad, 
-                            'carrera': response.rows[0].carrera, 
+                            'carrera': carreras_del_alumno, 
                             'email': response.rows[0].email
                         })
                     }
                 });
+    }
+    else{
+        res.send({});
     }
 });
 
