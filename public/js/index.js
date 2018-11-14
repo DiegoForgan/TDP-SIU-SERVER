@@ -2,7 +2,8 @@
 var initialData = {
 	listadoDocentes : [],
 	listadoAulas : [],
-	listadoMaterias : []
+	listadoMaterias : [],
+	role : undefined
 }
 
 $(document).ready(()=>{
@@ -635,83 +636,110 @@ $("#modalSelectDias").on('change', (event) => {
 // maneja menu
 function cambiarPantalla(numero){
 	switch(numero){
-		case 1:
-			$("#importacionPantalla").show();
+		case 0:
+			if (!initialData.role){
+				$("#loginPantalla").show();
+				$("#bienvenidoPantalla").hide();
+			}else{
+				$("#loginPantalla").hide();
+				$("#bienvenidoPantalla").show();
+			}
+			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
 			$("#periodosPantalla").hide();
 			$("#notificacionesPantalla").hide();
 
-			$("#importacionMenu").addClass("active");
+			$("#importacionMenu").removeClass("active");
 			$("#abmCursosMenu").removeClass("active");
 			$("#periodosMenu").removeClass("active");
 			$("#notificacionesMenu").removeClass("active");
+			break;
+		case 1:
+			if (initialData.role && initialData.role == "admin"){
+				$("#importacionPantalla").show();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+
+				$("#importacionMenu").addClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+			}
 			break;
 		case 2:
-			$("#importacionPantalla").hide();
-			$("#abmCursosPantalla").show();
-			$("#periodosPantalla").hide();
-			$("#notificacionesPantalla").hide();
+			if (initialData.role && initialData.role == "admin"){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").show();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
 
-			$("#importacionMenu").removeClass("active");
-			$("#abmCursosMenu").addClass("active");
-			$("#periodosMenu").removeClass("active");
-			$("#notificacionesMenu").removeClass("active");
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").addClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+			}
 			break;
 		case 3:
-			$.blockUI();
-			$.ajax({
-				url: '../admin/periodoActual/',
-				type: 'GET',
-				success: (data)=>{
-					$.unblockUI();
-					var info = data[0].descripcion.split('-');
-					if (data[0].activo) {
-						$('#cuatrimestrePeriodoActual').val(info[0]).trigger('change');
-						$('#inputAnioPeriodoActual').val(info[1]);
-						$("#inputPeriodoActual").val(data[0].descripcion);
-					}
-					$('#ultimoPeriodo').val(data[0].descripcion);
-					$('#inputAnioPeriodoActual').datepicker({
-						format: "yyyy",
-					    viewMode: "years", 
-					    minViewMode: "years",
-					    language: "es"
-					});
+			if (initialData.role && initialData.role == "admin"){
+				$.blockUI();
+				$.ajax({
+					url: '../admin/periodoActual/',
+					type: 'GET',
+					success: (data)=>{
+						$.unblockUI();
+						var info = data[0].descripcion.split('-');
+						if (data[0].activo) {
+							$('#cuatrimestrePeriodoActual').val(info[0]).trigger('change');
+							$('#inputAnioPeriodoActual').val(info[1]);
+							$("#inputPeriodoActual").val(data[0].descripcion);
+						}
+						$('#ultimoPeriodo').val(data[0].descripcion);
+						$('#inputAnioPeriodoActual').datepicker({
+							format: "yyyy",
+						    viewMode: "years", 
+						    minViewMode: "years",
+						    language: "es"
+						});
 
-					
-				},
-				error: function (xhr, ajaxOptions, thrownError) {
-			        $.unblockUI();
-			        swal({
-					  type: 'error',
-					  title: 'Oops...',
-					  text: 'Ha ocurrido un error al intentar traer info de periodo'
-					});
-			        console.log(xhr.responseText);
-			        console.log(thrownError);
-			  	}
-			});
+						
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+				        $.unblockUI();
+				        swal({
+						  type: 'error',
+						  title: 'Oops...',
+						  text: 'Ha ocurrido un error al intentar traer info de periodo'
+						});
+				        console.log(xhr.responseText);
+				        console.log(thrownError);
+				  	}
+				});
 
-			$("#importacionPantalla").hide();
-			$("#abmCursosPantalla").hide();
-			$("#periodosPantalla").show();
-			$("#notificacionesPantalla").hide();
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").show();
+				$("#notificacionesPantalla").hide();
 
-			$("#importacionMenu").removeClass("active");
-			$("#abmCursosMenu").removeClass("active");
-			$("#periodosMenu").addClass("active");
-			$("#notificacionesMenu").removeClass("active");
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").addClass("active");
+				$("#notificacionesMenu").removeClass("active");
+			}
 			break;
 		case 4:
-			$("#importacionPantalla").hide();
-			$("#abmCursosPantalla").hide();
-			$("#periodosPantalla").hide();
-			$("#notificacionesPantalla").show();
+			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").show();
 
-			$("#importacionMenu").removeClass("active");
-			$("#abmCursosMenu").removeClass("active");
-			$("#periodosMenu").removeClass("active");
-			$("#notificacionesMenu").addClass("active");
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").addClass("active");
+			}
+			break;
 
 	}
 }
@@ -773,7 +801,7 @@ $.ajax({
 });
 
 //comentar linea, solo para desarrollo
-cambiarPantalla(4);
+cambiarPantalla(0);
 
 // maneja el input
 $(".input-file-estudiantes").before(
@@ -1025,6 +1053,60 @@ function enviarNotificacion(){
 		});
 	}
 }
+
+
+//manejo el login
+var login = function(){
+	var usr = $("#usrLogin").val();
+	var pwd = $("#pwdLogin").val();
+
+	if (usr != undefined && usr != '' && pwd != undefined && pwd != ''){
+		$.blockUI({message:"Loggeando.."})
+		$.ajax({
+				url: '../admin/login/',
+				type: 'POST',
+				data: {
+					usr: usr,
+					pwd: pwd
+				},
+				success: (data)=>{
+					$.unblockUI();
+					if(data.status = 1){
+						initialData.role = data.role;
+						cambiarPantalla(0);
+					}else{
+						swal({
+						  type: 'error',
+						  title: 'Oops...',
+						  html: '<h3>Usuario y/o contraseña incorrectos</h3>'
+						});
+					}
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+			        $.unblockUI();
+			        swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  html: '<h3>Ha ocurrido un error al intentar loggearse</h3>'
+					});
+			        console.log(xhr.responseText);
+			        console.log(thrownError);
+		      	}
+			});
+	}else{
+		swal({
+			type: 'error',
+			title: 'Oops...',
+			html: '<h3>Verificar que el usuario o contraseña no se encuentren vacíos</h3>'
+		});
+	}
+}
+
+
+
+
+
+
 
 
 

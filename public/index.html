@@ -31,6 +31,22 @@
 		.divInhabilitado{
 			cursor: not-allowed;
 		}
+
+		/* Add Zoom Animation */
+		.animate {
+		    -webkit-animation: animatezoom 0.6s;
+		    animation: animatezoom 0.6s
+		}
+
+		@-webkit-keyframes animatezoom {
+		    from {-webkit-transform: scale(0)} 
+		    to {-webkit-transform: scale(1)}
+		}
+
+		@keyframes animatezoom {
+		    from {transform: scale(0)} 
+		    to {transform: scale(1)}
+		}
 	</style>
 </head>
 <body>
@@ -39,7 +55,7 @@
 	<nav class="navbar navbar-inverse ">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
-	      <a class="navbar-brand">SIU - FIUBA</a>
+	      <a class="navbar-brand" id="homeMenu" onclick="cambiarPantalla(0)">SIU - FIUBA</a>
 	    </div>
 	    <ul class="nav navbar-nav">
 	      <li class="active" id="importacionMenu" onclick="cambiarPantalla(1);"><a>Importación</a></li>
@@ -50,9 +66,45 @@
 	  </div>
 	</nav>
 
+	<!-- Pantalla login -->
+	<div id="loginPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-12" style="text-align: center;">
+		      	<img src="./resources/img/fiubaLogo.png" >
+      		</div>
+      	</div>
+      	<div class="row" style="margin: 5px">
+      		<div class="col-lg-3"></div>
+      		<div class="col-lg-6">
+			    <label for="email">Usuario:</label>
+			    <input type="email" class="form-control" id="usrLogin">
+		  	</div>
+	  	</div>
+		<div class="row" style="margin: 5px">
+			<div class="col-lg-3"></div>
+      		<div class="col-lg-6">
+				    <label for="pwd">Contraseña:</label>
+				    <input type="password" class="form-control" id="pwdLogin">
+		  	</div>
+	  	</div>
+	  	<div class="row" style="margin: 5px">
+      		<div class="col-lg-9" style="text-align: right;">
+	  			<button  class="btn btn-success" onclick="login();">Entrar</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Pantalla bienvenido -->
+	<div id="bienvenidoPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Bienvenido</h3>
+			</div>
+		</div>
+	</div>
 
 	<!-- Pantalla importación -->
-	<div id="importacionPantalla" class="container">
+	<div id="importacionPantalla" class="container" style="display: none;">
 		<div class="row">
 			<div class="col-lg-5">
 			    <h3>Importación estudiantes</h3>
