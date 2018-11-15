@@ -639,19 +639,23 @@ function cambiarPantalla(numero){
 			$("#importacionPantalla").show();
 			$("#abmCursosPantalla").hide();
 			$("#periodosPantalla").hide();
+			$("#notificacionesPantalla").hide();
 
 			$("#importacionMenu").addClass("active");
 			$("#abmCursosMenu").removeClass("active");
-			$("#periodosPantalla").removeClass("active");
+			$("#periodosMenu").removeClass("active");
+			$("#notificacionesMenu").removeClass("active");
 			break;
 		case 2:
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").show();
 			$("#periodosPantalla").hide();
+			$("#notificacionesPantalla").hide();
 
 			$("#importacionMenu").removeClass("active");
 			$("#abmCursosMenu").addClass("active");
-			$("#periodosPantalla").removeClass("active");
+			$("#periodosMenu").removeClass("active");
+			$("#notificacionesMenu").removeClass("active");
 			break;
 		case 3:
 			$.blockUI();
@@ -670,7 +674,8 @@ function cambiarPantalla(numero){
 					$('#inputAnioPeriodoActual').datepicker({
 						format: "yyyy",
 					    viewMode: "years", 
-					    minViewMode: "years"
+					    minViewMode: "years",
+					    language: "es"
 					});
 
 					
@@ -690,11 +695,23 @@ function cambiarPantalla(numero){
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
 			$("#periodosPantalla").show();
+			$("#notificacionesPantalla").hide();
 
 			$("#importacionMenu").removeClass("active");
 			$("#abmCursosMenu").removeClass("active");
-			$("#periodosPantalla").addClass("active");
+			$("#periodosMenu").addClass("active");
+			$("#notificacionesMenu").removeClass("active");
 			break;
+		case 4:
+			$("#importacionPantalla").hide();
+			$("#abmCursosPantalla").hide();
+			$("#periodosPantalla").hide();
+			$("#notificacionesPantalla").show();
+
+			$("#importacionMenu").removeClass("active");
+			$("#abmCursosMenu").removeClass("active");
+			$("#periodosMenu").removeClass("active");
+			$("#notificacionesMenu").addClass("active");
 
 	}
 }
@@ -756,7 +773,7 @@ $.ajax({
 });
 
 //comentar linea, solo para desarrollo
-cambiarPantalla(3);
+cambiarPantalla(4);
 
 // maneja el input
 $(".input-file-estudiantes").before(
@@ -826,7 +843,8 @@ $('#inputFechaInscripcionCursadasInicio,\
 	#inputFechaFinalesInicio,\
 	#inputFechaFinalesFin').datepicker({
 		format: "yyyy-mm-dd",
-		autoclose: true
+		autoclose: true,
+	    language: "es"
 });
 
 $('#cuatrimestrePeriodoActual').select2({
@@ -963,6 +981,50 @@ function okPeriodo(numero){
 }
 
 
+
+// maneja las notificaciones
+function enviarNotificacion(){
+	var titulo = $('#notificacionesTitulo').val();
+	var texto = $('#notificacionesTexto').val();
+
+	if (texto != undefined && texto != '' && titulo != undefined && titulo != ''){
+		$.blockUI({message:"Guardando.."})
+		$.ajax({
+				url: '../admin/notificaciones/',
+				type: 'POST',
+				data: {
+					titulo: titulo,
+					texto: texto
+				},
+				success: (data)=>{
+					$.unblockUI();
+					swal({
+					  type: 'success',
+					  title: 'Guardado!',
+					  html: '<h3>Se han enviado las notificaciones</h3>'
+					});
+					$('#notificacionesTitulo').val('');
+					$('#notificacionesTexto').val('');
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+			        $.unblockUI();
+			        swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  html: '<h3>Ha ocurrido un error al intentar enviar notificaciones</h3>'
+					});
+			        console.log(xhr.responseText);
+			        console.log(thrownError);
+		      	}
+			});
+	}else{
+		swal({
+			type: 'error',
+			title: 'Oops...',
+			html: '<h3>Verificar que el titulo o texto no se encuentren vacíos</h3>'
+		});
+	}
+}
 
 
 

@@ -4,22 +4,22 @@ module.exports = function(pool){
 				declare dia_hoy timestamp := now();\
 			begin\
 			\
-				INSERT INTO alumnos VALUES('00001', 'Gonzalez', 'Juan','alumno1', '12345', 5, 10, dia_hoy,'juangonzalez@gmail.com');\
-				INSERT INTO alumnos VALUES('00002', 'Fernandez', 'Federico','alumno2', '12345', 4, 10, dia_hoy,'federicofernandez@gmail.com');\
-				INSERT INTO alumnos VALUES('00003', 'Messi', 'Lionel','alumno3', '12345', 1, 10, dia_hoy,'lionelmessi@gmail.com');\
-				INSERT INTO alumnos VALUES('00004', 'Ronaldo', 'Cristiano','alumno4', '12345', 2, 10, dia_hoy,'cristianoronaldo@gmail.com');\
-				INSERT INTO alumnos VALUES('00005', 'Redondo', 'Fernando','alumno5', '12345', 8, 10, dia_hoy,'fernandoredondo@gmail.com');\
-				INSERT INTO alumnos VALUES('00006', 'Carlos', 'Roberto','alumno6', '12345', 6, 10, dia_hoy,'robertocarlos@gmail.com');\
-				INSERT INTO alumnos VALUES('00007', 'Di Maria', 'Angel','alumno7', '12345', 7, 10, dia_hoy,'angeldimaria@gmail.com');\
-				INSERT INTO alumnos VALUES('00008', 'Mascherano', 'Javier','alumno8', '12345', 8, 10, dia_hoy,'javiermascherano@gmail.com');\
-				INSERT INTO alumnos VALUES('00009', 'Batistuta', 'Gabriel','alumno9', '12345', 9, 10, dia_hoy,'gabrielbatistuta@gmail.com');\
-				INSERT INTO alumnos VALUES('00010', 'Riquelme', 'Juan Roman','alumno10', '12345', 10, 10, dia_hoy,'jrriquelme@gmail.com');\
-				INSERT INTO alumnos VALUES('00011', 'Robben', 'Arjen','alumno11', '12345', 11, 10, dia_hoy,'arjenrobben@gmail.com');\
-				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, 10, dia_hoy,'segioramos@gmail.com');\
-				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, 10, dia_hoy,'agustinluques@gmail.com');\
-				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','38888888', '12345', 10, 10, dia_hoy,'diegoforgan@gmail.com');\
-				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, 10, dia_hoy,'francoetcheverri@gmail.com');\
-				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 1, 10, dia_hoy,'federicobalina@gmail.com');\
+				INSERT INTO alumnos VALUES('00001', 'Gonzalez', 'Juan','alumno1', '12345', 5, '10', dia_hoy,'juangonzalez@gmail.com');\
+				INSERT INTO alumnos VALUES('00002', 'Fernandez', 'Federico','alumno2', '12345', 4, '10', dia_hoy,'federicofernandez@gmail.com');\
+				INSERT INTO alumnos VALUES('00003', 'Messi', 'Lionel','alumno3', '12345', 1, '10', dia_hoy,'lionelmessi@gmail.com');\
+				INSERT INTO alumnos VALUES('00004', 'Ronaldo', 'Cristiano','alumno4', '12345', 2, '10', dia_hoy,'cristianoronaldo@gmail.com');\
+				INSERT INTO alumnos VALUES('00005', 'Redondo', 'Fernando','alumno5', '12345', 8, '10', dia_hoy,'fernandoredondo@gmail.com');\
+				INSERT INTO alumnos VALUES('00006', 'Carlos', 'Roberto','alumno6', '12345', 6, '10', dia_hoy,'robertocarlos@gmail.com');\
+				INSERT INTO alumnos VALUES('00007', 'Di Maria', 'Angel','alumno7', '12345', 7, '10', dia_hoy,'angeldimaria@gmail.com');\
+				INSERT INTO alumnos VALUES('00008', 'Mascherano', 'Javier','alumno8', '12345', 8, '10', dia_hoy,'javiermascherano@gmail.com');\
+				INSERT INTO alumnos VALUES('00009', 'Batistuta', 'Gabriel','alumno9', '12345', 9, '10', dia_hoy,'gabrielbatistuta@gmail.com');\
+				INSERT INTO alumnos VALUES('00010', 'Riquelme', 'Juan Roman','alumno10', '12345', 10, '10', dia_hoy,'jrriquelme@gmail.com');\
+				INSERT INTO alumnos VALUES('00011', 'Robben', 'Arjen','alumno11', '12345', 11, '10', dia_hoy,'arjenrobben@gmail.com');\
+				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, '10', dia_hoy,'segioramos@gmail.com');\
+				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, '10;9', dia_hoy,'agustinluques@gmail.com');\
+				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','38888888', '12345', 10, '10', dia_hoy,'diegoforgan@gmail.com');\
+				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, '10;9', dia_hoy,'francoetcheverri@gmail.com');\
+				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 1, '10', dia_hoy,'federicobalina@gmail.com');\
             end;\
             $$;\
             ");
@@ -108,6 +108,7 @@ module.exports = function(pool){
 			INSERT INTO cursos VALUES(DEFAULT, 9, '0015','PC;PC','E7;E7',60,'miercoles;miercoles','19:00-23:00;19:00-23:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 8, '0010','PC;PC','411;411',50,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			INSERT INTO cursos VALUES(DEFAULT, 11, '0014','PC;PC','200;200',2,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
+			INSERT INTO cursos VALUES(DEFAULT, 10, '0014','PC;PC','200;200',2,'martes;jueves','08:00-11:00;08:00-11:00', 2);\
 			\
 			");
 
@@ -207,6 +208,35 @@ module.exports = function(pool){
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('95812', 36, true);\
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('38383', 3, true);\
 			INSERT INTO inscripcionesfinal(padron, id_final, es_regular) VALUES('38383', 16, true);\
+			\
+			");
+
+	pool.query("\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 1, 10, '12/08/2017', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 2, 9 , '14/08/2015', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 3, 8 , '15/08/2014', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 4, 7 , '16/08/2018', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 5, 10, '17/08/2015', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 6, 4 , '18/08/2014', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 7, 10, '19/08/2013', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 8, 9 , '20/08/2016', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 9, 6 , '21/08/2017', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('38383', 8, 4 , '21/08/2017', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('96803', 8, 4 , '21/08/2015', false, null);\
+			\
+			");
+
+	pool.query("\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Mecánica', 110);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Civil', 120);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Electricista', 130);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Industrial', 140);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Licenciatura en Análisis de Sistemas', 150);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Química', 160);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria en Petróleo', 170);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Naval', 180);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Electrónica', 190);\
+			INSERT INTO carreras(nombre, creditos_totales) VALUES('Ingenieria Informática', 248);\
 			\
 			");
 

@@ -21,7 +21,7 @@ module.exports = function(pool){
 				usuario varchar(50) not null,\
 				contrasena varchar(20) not null,\
 				prioridad int not null,\
-				carrera int not null,\
+				carrera varchar(50) not null,\
 				f_update timestamp not null,\
 				email varchar(200) not null);"
             );
@@ -104,7 +104,8 @@ module.exports = function(pool){
 			id_final SERIAL,\
 			id_curso int not null,\
 			fecha_examen date not null,\
-			horario_examen time not null);"
+			horario_examen time not null,\
+			abierto bool not null DEFAULT true);"
 			);
 			
 	pool.query("DROP TABLE IF EXISTS inscripcionesfinal;\
@@ -112,6 +113,26 @@ module.exports = function(pool){
 	create table inscripcionesfinal(\
 			padron varchar(10) not null,\
 			id_final int not null,\
-			es_regular boolean not null);"
-        );
+			es_regular boolean not null,\
+			nota_del_final int);"
+		);
+		
+	pool.query("DROP TABLE IF EXISTS historialacademico;\
+	\
+	create table historialacademico(\
+			padron varchar(10) not null,\
+			id_materia int not null,\
+			nota int not null,\
+			fecha date not null,\
+			completo_encuesta bool not null,\
+			resultados_encuesta text);"
+		);
+		
+	pool.query("DROP TABLE IF EXISTS carreras;\
+		\
+		create table carreras(\
+				id_carrera SERIAL,\
+				nombre varchar(40) not null,\
+				creditos_totales int not null);"
+		);
 }

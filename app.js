@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 const db = require('./db');
 var bodyParser = require('body-parser');
+require('dotenv').load();
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({
@@ -62,6 +63,14 @@ app.get('/login',(req,res)=>{
   }
 });
 
+app.get('/resetdb',(req,res)=>{
+  db.resetdb();
+  res.send("Base reseteada " + new Date());
+});
+
 app.listen(PORT, function () {
   console.log('Servido escuchando en el puerto: ' + PORT);
 });
+
+// var fb = require('./firebase')
+// fb.notificar("sale bermuda gil", "ferro no volves mas", "all")

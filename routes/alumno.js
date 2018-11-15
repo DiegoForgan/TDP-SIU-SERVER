@@ -33,9 +33,9 @@ router.get('/prioridad/:padron', function (req, res) {
                 'fechaInicioCursadas': new Date(resp_padron.rows[0].fechainiciocursadas),
                 'fechaFinCursadas': new Date(resp_padron.rows[0].fechafincursadas),
                 'fechaInicioFinales': new Date(resp_padron.rows[0].fechainiciofinales),
-                'fechaFinFinales': new Date(resp_padron.rows[0].fechafinfinales)
+                'fechaFinFinales': new Date(resp_padron.rows[0].fechafinfinales),
+                'encuestas': resp_padron.rows[0].encuestas,
             }];
-            console.log(obj)
             res.send(obj);  
         } 
         else res.send([{}]);
@@ -43,7 +43,7 @@ router.get('/prioridad/:padron', function (req, res) {
 });
 
 //Devuelve la oferta academica.
-//params: ?id_materia={id_materia}&filtro={filtro}
+//params: ?id_materia={id_materia}&filtro={filtro}&id_carrera={id_carrera}
 router.get('/oferta/:padron', function (req, res) {
     console.log("Un alumno consulto la oferta academica");
     var listado = [];
@@ -64,8 +64,9 @@ router.get('/oferta/:padron', function (req, res) {
     if (!req.query.id_materia) {
         db.query("SELECT m.*\
                     FROM materias m\
-                    INNER JOIN materias_carrera mc ON mc.id_materia = m.id\
-                    INNER JOIN alumnos a ON a.carrera = mc.id_carrera\
+                    INNER JOIN materias_carrera mc ON mc.id_materia = m.id AND mc.id_carrera = $5\
+                    INNER JOIN alumnos a ON true\
+                    INNER JOIN regexp_split_to_table(a.carrera, ';') carreraaux on cast(carreraaux as int) = mc.id_carrera\
                     WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $3 or m.nombre ilike $4)\
                         AND m.id not in (\
                             select m.id\
@@ -73,9 +74,17 @@ router.get('/oferta/:padron', function (req, res) {
                             inner join cursos c on c.id_curso = i.id_curso\
                             inner join materias m on m.id = c.id_materia\
                             where i.padron = $1\
+                            \
+                            UNION\
+                            \
+                            SELECT materias.id\
+                            FROM historialacademico\
+                            INNER JOIN materias ON materias.id = historialacademico.id_materia\
+                            INNER JOIN materias_carrera mc ON mc.id_materia = materias.id AND mc.id_carrera = $5\
+                            WHERE $1 = historialacademico.padron\
                         )\
                     ORDER BY m.nombre",
-                [padron, filtro, filtro2, filtro3],
+                [padron, filtro, filtro2, filtro3, req.query.id_carrera],
                 (error, respuesta) => {
                     if (!error) {
                         if (respuesta.rowCount != 0) {
@@ -179,7 +188,7 @@ function obtenerFinalesDeLaMateria(req, res) {
 //Inscribe al alumno que se identifica con el parametro "padron" al curso cuyo id es "id_curso"
 // o al final cuyo id es "id_final"
 //params: ?curso={id_curso}&padron={padron_alumno} para inscripcion a CURSOS
-//params: ?final={id_final}&padron={padron_alumno} para inscripcion a FINALES
+//params: ?final={id_final}&padron={padron_alumno}&es_regular={regularOlibre} para inscripcion a FINALES
 //Devuelve el estado de la inscripcion con un detalle
 //ESTADOS POSIBLES:
 /*
@@ -189,7 +198,7 @@ function obtenerFinalesDeLaMateria(req, res) {
 */
 router.post('/inscribir', (req, res) => {
     if (req.query.curso && req.query.padron) inscribirACurso(req, res);
-    else if (req.query.final && req.query.padron) inscribirAFinal(req,res);
+    else if (req.query.final && req.query.padron && req.query.es_regular) inscribirAFinal(req,res);
     else res.send({'estado':-1, 'detalles':'Faltan parametros en el endpoint!'});
 });
 
@@ -202,6 +211,174 @@ router.delete('/desinscribir',(req,res)=>{
     if (req.query.curso && req.query.padron) desinscribirDeUnCurso(req,res);
     else if (req.query.final && req.query.padron) desinscribirDeUnFinal(req,res);
     else res.send({'estado':false, 'detalle':'faltan parámetros en el endpoint!'});
+});
+
+
+//editar datos /perfil?padron=95812&mail=francoetcheverri@gmail.com&pswactual=12345&pswnueva=1234556
+// 1- cambio mail
+// 2- cambio mail y contra
+// 3- cambio contra
+// 4- la contra es incorrecta
+router.put('/perfil', (req, res) =>{
+    if (req.query.padron){
+        db.query('SELECT editarDatosAlumno($1, $2, $3, $4)', 
+            [req.query.padron, req.query.mail, req.query.pswactual, req.query.pswnueva], 
+            (err, response)=>{
+                if(!err){
+                    res.send({
+                        'result': response.rows[0].editardatosalumno
+                    });
+                }
+                
+            }
+        );
+    }
+});
+
+//params: ?padron={padron del alumno}&id_carrera={id_carrera}
+router.get('/historial', (req, res) =>{
+    if (!req.query.padron || !req.query.id_carrera) {
+        res.send([{}]);
+    }
+    else{
+        db.query('SELECT * FROM gethistorialdelalumno ($1, $2)',[req.query.padron, req.query.id_carrera],(error,historial)=>{
+            if (error) {
+                console.log(error);
+                res.send([{}]);
+            }
+            else if (historial.rowCount == 0){
+                res.send([{}]);
+            }
+            else{
+                res.send(historial.rows);
+            }
+        })
+    }
+});
+
+//params: ?padron={padron del alumno}&id_carrera={id_carrera}
+router.get('/creditos', (req, res) =>{
+    if (!req.query.padron || !req.query.id_carrera) {
+        console.log("no mando el padron o carrera!");
+        res.send({
+            'creditos_totales': '0',
+            'creditos_obtenidos': '0',
+            'porcentaje': '0.00'
+        });
+    }
+    else {
+        db.query('SELECT * FROM getcreditosdelacarrera($1, $2)',[req.query.padron, req.query.id_carrera],(error,creditos_totales)=>{
+            if (error){
+                console.log(error);
+                res.send({
+                    'creditos_totales': '0',
+                    'creditos_obtenidos': '0',
+                    'porcentaje': '0.00'
+                });
+            }
+            else{
+                var creditos_totales = creditos_totales.rows[0].creditos_totales;
+                
+                db.query('SELECT * FROM getcreditosobtenidos($1, $2)',[req.query.padron, req.query.id_carrera],(error,avance)=>{
+                    if (error){
+                        console.log(error);
+                        res.send({
+                        'creditos_totales': '0',
+                        'creditos_obtenidos': '0',
+                        'porcentaje': '0'
+                        });
+                    }
+                    else{
+                        if (avance.rowCount == 0) creditos_obtenidos = 0;
+                        else creditos_obtenidos = avance.rows[0].creditos_obtenidos;
+                        
+                        var porcentaje = (creditos_obtenidos/creditos_totales)*100;
+                        res.send({
+                            'creditos_totales': creditos_totales.toString(),
+                            'creditos_obtenidos': creditos_obtenidos.toString(),
+                            'porcentaje': (porcentaje.toFixed(2)).toString()
+                        }); 
+                    }
+                })
+            }
+        })
+    }
+});
+
+
+//params: ?padron={padron del alumno}
+router.get('/regular', (req, res) =>{
+    if (!req.query.padron) {
+        console.log("no mando el padron!");
+        res.send({});
+    }
+    else {
+        db.query('SELECT esRegular($1)',[req.query.padron],(error,response)=>{
+            if (error){
+                console.log(error);
+                res.send({});
+            }
+            else{
+                res.send({
+                    'es_regular': response.rows[0].esregular
+                })
+            }
+        })
+    }
+});
+
+//params: ?padron={padron del alumno}
+router.get('/encuestas', (req, res) =>{
+    if (!req.query.padron) {
+        console.log("no mando el padron!");
+        res.send([{}]);
+    }
+    else {
+        db.query('SELECT * FROM getEncuestas($1)',[req.query.padron],(error,response)=>{
+            if (error){
+                console.log(error);
+                res.send({});
+            }
+            else{
+                var listado = [];
+                if (response.rowCount != 0) {
+                    (response.rows).forEach(encuesta => {
+                        var elemento = {
+                            'id': encuesta.id_materia,
+                            'codigo': encuesta.codigo,
+                            'nombre': encuesta.nombre,
+                        };
+                        listado.push(elemento);
+                    });
+                    res.send(listado);
+                } else {
+                    res.send([{}])
+                }
+            }
+        })
+    }
+});
+
+//params: ?padron={padron del alumno}&id_materia={id}&respuesta={respuesta}
+router.post('/encuestas', (req, res) =>{
+    if (!req.query.padron && !req.query.repsuesta) {
+        console.log("no mando el padron o respuesta!");
+        res.send("error");
+    }
+    else {
+        db.query('UPDATE historialacademico\
+                    SET completo_encuesta = true,\
+                        resultados_encuesta = $3\
+                    WHERE padron = $1 and id_materia = $2',[req.query.padron, req.query.id_materia, req.query.respuesta],(error,response)=>{
+            if (error){
+                console.log(error);
+                res.send("error");
+            }
+            else{
+                    res.send("ok");
+                }             
+        })
+    }
 });
   
 module.exports = router;
@@ -258,7 +435,7 @@ function inscribirAFinal(req, res) {
                 }
                 else{
                     db.query('INSERT INTO inscripcionesfinal (padron, id_final, es_regular) VALUES ($1,$2,$3)'
-                    ,[req.query.padron,req.query.final,true]);
+                    ,[req.query.padron,req.query.final,req.query.es_regular]);
                     res.send({'estado':true, 'detalle':'Inscripcion exitosa!'});
                 }
             })
@@ -279,14 +456,6 @@ function inscribirACurso(req, res) {
     db.query('SELECT * FROM getDatosDeInscripcion($1)', [req.query.curso], (error, resp_curso) => {
         if (error)
             res.send(error); //{'estado':-1, 'detalles':'error en la query del curso de la base'});
-        //no aparece en la lista de inscriptos ninguna entrada
-        else if (resp_curso.rowCount == 0) {
-            db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)', [req.query.padron, req.query.curso, true]);
-            res.send({ 'estado': 1, 'detalles': 'el alumno fue inscripto con exito!' });
-            //SOLUCIONAR BUG DE MATERIA CONO UNA SOLA VACANTE QUE NO GENERA EL CURSO CONDICIONAL!
-            //Se soluciona sin tocar codigo poniendo siempre cursos con 2 vacantes por lo menos!
-            //Cuando debe anotarlo con el flag condicional FALSE, anota al primero como TRUE
-        }
         else {
             //Chequeo las vacantes del curso donde se quiere inscribir el alumno
             var vacantes_disponibles = resp_curso.rows[0].vacantes;
@@ -296,7 +465,7 @@ function inscribirACurso(req, res) {
             var estado_inscripcion = resp_curso.rows[0].legajo;
             if (estado_inscripcion == 'cond')
                 es_inscripcion_regular = false;
-            if (vacantes_disponibles != 0) {
+            if (vacantes_disponibles > 0) {
                 vacantes_disponibles--;
                 db.query('INSERT INTO inscripciones VALUES ($1,$2,$3)', [req.query.padron, req.query.curso, es_inscripcion_regular]);
                 res.send({ 'estado': 1, 'detalles': 'el alumno fue inscripto con exito!' });
