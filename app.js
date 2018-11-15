@@ -44,8 +44,8 @@ app.get('/login',(req,res)=>{
   else {
     var mensaje = req.query.usuario+req.query.contrasena;
     var consulta = (SHA256(mensaje)).toString();
-    console.log(mensaje);
-    console.log(consulta);
+    //console.log(mensaje);
+    //console.log(consulta);
     db.query('SELECT * FROM obtenerAlumnoConCredenciales($1,$2)',[req.query.usuario, consulta],(error,resp_alumnos)=>{
       if (error) res.send ('Hubo un error!');
       else {
