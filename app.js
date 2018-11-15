@@ -4,6 +4,9 @@ const db = require('./db');
 var bodyParser = require('body-parser');
 require('dotenv').load();
 
+//libreria crypto-js para hashear claves
+var SHA256 = require('crypto-js/sha256');
+
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({
   extended: true
@@ -39,11 +42,15 @@ app.get('/login',(req,res)=>{
     res.send("Login mal realizado! Faltan datos!");
   }
   else {
-    db.query('SELECT * FROM obtenerAlumnoConCredenciales($1,$2)',[req.query.usuario, req.query.contrasena],(error,resp_alumnos)=>{
+    var mensaje = req.query.usuario+req.query.contrasena;
+    var consulta = (SHA256(mensaje)).toString();
+    console.log(mensaje);
+    console.log(consulta);
+    db.query('SELECT * FROM obtenerAlumnoConCredenciales($1,$2)',[req.query.usuario, consulta],(error,resp_alumnos)=>{
       if (error) res.send ('Hubo un error!');
       else {
         if (resp_alumnos.rowCount == 0) {
-          db.query('SELECT * FROM obtenerDocenteConCredenciales($1,$2)',[req.query.usuario, req.query.contrasena],(err,resp_docentes)=>{
+          db.query('SELECT * FROM obtenerDocenteConCredenciales($1,$2)',[req.query.usuario, consulta],(err,resp_docentes)=>{
             if (err) res.send ('Hubo un error!');
             else{
               if (resp_docentes.rowCount == 0) res.send({'tipo':0});

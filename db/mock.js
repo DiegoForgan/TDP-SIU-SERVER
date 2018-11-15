@@ -18,7 +18,7 @@ module.exports = function(pool){
 				INSERT INTO alumnos VALUES('00012', 'Ramos', 'Sergio','alumno12', '12345', 12, '10', dia_hoy,'segioramos@gmail.com');\
 				INSERT INTO alumnos VALUES('96803', 'Luques', 'Agustin','agusluques', '12345', 1, '10;9', dia_hoy,'agustinluques@gmail.com');\
 				INSERT INTO alumnos VALUES('92290', 'Martins Forgan', 'Diego','38888888', '12345', 10, '10', dia_hoy,'diegoforgan@gmail.com');\
-				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', '12345', 1, '10;9', dia_hoy,'francoetcheverri@gmail.com');\
+				INSERT INTO alumnos VALUES('95812', 'Etcheverri', 'Franco','38324264', 'f7ee9b2c5912debac3568a6cd6a6a012b3d3ffb1d64b1109733c5fd4fc750560', 1, '10;9', dia_hoy,'francoetcheverri@gmail.com');\
 				INSERT INTO alumnos VALUES('38383', 'Baliña', 'Federico','38383838', '12345', 1, '10', dia_hoy,'federicobalina@gmail.com');\
             end;\
             $$;\
@@ -63,11 +63,11 @@ module.exports = function(pool){
 
 	//Cargo datos de los docentes
 	pool.query("\
-			INSERT INTO docentes VALUES('0001', 'Fontela', 'Carlos','fontela', '12345','cfontela@fi.uba.ar');\
-			INSERT INTO docentes VALUES('0002', 'Calonico', 'Cristian','calonico', '12345','ccalonico@fi.uba.ar');\
-			INSERT INTO docentes VALUES('0003', 'Maulhardt', 'Martin','martinmaul', '12345','mmaulhardt@fi.uba.ar');\
-			INSERT INTO docentes VALUES('0004', 'Acero', 'Fernando','acero', '12345','facero@fi.uba.ar');\
-			INSERT INTO docentes VALUES('0005', 'Sirne', 'Ricardo','sirne', '12345','rsirne@fi.uba.ar');\
+			INSERT INTO docentes VALUES('0001', 'Fontela', 'Carlos','fontela', 'ad3d3ee8d93a8497c71f7455671b24b89b656f31cd9d4526e0567fc2829368d8','cfontela@fi.uba.ar');\
+			INSERT INTO docentes VALUES('0002', 'Calonico', 'Cristian','calonico', 'bc24b94f86d83ee867c0657dfec3fd1cbca15d193a1b86127bba3b9ea63d6e21','ccalonico@fi.uba.ar');\
+			INSERT INTO docentes VALUES('0003', 'Maulhardt', 'Martin','martinmaul', 'b8bcdd296319d9ddf0c852f29a1076261c7ea201e9cc4ffad540a6750f434e2d','mmaulhardt@fi.uba.ar');\
+			INSERT INTO docentes VALUES('0004', 'Acero', 'Fernando','acero', 'a3419a9660c67d66b970371878587d461abbc2b4e3d9a1d79c837ff5a1c05aeb','facero@fi.uba.ar');\
+			INSERT INTO docentes VALUES('0005', 'Sirne', 'Ricardo','sirne', '65f38934cf2c13fb26e1114942170abc378a0a774f04d19f8a1744bab472298d','rsirne@fi.uba.ar');\
 			INSERT INTO docentes VALUES('0006', 'Argerich', 'Luis','argerich', '12345','largerich@fi.uba.ar');\
 			INSERT INTO docentes VALUES('0007', 'Grynberg', 'Sebastian','grynberg', '12345','sgrynberg@fi.uba.ar');\
 			INSERT INTO docentes VALUES('0008', 'Villagra', 'Sergio','villagra', '12345','svillagra@fi.uba.ar');\
