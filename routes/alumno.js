@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var db = require('../db');
 var separar = require('../auxiliares/separarValoresPuntoYComa');
+var SHA256 = require('crypto-js/sha256');
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -221,17 +222,41 @@ router.delete('/desinscribir',(req,res)=>{
 // 4- la contra es incorrecta
 router.put('/perfil', (req, res) =>{
     if (req.query.padron){
-        db.query('SELECT editarDatosAlumno($1, $2, $3, $4)', 
-            [req.query.padron, req.query.mail, req.query.pswactual, req.query.pswnueva], 
-            (err, response)=>{
-                if(!err){
-                    res.send({
-                        'result': response.rows[0].editardatosalumno
-                    });
-                }
-                
+        db.query('SELECT alumnos.usuario \
+        FROM alumnos \
+        WHERE alumnos.padron = $1',[req.query.padron],(error,usuarioEncontrado) => {
+            if (error) {
+                console.log(error);
+                res.send({
+                    'result': 4
+                });
             }
-        );
+            else if (usuarioEncontrado.rowCount == 0) {
+                res.send({
+                    'result': 4
+                });
+            }
+            else{
+                var actual = usuarioEncontrado.rows[0].usuario+req.query.pswactual;
+                var actual_encriptada = (SHA256(actual)).toString();
+
+                var nueva = usuarioEncontrado.rows[0].usuario+req.query.pswnueva;
+                var nueva_encriptada = (SHA256(nueva)).toString();
+                
+                db.query('SELECT editarDatosAlumno($1, $2, $3, $4)', 
+                [req.query.padron, req.query.mail, actual_encriptada, nueva_encriptada], 
+                (err, response)=>{
+                    if (!err) {
+                        res.send({
+                            'result': response.rows[0].editardatosalumno
+                        }); 
+                    }
+                });
+            }
+        });
+    }
+    else{
+        res.send('No mandaste el padron!');
     }
 });
 
