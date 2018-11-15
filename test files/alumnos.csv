@@ -1,16 +1,16 @@
-00001, Gonzalez      , Juan      ,alumno1   , 12345, 5 , 10, juangonzalez@gmail.com
-00002, Fernandez     , Federico  ,alumno2   , 12345, 4 , 10, federicofernandez@gmail.com
-00003, Messi         , Lionel    ,alumno3   , 12345, 1 , 10, lionelmessi@gmail.com
-00004, Ronaldo       , Cristiano ,alumno4   , 12345, 2 , 10, cristianoronaldo@gmail.com
-00005, Redondo       , Fernando  ,alumno5   , 12345, 8 , 10, fernandoredondo@gmail.com
-00006, Carlos        , Roberto   ,alumno6   , 12345, 6 , 10, robertocarlos@gmail.com
-00007, Di Maria      , Angel     ,alumno7   , 12345, 7 , 10, angeldimaria@gmail.com
-00008, Mascherano    , Javier    ,alumno8   , 12345, 8 , 10, javiermascherano@gmail.com
-00009, Batistuta     , Gabriel   ,alumno9   , 12345, 9 , 10, gabrielbatistuta@gmail.com
-00010, Riquelme      , Juan Roman,alumno10  , 12345, 10, 10, jrriquelme@gmail.com
-00011, Robben        , Arjen     ,alumno11  , 12345, 11, 10, arjenrobben@gmail.com
-00012, Ramos         , Sergio    ,alumno12  , 12345, 12, 10, segioramos@gmail.com
-96803, Luques        , Agustin   ,agusluques, 12345, 1 , 10, agustinluques@gmail.com
-92290, Martins Forgan, Diego     ,38888888  , 12345, 10, 10, diegoforgan@gmail.com
-95812, Etcheverri    , Franco    ,38324264  , 12345, 1 , 10, francoetcheverri@gmail.com
-38383, Baliña        , Federico  ,38383838  , 12345, 1 , 10, federicobalina@gmail.com
+00001, Gonzalez      , Juan      ,alumno1   , 9688dba895b12cbf30de03aa0493bd9dcb4a8871cb50164f493a4f7e03ea1e82, 5 , 10, juangonzalez@gmail.com
+00002, Fernandez     , Federico  ,alumno2   , 9472d4f1dd94611b6f774d199017691e447b258555aac0151c7b4072329f210a, 4 , 10, federicofernandez@gmail.com
+00003, Messi         , Lionel    ,alumno3   , bdb846cacb3da620dfa0e28a76b45b653c7d9929915dff3aded5da7b6eb67789, 1 , 10, lionelmessi@gmail.com
+00004, Ronaldo       , Cristiano ,alumno4   , 5d6dc36e8ed6dd745f6d378ea4709cefcab97a504f2953c1a64286da4a7709f5, 2 , 10, cristianoronaldo@gmail.com
+00005, Redondo       , Fernando  ,alumno5   , c5725a6c49fcec9775a5394f187dcaa94e00a2a8b1cb8998ee9ca1586a31d3ce, 8 , 10, fernandoredondo@gmail.com
+00006, Carlos        , Roberto   ,alumno6   , de34feff854dfc820d8a37b3f2afbfd5759a4d97a95b402d609284fbd8d38de9, 6 , 10, robertocarlos@gmail.com
+00007, Di Maria      , Angel     ,alumno7   , e4fe1a64b0f50c2a9b0735f9a0d76436b32bbc06e057b96ac366237333d49f2a, 7 , 10, angeldimaria@gmail.com
+00008, Mascherano    , Javier    ,alumno8   , 87fc456cd7afcc2ad945aafaea7c4cacf47e01bbc7dbeb6356381832d87afacc, 8 , 10, javiermascherano@gmail.com
+00009, Batistuta     , Gabriel   ,alumno9   , c9f2f49fbd815e776746cb8c211df0cbcec95ff7e86268a9fbcf1fadb1cdffd5, 9 , 10, gabrielbatistuta@gmail.com
+00010, Riquelme      , Juan Roman,alumno10  , 31a02e46dcea910737c54f1cdb18ac227e1e1f52464e6632a6fd6a3fcab1f5a9, 10, 10, jrriquelme@gmail.com
+00011, Robben        , Arjen     ,alumno11  , b82dc27232e670268af0fa7741e4cf6df9162b4b6ff6551a377a4f40271b0507, 11, 10, arjenrobben@gmail.com
+00012, Ramos         , Sergio    ,alumno12  , d76bc455b73e9c55a4478b73bc6ee3fd6a54b568c19cf274c0f1583182a3e052, 12, 10, segioramos@gmail.com
+96803, Luques        , Agustin   ,agusluques, c9d5fdd29ad0ca3e6ff3b67eff27b09569a94067933c56db95b5cf8c76d7a13f, 1 , 10, agustinluques@gmail.com
+92290, Martins Forgan, Diego     ,38888888  , 89ebfd80df58d21f5d416aa6920e5964c77b23ffb062bacb3344cfdd0205fc5e, 10, 10, diegoforgan@gmail.com
+95812, Etcheverri    , Franco    ,38324264  , f7ee9b2c5912debac3568a6cd6a6a012b3d3ffb1d64b1109733c5fd4fc750560, 1 , 10, francoetcheverri@gmail.com
+38383, Baliña        , Federico  ,38383838  , 1f71e8febfc47d58af5caf53fbbf5274fc8f7c690c669fad42d382e3ff3f59e7, 1 , 10, federicobalina@gmail.com
