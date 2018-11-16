@@ -160,4 +160,13 @@ router.post('/notificaciones', (req, res) => {
     }
 })
 
+router.post('/login', (req, res) => {
+    var usr = req.body.usr;
+    var pwd = req.body.pwd;
+    console.log(usr)
+    console.log(pwd)
+
+    res.send({status: 1, role: "dpto"})
+})
+
 module.exports = router;
