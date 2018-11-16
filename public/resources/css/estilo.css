@@ -1,0 +1,55 @@
+.btnAccion{
+	margin: 0px 5px;
+}
+.swal2-popup{
+	font-size: 1.6rem !important;
+}
+.divInhabilitado *{
+    pointer-events: none;
+    opacity: 0.4;
+}
+.divInhabilitado{
+	cursor: not-allowed;
+}
+
+/* Add Zoom Animation */
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+    from {-webkit-transform: scale(0)} 
+    to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+    from {transform: scale(0)} 
+    to {transform: scale(1)}
+}
+
+.navbar { 
+	background-color: #303F9F;
+	border-color: #303F9F;
+	border-radius: 0;
+}
+
+.navbar .navbar-brand {
+	color: #FFFFFF;
+	text-align: center;
+}
+
+.navbar .container-fluid{
+	cursor: pointer;
+
+}
+
+.navbar .navbar-nav li a{
+	font-size: 17px;
+	color: #FFFFFF;
+}
+
+.navbar .navbar-nav li:hover{
+	background-color: #000000;
+	cursor: pointer;
+}
