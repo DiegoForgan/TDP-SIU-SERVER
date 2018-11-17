@@ -59,5 +59,32 @@
 }
 
 #loginPantalla {
-	margin-top: 7%;
+	margin-top: 6%;
+}
+
+body {
+	color: black;
+}
+
+tr {
+	background-color: #303F9F;
+	color: white;
+}
+
+tr th {
+	text-align: center;
+}
+
+tbody tr {
+	background-color: grey;
+	color: black;
+}
+
+tbody tr td {
+	text-align: center;
+}
+
+.col-no-padding {
+	padding-left: 0px;
+	padding-right: 0px;
 }
