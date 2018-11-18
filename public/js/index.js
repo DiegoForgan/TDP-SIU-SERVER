@@ -684,7 +684,7 @@ function cambiarPantalla(numero){
 			break;
 		case 3:
 			if (initialData.role && initialData.role == "admin"){
-				$.blockUI();
+				$.blockUI({message:"Cargando.."})
 				$.ajax({
 					url: '../admin/periodoActual/',
 					type: 'GET',
