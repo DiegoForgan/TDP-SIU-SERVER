@@ -640,9 +640,19 @@ function cambiarPantalla(numero){
 			if (!initialData.role){
 				$("#loginPantalla").show();
 				$("#bienvenidoPantalla").hide();
+				$("#importacionMenu").hide();
+				$("#abmCursosMenu").hide();
+				$("#periodosMenu").hide();
+				$("#notificacionesMenu").hide();
+				$("#cerrarSesion").hide();
 			}else{
 				$("#loginPantalla").hide();
 				$("#bienvenidoPantalla").show();
+				$("#importacionMenu").show();
+				$("#abmCursosMenu").show();
+				$("#periodosMenu").show();
+				$("#notificacionesMenu").show();
+				$("#cerrarSesion").show();
 			}
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
