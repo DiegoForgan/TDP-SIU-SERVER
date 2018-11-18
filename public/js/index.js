@@ -660,6 +660,7 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
 
 				$("#importacionMenu").addClass("active");
 				$("#abmCursosMenu").removeClass("active");
@@ -673,6 +674,7 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").show();
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").addClass("active");
@@ -682,7 +684,7 @@ function cambiarPantalla(numero){
 			break;
 		case 3:
 			if (initialData.role && initialData.role == "admin"){
-				$.blockUI();
+				$.blockUI({message:"Cargando.."})
 				$.ajax({
 					url: '../admin/periodoActual/',
 					type: 'GET',
@@ -720,6 +722,7 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").show();
 				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").removeClass("active");
@@ -733,6 +736,7 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").show();
+				$("#bienvenidoPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").removeClass("active");
