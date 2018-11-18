@@ -92,3 +92,11 @@ tbody tr td {
 html {
 	min-height: 100%;
 }
+
+#cerrarSesion {
+	float: right;
+}
+
+.navbar-nav {
+	float: none;
+}
