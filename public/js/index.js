@@ -645,6 +645,7 @@ function cambiarPantalla(numero){
 				$("#periodosMenu").hide();
 				$("#notificacionesMenu").hide();
 				$("#cerrarSesion").hide();
+				$("#reportes").hide();
 			}else{
 				$("#loginPantalla").hide();
 				$("#bienvenidoPantalla").show();
@@ -653,6 +654,7 @@ function cambiarPantalla(numero){
 				$("#periodosMenu").show();
 				$("#notificacionesMenu").show();
 				$("#cerrarSesion").show();
+				$("#reportes").show();
 			}
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
