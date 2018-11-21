@@ -33,11 +33,11 @@
 			<li id="periodosMenu" onclick="cambiarPantalla(3);"><a>Periodos Inscripción</a></li>
 			<li id="notificacionesMenu" onclick="cambiarPantalla(4);"><a>Notificaciones</a></li>
 			<li id="cerrarSesion" onclick="cerrarSesion();"><a>Cerrar sesión</a></li>
-			<li id="reportes" onclick="cambiarPantalla(5);" class="dropdown">
+			<li id="reportes" class="dropdown">
 			   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reportes <span class="caret"></span></a>
 			    <ul class="dropdown-menu" role="menu">
-			       <li><a href="#">Reporte 1</a></li>
-			       <li><a href="#">Reporte 2</a></li>
+			       <li onclick="cambiarPantalla(5);"><a>Reporte de encuestas</a></li>
+			       <li onclick="cambiarPantalla(6);"><a>Reporte de cursos</a></li>
 			    </ul>
 			</li>
 	    </ul>
@@ -307,7 +307,7 @@
 		</div> -->
 	</div>
 
-	<!-- Pantalla importación -->
+	<!-- Pantalla notificaciones -->
 	<div id="notificacionesPantalla" class="container" style="display: none;">
 		<div class="row">
 			<div class="col-lg-5">
@@ -336,6 +336,25 @@
 			</div>
 		</div>
 
+	</div>
+
+
+	<!-- Pantalla reportes de encuestas -->
+	<div id="reporteEncuestasPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Reportes de encuestas</h3>
+			</div>
+		</div>
+	</div>
+
+	<!-- Pantalla reportes de cursos -->
+	<div id="reporteCursosPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Reportes de cursos</h3>
+			</div>
+		</div>
 	</div>
 
 	<!-- Modal -->

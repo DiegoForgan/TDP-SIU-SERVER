@@ -660,11 +660,14 @@ function cambiarPantalla(numero){
 			$("#abmCursosPantalla").hide();
 			$("#periodosPantalla").hide();
 			$("#notificacionesPantalla").hide();
+			$("#reporteEncuestasPantalla").hide();
+			$("#reporteCursosPantalla").hide();
 
 			$("#importacionMenu").removeClass("active");
 			$("#abmCursosMenu").removeClass("active");
 			$("#periodosMenu").removeClass("active");
 			$("#notificacionesMenu").removeClass("active");
+			$("#reportes").removeClass("active");
 			break;
 		case 1:
 			if (initialData.role && initialData.role == "admin"){
@@ -673,11 +676,14 @@ function cambiarPantalla(numero){
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").hide();
 				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").addClass("active");
 				$("#abmCursosMenu").removeClass("active");
 				$("#periodosMenu").removeClass("active");
 				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
 			}
 			break;
 		case 2:
@@ -687,11 +693,14 @@ function cambiarPantalla(numero){
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").hide();
 				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").addClass("active");
 				$("#periodosMenu").removeClass("active");
 				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
 			}
 			break;
 		case 3:
@@ -735,11 +744,14 @@ function cambiarPantalla(numero){
 				$("#periodosPantalla").show();
 				$("#notificacionesPantalla").hide();
 				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").removeClass("active");
 				$("#periodosMenu").addClass("active");
 				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
 			}
 			break;
 		case 4:
@@ -749,11 +761,48 @@ function cambiarPantalla(numero){
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").show();
 				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").removeClass("active");
 				$("#periodosMenu").removeClass("active");
 				$("#notificacionesMenu").addClass("active");
+				$("#reportes").removeClass("active");
+			}
+			break;
+		case 5:
+			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").show();
+				$("#reporteCursosPantalla").hide();								
+
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").addClass("active");
+			}
+			break;
+		case 6:
+			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").show();								
+
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").addClass("active");
 			}
 			break;
 
