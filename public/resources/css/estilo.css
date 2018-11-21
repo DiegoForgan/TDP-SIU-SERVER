@@ -195,3 +195,7 @@ div[data-title]:hover:after {
     background-color: white;
     color: black;
 }
+
+#piechartEncuestas{
+	margin: 0 auto !important;
+}
