@@ -1136,7 +1136,7 @@ var login = function(){
 				},
 				success: (data)=>{
 					$.unblockUI();
-					if(data.status = 1){
+					if(data.status == 1){
 						initialData.role = data.role;
 						cambiarPantalla(0);
 					}else{

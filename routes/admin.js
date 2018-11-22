@@ -1,6 +1,7 @@
 var router = require('express').Router();
 const db = require('../db');
 const fb = require('../firebase');
+var SHA256 = require('crypto-js/sha256');
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -162,11 +163,15 @@ router.post('/notificaciones', (req, res) => {
 
 router.post('/login', (req, res) => {
     var usr = req.body.usr;
-    var pwd = req.body.pwd;
-    console.log(usr)
-    console.log(pwd)
-
-    res.send({status: 1, role: "dpto"})
+    var pwd = (SHA256(req.body.pwd)).toString();
+    db.query("SELECT * from login($1, $2)",
+            [usr, pwd], (err, response)=>{
+            if (!err) {
+                res.send({status: response.rows[0].status, role: response.rows[0].role});
+            }else{
+                res.send({status: 0, role: ""});
+            }
+    });
 })
 
 module.exports = router;
