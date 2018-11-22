@@ -1217,11 +1217,9 @@ function quitarFiltro() {
 	  document.getElementById("inputDocente").value = "";
 }
 
-
-
-
-
-
-
-
-
+function cerrarSesion(){
+	initialData.role = undefined;
+	document.getElementById("usrLogin").value = "";
+	document.getElementById("pwdLogin").value = "";
+	cambiarPantalla(0);
+}
