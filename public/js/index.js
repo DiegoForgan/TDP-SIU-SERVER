@@ -1181,7 +1181,7 @@ function filtrar() {
 	    tdNombre = tr[i].getElementsByTagName("td")[1];
 	    tdDocente = tr[i].getElementsByTagName("td")[2];
 	    if (tdCodigo && tdNombre) {
-	      if ((tdCodigo.innerHTML.indexOf(inputCodigo) > -1) && (tdNombre.innerHTML.indexOf(inputNombre) > -1) && (tdDocente.innerHTML.indexOf(inputDocente) > -1)) {
+	      if ((tdCodigo.innerHTML.indexOf(inputCodigo) > -1) && (tdNombre.innerHTML.toUpperCase().indexOf(inputNombre.toUpperCase()) > -1) && (tdDocente.innerHTML.toUpperCase().indexOf(inputDocente.toUpperCase()) > -1)) {
 	        tr[i].style.display = "";
 	      } else {
 	        tr[i].style.display = "none";
