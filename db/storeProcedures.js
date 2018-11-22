@@ -315,9 +315,9 @@ module.exports = function(pool){
     );
 
     //Dado un usuario y contraseña de un alumno, devuelve sus datos.
-    pool.query("DROP FUNCTION IF EXISTS obtenerAlumnoConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
+    pool.query("DROP FUNCTION IF EXISTS obtenerAlumnoConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(64));\
     \
-    CREATE OR REPLACE FUNCTION  obtenerAlumnoConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
+    CREATE OR REPLACE FUNCTION  obtenerAlumnoConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(64))\
     RETURNS TABLE(padron varchar(10), apellido varchar(200), nombre varchar(200), prioridad int, carreras text, desc_carreras text, email varchar(200))\
     AS $$\
     BEGIN\
@@ -340,9 +340,9 @@ module.exports = function(pool){
     );
 
     //Dado un usuario y contraseña de un docente, devuelve sus datos.
-    pool.query("DROP FUNCTION IF EXISTS obtenerDocenteConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(20));\
+    pool.query("DROP FUNCTION IF EXISTS obtenerDocenteConCredenciales(usuario_consultado varchar(50),contrasena_consultada varchar(64));\
     \
-    CREATE OR REPLACE FUNCTION  obtenerDocenteConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(20))\
+    CREATE OR REPLACE FUNCTION  obtenerDocenteConCredenciales (usuario_consultado varchar(50),contrasena_consultada varchar(64))\
     RETURNS TABLE(legajo varchar(10), apellido varchar(200), nombre varchar(200), email varchar(200))\
     AS $$\
     BEGIN\
@@ -424,8 +424,8 @@ module.exports = function(pool){
     pool.query("CREATE OR REPLACE FUNCTION editarDatosAlumno(\
         _padron varchar(10), \
         _mail varchar(200), \
-        _pswanterior varchar(20), \
-        _pswnueva varchar(20)\
+        _pswanterior varchar(64), \
+        _pswnueva varchar(64)\
     )\
     RETURNS int\
     AS $$\
@@ -471,8 +471,8 @@ module.exports = function(pool){
     pool.query("CREATE OR REPLACE FUNCTION editarDatosDocente(\
         _legajo varchar(10), \
         _mail varchar(200), \
-        _pswanterior varchar(20), \
-        _pswnueva varchar(20)\
+        _pswanterior varchar(64), \
+        _pswnueva varchar(64)\
     )\
     RETURNS int\
     AS $$\

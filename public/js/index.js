@@ -640,19 +640,34 @@ function cambiarPantalla(numero){
 			if (!initialData.role){
 				$("#loginPantalla").show();
 				$("#bienvenidoPantalla").hide();
+				$("#importacionMenu").hide();
+				$("#abmCursosMenu").hide();
+				$("#periodosMenu").hide();
+				$("#notificacionesMenu").hide();
+				$("#cerrarSesion").hide();
+				$("#reportes").hide();
 			}else{
 				$("#loginPantalla").hide();
 				$("#bienvenidoPantalla").show();
+				$("#importacionMenu").show();
+				$("#abmCursosMenu").show();
+				$("#periodosMenu").show();
+				$("#notificacionesMenu").show();
+				$("#cerrarSesion").show();
+				$("#reportes").show();
 			}
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
 			$("#periodosPantalla").hide();
 			$("#notificacionesPantalla").hide();
+			$("#reporteEncuestasPantalla").hide();
+			$("#reporteCursosPantalla").hide();
 
 			$("#importacionMenu").removeClass("active");
 			$("#abmCursosMenu").removeClass("active");
 			$("#periodosMenu").removeClass("active");
 			$("#notificacionesMenu").removeClass("active");
+			$("#reportes").removeClass("active");
 			break;
 		case 1:
 			if (initialData.role && initialData.role == "admin"){
@@ -660,11 +675,15 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").addClass("active");
 				$("#abmCursosMenu").removeClass("active");
 				$("#periodosMenu").removeClass("active");
 				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
 			}
 			break;
 		case 2:
@@ -673,16 +692,20 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").show();
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").addClass("active");
 				$("#periodosMenu").removeClass("active");
 				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
 			}
 			break;
 		case 3:
 			if (initialData.role && initialData.role == "admin"){
-				$.blockUI();
+				$.blockUI({message:"Cargando.."})
 				$.ajax({
 					url: '../admin/periodoActual/',
 					type: 'GET',
@@ -720,11 +743,15 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").show();
 				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").removeClass("active");
 				$("#periodosMenu").addClass("active");
 				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
 			}
 			break;
 		case 4:
@@ -733,11 +760,49 @@ function cambiarPantalla(numero){
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
 				$("#notificacionesPantalla").show();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
 				$("#importacionMenu").removeClass("active");
 				$("#abmCursosMenu").removeClass("active");
 				$("#periodosMenu").removeClass("active");
 				$("#notificacionesMenu").addClass("active");
+				$("#reportes").removeClass("active");
+			}
+			break;
+		case 5:
+			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").show();
+				$("#reporteCursosPantalla").hide();								
+
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").addClass("active");
+			}
+			break;
+		case 6:
+			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").show();								
+
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").addClass("active");
 			}
 			break;
 
@@ -1102,12 +1167,59 @@ var login = function(){
 	}
 }
 
+function filtrar() {
+	  var inputCodigo, inputNombre, inputDocente, table, tr, tdCodigo, tdNombre, tdDocente, i;
+	  inputCodigo = document.getElementById("inputCodigo").value;
+	  inputNombre = document.getElementById("inputNombre").value;
+	  inputDocente = document.getElementById("inputDocente").value;
+	  table = document.getElementById("tablaCursos");
+	  tr = table.getElementsByTagName("tr");
 
+	  // Loop through all table rows, and hide those who don't match the search query
+	  for (i = 0; i < tr.length; i++) {
+	    tdCodigo = tr[i].getElementsByTagName("td")[0];
+	    tdNombre = tr[i].getElementsByTagName("td")[1];
+	    tdDocente = tr[i].getElementsByTagName("td")[2];
+	    if (tdCodigo && tdNombre) {
+	      if ((tdCodigo.innerHTML.indexOf(inputCodigo) > -1) && (tdNombre.innerHTML.toUpperCase().indexOf(inputNombre.toUpperCase()) > -1) && (tdDocente.innerHTML.toUpperCase().indexOf(inputDocente.toUpperCase()) > -1)) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    } 
+	  }
+}
 
+function quitarFiltro() {
+	  var inputCodigo, inputNombre, inputDocente, table, tr, tdCodigo, tdNombre, tdDocente, i;
+	  inputCodigo = "";
+	  inputNombre = "";
+	  inputDocente = "";
+	  table = document.getElementById("tablaCursos");
+	  tr = table.getElementsByTagName("tr");
 
+	  // Loop through all table rows, and hide those who don't match the search query
+	  for (i = 0; i < tr.length; i++) {
+	    tdCodigo = tr[i].getElementsByTagName("td")[0];
+	    tdNombre = tr[i].getElementsByTagName("td")[1];
+	    tdDocente = tr[i].getElementsByTagName("td")[2];
+	    if (tdCodigo && tdNombre) {
+	      if ((tdCodigo.innerHTML.indexOf(inputCodigo) > -1) && (tdNombre.innerHTML.indexOf(inputNombre) > -1) && (tdDocente.innerHTML.indexOf(inputDocente) > -1)) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    } 
+	  }
 
+	  document.getElementById("inputCodigo").value = "";
+	  document.getElementById("inputNombre").value = "";
+	  document.getElementById("inputDocente").value = "";
+}
 
-
-
-
-
+function cerrarSesion(){
+	initialData.role = undefined;
+	document.getElementById("usrLogin").value = "";
+	document.getElementById("pwdLogin").value = "";
+	cambiarPantalla(0);
+}
