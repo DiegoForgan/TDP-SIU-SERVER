@@ -647,14 +647,22 @@ function cambiarPantalla(numero){
 				$("#cerrarSesion").hide();
 				$("#reportes").hide();
 			}else{
-				$("#loginPantalla").hide();
-				$("#bienvenidoPantalla").show();
-				$("#importacionMenu").show();
-				$("#abmCursosMenu").show();
-				$("#periodosMenu").show();
-				$("#notificacionesMenu").show();
-				$("#cerrarSesion").show();
-				$("#reportes").show();
+				if(initialData.role == "admin"){
+					$("#loginPantalla").hide();
+					$("#bienvenidoPantalla").show();
+					$("#importacionMenu").show();
+					$("#abmCursosMenu").show();
+					$("#periodosMenu").show();
+					$("#notificacionesMenu").show();
+					$("#cerrarSesion").show();
+					$("#reportes").show();
+				} else {
+					$("#loginPantalla").hide();
+					$("#bienvenidoPantalla").show();
+					$("#abmCursosMenu").show();
+					$("#cerrarSesion").show();
+					$("#reportes").show();
+				}
 			}
 			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
@@ -670,7 +678,7 @@ function cambiarPantalla(numero){
 			$("#reportes").removeClass("active");
 			break;
 		case 1:
-			if (initialData.role && initialData.role == "admin"){
+			if (initialData.role){
 				$("#importacionPantalla").show();
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
@@ -687,7 +695,7 @@ function cambiarPantalla(numero){
 			}
 			break;
 		case 2:
-			if (initialData.role && initialData.role == "admin"){
+			if (initialData.role){
 				$("#importacionPantalla").hide();
 				$("#abmCursosPantalla").show();
 				$("#periodosPantalla").hide();
@@ -704,7 +712,7 @@ function cambiarPantalla(numero){
 			}
 			break;
 		case 3:
-			if (initialData.role && initialData.role == "admin"){
+			if (initialData.role){
 				$.blockUI({message:"Cargando.."})
 				$.ajax({
 					url: '../admin/periodoActual/',
@@ -755,7 +763,7 @@ function cambiarPantalla(numero){
 			}
 			break;
 		case 4:
-			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+			if (initialData.role){
 				$("#importacionPantalla").hide();
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
@@ -772,7 +780,7 @@ function cambiarPantalla(numero){
 			}
 			break;
 		case 5:
-			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+			if (initialData.role){
 				$("#importacionPantalla").hide();
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
@@ -789,7 +797,7 @@ function cambiarPantalla(numero){
 			}
 			break;
 		case 6:
-			if (initialData.role && (initialData.role == "admin" || initialData.role == "dpto")){
+			if (initialData.role){
 				$("#importacionPantalla").hide();
 				$("#abmCursosPantalla").hide();
 				$("#periodosPantalla").hide();
