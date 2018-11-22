@@ -649,6 +649,35 @@ module.exports = function(pool){
     $$\
     \
     LANGUAGE 'plpgsql'");
+
+    // esta hace el login
+    pool.query("CREATE OR REPLACE FUNCTION login(\
+        _usr varchar(50),\
+        _psw varchar(64)\
+    )\
+    RETURNS TABLE(status int, role varchar(10))\
+    AS $$\
+        DECLARE\
+            _psw_db varchar(64);\
+            _role varchar(10);\
+            _status int;\
+        BEGIN \
+            select d.contrasena, d.role into _psw_db, _role\
+            from departamentos d\
+            where d.usuario = _usr;\
+            \
+            IF (_psw_db ilike _psw)\
+            THEN\
+                _status = 1;\
+            ELSE\
+                _status = 0;\
+            END IF;\
+            RETURN QUERY\
+            select _status, _role;\
+        END;\
+    $$\
+    \
+    LANGUAGE 'plpgsql'");
     
     
     

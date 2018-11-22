@@ -58,6 +58,23 @@ module.exports = function(pool){
                 id_materia int not null);"
             );
 
+    pool.query("DROP TABLE IF EXISTS materias_departamento;\
+			\
+			create table materias_departamento(\
+				id_dpto int not null,\
+                id_materia int not null);"
+            );
+
+    pool.query("DROP TABLE IF EXISTS departamentos;\
+			\
+			create table departamentos(\
+				id_dpto int not null,\
+				nombre_dpto varchar(200) not null,\
+                usuario varchar(50) not null,\
+                contrasena varchar(64) not null,\
+                role varchar(10) not null);"
+            );			
+
     
     pool.query("DROP TABLE IF EXISTS materias;\
 			\
@@ -135,4 +152,5 @@ module.exports = function(pool){
 				nombre varchar(40) not null,\
 				creditos_totales int not null);"
 		);
+
 }

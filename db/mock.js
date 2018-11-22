@@ -61,6 +61,8 @@ module.exports = function(pool){
 			\
             ");
 
+
+
 	//Cargo datos de los docentes
 	pool.query("\
 			INSERT INTO docentes VALUES('0001', 'Fontela', 'Carlos','fontela', 'ad3d3ee8d93a8497c71f7455671b24b89b656f31cd9d4526e0567fc2829368d8','cfontela@fi.uba.ar');\
@@ -150,6 +152,31 @@ module.exports = function(pool){
 			INSERT INTO materias(codigo, nombre, creditos) VALUES('99.99', 'Materia Para Llenar', 100);\
 			\
 			");
+
+	pool.query("\
+			INSERT INTO materias_departamento VALUES(1, 1);\
+			INSERT INTO materias_departamento VALUES(1, 2);\
+			INSERT INTO materias_departamento VALUES(2, 3);\
+			INSERT INTO materias_departamento VALUES(2, 3);\
+			INSERT INTO materias_departamento VALUES(2, 4);\
+			INSERT INTO materias_departamento VALUES(2, 5);\
+			INSERT INTO materias_departamento VALUES(2, 6);\
+			INSERT INTO materias_departamento VALUES(2, 7);\
+			INSERT INTO materias_departamento VALUES(2, 8);\
+			INSERT INTO materias_departamento VALUES(2, 9);\
+			INSERT INTO materias_departamento VALUES(3, 10);\
+			INSERT INTO materias_departamento VALUES(4, 11);\
+			\
+            ");
+
+	pool.query("\
+			INSERT INTO departamentos (id_dpto, nombre_dpto, usuario, contrasena, role) VALUES(1, 'Departamento de Matemática', 'dptomatematica', 'B19CEC329221386605CC109352A2405946AFB45ECC3CD34178582D6458B0F304', 'dpto');\
+			INSERT INTO departamentos (id_dpto, nombre_dpto, usuario, contrasena, role) VALUES(2, 'Departamento de Computación', 'dptocomputacion', '4666A07163165A9C2CB3961C6C954AB7ADF5BFD414E70E2BF7EAAE71EBC06696', 'dpto');\
+			INSERT INTO departamentos (id_dpto, nombre_dpto, usuario, contrasena, role) VALUES(3, 'Departamento de Cond', 'dptocond', '5994471ABB01112AFCC18159F6CC74B4F511B99806DA59B3CAF5A9C173CACFC5', 'dpto');\
+			INSERT INTO departamentos (id_dpto, nombre_dpto, usuario, contrasena, role) VALUES(4, 'Departamento de Llenar', 'dptollenar', '5994471ABB01112AFCC18159F6CC74B4F511B99806DA59B3CAF5A9C173CACFC5', 'dpto');\
+			INSERT INTO departamentos (id_dpto, nombre_dpto, usuario, contrasena, role) VALUES(0, 'Admin', 'admin', '8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918', 'admin');\
+			\
+            ");
 
 	pool.query("\
 			INSERT INTO examenesfinales (id_curso, fecha_examen, horario_examen) VALUES(1, '12/12/2018', '09:00');\
