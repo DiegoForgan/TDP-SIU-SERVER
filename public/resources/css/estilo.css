@@ -206,4 +206,10 @@ div[data-title]:hover:after {
 
 .btn-filtro {
 	float: right;
+	margin-right: 2px;
+	margin-left: 2px;
+}
+
+div input {
+	width: 100%;
 }
