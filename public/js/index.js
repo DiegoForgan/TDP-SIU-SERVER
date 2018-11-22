@@ -3,7 +3,11 @@ var initialData = {
 	listadoDocentes : [],
 	listadoAulas : [],
 	listadoMaterias : [],
-	role : undefined
+	listadoDepartamentos : [],
+	listadoPeriodos : [],
+	role : "admin",
+	id : undefined,
+	nombre : undefined
 }
 
 $(document).ready(()=>{
@@ -71,6 +75,28 @@ function cargarInfo(termina){
 							$("#modalSelectMaterias").append(option);
 						}
 						$("#modalSelectMaterias").trigger('change');
+					}
+					if (data[3]){
+						initialData.listadoDepartamentos = data[3].rows;
+						for (var i = 0; i < data[3].rows.length; i++) {
+							var dpto = data[3].rows[i];
+							if (dpto.id != 0) {
+								var option = new Option(dpto.nombre, dpto.id, false, false);
+								$("#modalSelectDptoEncuestas").append(option);
+							}
+						}
+						$("#modalSelectDptoEncuestas").trigger('change');
+						$("#modalSelectDptoEncuestas").select2({ width: '100%' });
+					}
+					if (data[4]){
+						initialData.listadoPeriodos = data[4].rows;
+						for (var i = 0; i < data[4].rows.length; i++) {
+							var periodo = data[4].rows[i];
+							var option = new Option(periodo.desc, periodo.id, false, false);
+							$("#modalSelectPeriodoEncuestas").append(option);
+						}
+						$("#modalSelectPeriodoEncuestas").trigger('change');
+						$("#modalSelectPeriodoEncuestas").select2({ width: '100%' });
 					}
 				}
 
@@ -1146,6 +1172,8 @@ var login = function(){
 					$.unblockUI();
 					if(data.status == 1){
 						initialData.role = data.role;
+						initialData.id = data.id;
+						initialData.nombre = data.nombre;
 						cambiarPantalla(0);
 					}else{
 						swal({
@@ -1227,6 +1255,8 @@ function quitarFiltro() {
 
 function cerrarSesion(){
 	initialData.role = undefined;
+	initialData.id = undefined;
+	initialData.nombre = undefined;
 	document.getElementById("usrLogin").value = "";
 	document.getElementById("pwdLogin").value = "";
 	cambiarPantalla(0);
