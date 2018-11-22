@@ -187,6 +187,14 @@
 			    <h3>Cursos</h3>
 			</div>
 		</div>
+		<div class="row row-filtro">
+			<div class="col-lg-12">
+				<input type="text" id="inputCodigo" placeholder="Codigo..." title="Codigo...">
+				<input type="text" id="inputNombre" placeholder="Nombre..." title="Nombre...">
+				<input type="text" id="inputDocente" placeholder="Docente..." title="Docente...">
+				<button class="btn btn-success btn-filtro" type="button" onclick="filtrar()">FILTRAR</button>
+			</div>
+		</div>
 		<div class="row">
 			<div id="tablaCursos" class="col-lg-12">
 			</div>
@@ -425,31 +433,34 @@
 	<script type="text/javascript" src="js/index.js"></script>
 
 	<script type="text/javascript">
-	google.charts.load('visualization', '1.0', {'packages':['corechart']});
-	google.charts.setOnLoadCallback(drawChartEncuestas);    
-	var data; 
-	var dataList = ['Work', 'Friends', 'Eat', 'TV', 'Gym', 'Sleep'];
-	var chart;
-	function drawChartEncuestas() {
-	  	data = google.visualization.arrayToDataTable([
-		  ['Task', 'Hours per Day'],
-		  ['Work', 8],
-		  ['Friends', 2],
-		  ['Eat', 2],
-		  ['TV', 2],
-		  ['Gym', 2],
-		  ['Sleep', 8]
-		]);
-		var options = {'title':'My Average Day', 'width':550, 'height':400, 'backgroundColor': 'transparent'};
-		chart = new google.visualization.PieChart(document.getElementById('piechartEncuestas'));
-		chart.draw(data, options);
-		google.visualization.events.addListener(chart, 'select', selectHandler2);
-	}
+		google.charts.load('visualization', '1.0', {'packages':['corechart']});
+		google.charts.setOnLoadCallback(drawChartEncuestas);    
+		var data; 
+		var dataList = ['Work', 'Friends', 'Eat', 'TV', 'Gym', 'Sleep'];
+		var dataListValues = [8, 2, 2, 2, 2, 8];
+		var chart;
+		function drawChartEncuestas() {
+		  	data = google.visualization.arrayToDataTable([
+			  ['Task', 'Hours per Day'],
+			  ['Work', 8],
+			  ['Friends', 2],
+			  ['Eat', 2],
+			  ['TV', 2],
+			  ['Gym', 2],
+			  ['Sleep', 8]
+			]);
+			var options = {'title':'My Average Day', 'width':550, 'height':400, 'backgroundColor': 'transparent'};
+			chart = new google.visualization.PieChart(document.getElementById('piechartEncuestas'));
+			chart.draw(data, options);
+			google.visualization.events.addListener(chart, 'select', selectHandler2);
+		}
 
-	function selectHandler2() {
-	  var selection = chart.getSelection();
-	  alert('Selección: ' + dataList[selection[0].row]);
-	}
+		function selectHandler2() {
+		  var selection = chart.getSelection();
+		  alert('Selección: ' + dataList[selection[0].row] + " - Valor: " + dataListValues[selection[0].row]);
+		}
 	</script>
+
+
 </body>
 </html>

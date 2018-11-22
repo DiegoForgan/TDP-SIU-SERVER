@@ -199,3 +199,11 @@ div[data-title]:hover:after {
 #piechartEncuestas{
 	margin: 0 auto !important;
 }
+
+.row-filtro {
+	margin-bottom: 10px;
+}
+
+.btn-filtro {
+	float: right;
+}

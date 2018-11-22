@@ -1167,7 +1167,28 @@ var login = function(){
 	}
 }
 
+function filtrar() {
+	  var inputCodigo, inputNombre, inputDocente, table, tr, tdCodigo, tdNombre, tdDocente, i;
+	  inputCodigo = document.getElementById("inputCodigo").value;
+	  inputNombre = document.getElementById("inputNombre").value;
+	  inputDocente = document.getElementById("inputDocente").value;
+	  table = document.getElementById("tablaCursos");
+	  tr = table.getElementsByTagName("tr");
 
+	  // Loop through all table rows, and hide those who don't match the search query
+	  for (i = 0; i < tr.length; i++) {
+	    tdCodigo = tr[i].getElementsByTagName("td")[0];
+	    tdNombre = tr[i].getElementsByTagName("td")[1];
+	    tdDocente = tr[i].getElementsByTagName("td")[2];
+	    if (tdCodigo && tdNombre) {
+	      if ((tdCodigo.innerHTML.indexOf(inputCodigo) > -1) && (tdNombre.innerHTML.indexOf(inputNombre) > -1) && (tdDocente.innerHTML.indexOf(inputDocente) > -1)) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    } 
+	  }
+}
 
 
 
