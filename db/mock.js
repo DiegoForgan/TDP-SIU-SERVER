@@ -239,17 +239,17 @@ module.exports = function(pool){
 			");
 
 	pool.query("\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 1, 10, '12/08/2017', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 2, 9 , '14/08/2015', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 3, 8 , '15/08/2014', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 4, 7 , '16/08/2018', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 5, 10, '17/08/2015', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 6, 4 , '18/08/2014', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 7, 10, '19/08/2013', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 8, 9 , '20/08/2016', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 9, 6 , '21/08/2017', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('38383', 8, 4 , '21/08/2017', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('96803', 8, 4 , '21/08/2015', false, null);\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 1, 10, '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 2, 9 , '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 3, 8 , '25/10/2018', true, '{\"Pregunta1\":2,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 4, 7 , '25/10/2018', true, '{\"Pregunta1\":1,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 5, 10, '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 6, 4 , '25/10/2018', true, '{\"Pregunta1\":3,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 7, 10, '25/10/2018', true, '{\"Pregunta1\":3,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 8, 9 , '25/10/2018', true, '{\"Pregunta1\":3,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 9, 6 , '25/10/2018', true, '{\"Pregunta1\":2,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('38383', 8, 4 , '25/10/2018', true, '{\"Pregunta1\":5,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('96803', 8, 4 , '25/10/2018', true, '{\"Pregunta1\":5,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
 			\
 			");
 

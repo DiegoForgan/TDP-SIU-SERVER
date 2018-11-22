@@ -104,7 +104,19 @@ router.get('/info', (req, res) => {
                 codigo,\
                 nombre\
             FROM materias\
-            ORDER BY nombre;", null, (err, response)=>{
+            ORDER BY nombre;\
+            \
+            SELECT\
+                id_dpto as id,\
+                nombre_dpto as nombre\
+            FROM departamentos\
+            ORDER BY nombre;\
+            \
+            SELECT\
+                id,\
+                descripcion as desc\
+            FROM periodos\
+            ORDER BY id;", null, (err, response)=>{
                                     res.send(response);
                                 }
     )
@@ -167,9 +179,36 @@ router.post('/login', (req, res) => {
     db.query("SELECT * from login($1, $2)",
             [usr, pwd], (err, response)=>{
             if (!err) {
-                res.send({status: response.rows[0].status, role: response.rows[0].role});
+                res.send({status: response.rows[0].status, role: response.rows[0].role, id: response.rows[0].id, nombre: response.rows[0].nombre});
             }else{
-                res.send({status: 0, role: ""});
+                res.send({status: 0, role: "", id: 0, nombre: ""});
+            }
+    });
+})
+
+router.get('/encuestas/:dpto/:periodo', (req, res) => {
+    db.query("select m.id, m.nombre, ha.resultados_encuesta\
+                from materias_departamento md\
+                inner join materias m on m.id = md.id_materia\
+                inner join historialacademico ha on ha.id_materia = m.id\
+                where md.id_dpto = $1 \
+                    and ha.fecha < (select fechafinfinales from periodos where id = $2)\
+                    and ha.fecha > (select fechainiciofinales from periodos where id = $2)\
+                    and completo_encuesta;",
+            [req.params.dpto, req.params.periodo], (err, response)=>{
+            if (!err) {
+                result = [];
+                for (var i = 0; i < response.rows.length; i++) {
+                    var encuesta = JSON.parse(response.rows[i].resultados_encuesta)
+                    result.push({
+                        id: response.rows[i].id,
+                        materia: response.rows[i].nombre, 
+                        puntaje: encuesta.Pregunta1, 
+                        observacion: encuesta.Pregunta7})
+                }
+                res.send(result);
+            }else{
+                res.send({status: 0, role: "", id: 0, nombre: ""});
             }
     });
 })

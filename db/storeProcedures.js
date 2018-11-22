@@ -655,14 +655,16 @@ module.exports = function(pool){
         _usr varchar(50),\
         _psw varchar(64)\
     )\
-    RETURNS TABLE(status int, role varchar(10))\
+    RETURNS TABLE(status int, role varchar(10), id int, nombre varchar(200))\
     AS $$\
         DECLARE\
             _psw_db varchar(64);\
             _role varchar(10);\
             _status int;\
+            _id int;\
+            _nombre varchar(200);\
         BEGIN \
-            select d.contrasena, d.role into _psw_db, _role\
+            select d.id_dpto, d.nombre_dpto, d.contrasena, d.role into _id, _nombre, _psw_db, _role\
             from departamentos d\
             where d.usuario = _usr;\
             \
@@ -673,7 +675,7 @@ module.exports = function(pool){
                 _status = 0;\
             END IF;\
             RETURN QUERY\
-            select _status, _role;\
+            select _status, _role, _id, _nombre;\
         END;\
     $$\
     \
