@@ -85,6 +85,7 @@ function cargarInfo(termina){
 								$("#modalSelectDptoEncuestas").append(option);
 							}
 						}
+
 						$("#modalSelectDptoEncuestas").trigger('change');
 						$("#modalSelectDptoEncuestas").select2({ width: '100%' });
 					}
@@ -95,8 +96,10 @@ function cargarInfo(termina){
 							var option = new Option(periodo.desc, periodo.id, false, false);
 							$("#modalSelectPeriodoEncuestas").append(option);
 						}
+						
 						$("#modalSelectPeriodoEncuestas").trigger('change');
 						$("#modalSelectPeriodoEncuestas").select2({ width: '100%' });
+
 					}
 				}
 
@@ -1175,6 +1178,14 @@ var login = function(){
 						initialData.id = data.id;
 						initialData.nombre = data.nombre;
 						cambiarPantalla(0);
+
+						if (initialData && initialData.role == "dpto" && initialData.id){
+							$("#modalSelectDptoEncuestas").val(initialData.id);
+							$("#modalSelectDptoEncuestas").prop('disabled', 'disabled');
+						}else{
+							$("#modalSelectDptoEncuestas").prop('disabled', false);
+						}
+						$("#modalSelectDptoEncuestas").trigger('change');
 					}else{
 						swal({
 						  type: 'error',
@@ -1254,10 +1265,5 @@ function quitarFiltro() {
 }
 
 function cerrarSesion(){
-	initialData.role = undefined;
-	initialData.id = undefined;
-	initialData.nombre = undefined;
-	document.getElementById("usrLogin").value = "";
-	document.getElementById("pwdLogin").value = "";
-	cambiarPantalla(0);
+	location.reload();
 }

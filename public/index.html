@@ -520,9 +520,19 @@
 
 		function drawChartEncuestas(todo, listado) {
 			var data; 
-			var dataList = listado.map((el)=>{return [el.materia, el.avg]});
+			var dataList = listado.map((el)=>{
+				var color;
+				if (el.avg >= 4) {
+					color = 'green';
+				}else if (el.avg > 2) {
+					color = 'yellow';
+				}else{
+					color = 'red';
+				}
+				return [el.materia, el.avg, color];
+			});
 			var chart;
-		  	data = google.visualization.arrayToDataTable([["Materia","Promedio"]].concat(dataList));
+		  	data = google.visualization.arrayToDataTable([["Materia","Promedio", { role: 'style' }]].concat(dataList));
 			var options = {
 				'title':'Promedio de opinión general',
 				'width':700, 
