@@ -496,6 +496,7 @@ function guardarCurso(){
 }
 
 function agregarCurso(){
+	var materia = $("#modalSelectMaterias").val();
 	var docente = $("#modalSelectDocentes").val();
 	var cupos = $("#modalInputCupos").val();
 	var dias = $("#modalSelectDias").val();
@@ -513,8 +514,9 @@ function agregarCurso(){
 	strHorarios = strHorarios.slice(0, -1);
 
 	var idCurso = $("#modalInputId").val();
-	$.blockUI({message:"Guardando.."})
-	$.ajax({
+	if(materia && docente && cupos && dias && strAulas && strSedes && strDias && strHorarios){
+		$.blockUI({message:"Guardando.."})
+		$.ajax({
 			url: '../admin/cursos/',
 			type: 'POST',
 			data: {
@@ -547,6 +549,15 @@ function agregarCurso(){
 		        console.log(thrownError);
 	      	}
 		});
+	} else {
+		swal({
+			title: 'Faltan datos',
+			type: 'warning',
+			confirmButtonColor: '#3085d6',
+			confirmButtonText: 'ACEPTAR',
+		});
+	}
+
 }
 
 $('#modalCurso').on('show.bs.modal', function (event) {
