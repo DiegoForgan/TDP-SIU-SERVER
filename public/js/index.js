@@ -1126,6 +1126,76 @@ function okPeriodo(numero){
 					});
 			}
 			break;
+		case 5:
+			var ultPeriodo = $('#ultimoPeriodo').val().split('-');
+			if ($("#inputFechaInscripcionCursadasInicio").val() 
+				&& $("#inputFechaInscripcionCursadasFin").val() 
+				&& $("#inputFechaInscripcionCursadasInicio").val() < $("#inputFechaInscripcionCursadasFin").val()
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() 
+				&& $("#inputFechaDesinscripcionCursadasFin").val() 
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() < $("#inputFechaDesinscripcionCursadasFin").val()
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() > $("#inputFechaInscripcionCursadasFin").val()
+				&& $("#inputFechaCursadasInicio").val() 
+				&& $("#inputFechaCursadasFin").val() 
+				&& $("#inputFechaCursadasInicio").val() < $("#inputFechaCursadasFin").val()
+				&& $("#inputFechaCursadasInicio").val() > $("#inputFechaDesinscripcionCursadasFin").val()
+				&& $('#cuatrimestrePeriodoActual').val() 
+				&& $('#inputAnioPeriodoActual').val()
+				&& ($('#inputAnioPeriodoActual').val() > ultPeriodo[1]
+					|| $('#inputAnioPeriodoActual').val() == ultPeriodo[1] && $('#cuatrimestrePeriodoActual').val()[0] >= ultPeriodo[0][0])
+				&& $("#inputFechaFinalesInicio").val() 
+				&& $("#inputFechaFinalesFin").val() 
+				&& $("#inputFechaFinalesInicio").val() < $("#inputFechaFinalesFin").val()
+				&& $("#inputFechaFinalesInicio").val() > $("#inputFechaCursadasFin").val()){
+					$.blockUI({message:"Guardando.."})
+					$.ajax({
+							url: '../admin/periodos/',
+							type: 'POST',
+							data: {
+								periodo: $('#inputPeriodoActual').val() ,
+								fechaInicioInscripcionCursadas: $("#inputFechaInscripcionCursadasInicio").val() ,
+								fechaFinInscripcionCursadas: $("#inputFechaInscripcionCursadasFin").val() ,
+								fechaInicioDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasInicio").val() ,
+								fechaFinDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasFin").val() ,
+								fechaInicioCursadas: $("#inputFechaCursadasInicio").val() ,
+								fechaFinCursadas: $("#inputFechaCursadasFin").val() ,
+								fechaInicioFinales: $("#inputFechaFinalesInicio").val() ,
+								fechaFinFinales: $("#inputFechaFinalesFin").val() 
+							},
+							success: (data)=>{
+								$.unblockUI();
+								swal({
+								  type: 'success',
+								  title: 'Guardado!',
+								  text: 'Se han guardado los periodos'
+								});
+								$("#inputFechaInscripcionCursadasInicio").val('')
+								$("#inputFechaInscripcionCursadasFin").val('')
+								$("#inputFechaDesinscripcionCursadasInicio").val('')
+								$("#inputFechaDesinscripcionCursadasFin").val('')
+								$("#inputFechaCursadasInicio").val('')
+								$("#inputFechaCursadasFin").val('')
+								$("#inputFechaFinalesInicio").val('')
+								$("#inputFechaFinalesFin").val('') 
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+						        $.unblockUI();
+						        swal({
+								  type: 'error',
+								  title: 'Oops...',
+								  text: 'Ha ocurrido un error al intentar guardar periodos'
+								});
+						        console.log(xhr.responseText);
+						        console.log(thrownError);
+					      	}
+						});
+			} else {
+					swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio<br>La fecha de inicio debe ser mayor a la de fin de la etapa anterior</p>'
+					});
+			}
 	}
 }
 
