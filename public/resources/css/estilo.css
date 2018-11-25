@@ -104,10 +104,6 @@ html {
 /* CALENDAR */
 @import url(https://fonts.googleapis.com/css?family=Fjalla+One:400|Roboto:400,400italic,700);
 
-body {
-  background-color:#282423;
-}
-
 .jzdbox1 {
   width:315px; 
   background:#332f2e; 
