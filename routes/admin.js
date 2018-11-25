@@ -179,6 +179,7 @@ router.post('/login', (req, res) => {
     db.query("SELECT * from login($1, $2)",
             [usr, pwd], (err, response)=>{
             if (!err) {
+                console.log({status: response.rows[0].status, role: response.rows[0].role, id: response.rows[0].id, nombre: response.rows[0].nombre})
                 res.send({status: response.rows[0].status, role: response.rows[0].role, id: response.rows[0].id, nombre: response.rows[0].nombre});
             }else{
                 res.send({status: 0, role: "", id: 0, nombre: ""});
