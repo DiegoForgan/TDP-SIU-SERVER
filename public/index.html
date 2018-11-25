@@ -399,6 +399,25 @@
 			</div>
 		</div>
 		<div class="row">
+			<div class="col-lg-4">
+			    <label>Departamento:</label>
+			    <select id="modalSelectDptoCursos">
+
+			    </select>
+			</div>
+			<div class="col-lg-2">
+			    <label>Periodo:</label>
+			    <select id="modalSelectPeriodoCursos">
+
+			    </select>
+			</div>
+		</div>
+		<div class="row" style="text-align: right; margin-top: 10px;">
+			<div class="col-lg-6">
+			    <button class="btn btn-success" onclick="consultarCursos()">Consultar</button>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-lg-5">
 				<div id="piechartCursos"></div>
 			</div>
@@ -556,31 +575,50 @@
 		  	}
 		}
 		
-		function drawChartCursos() {
-			var data; 
-			var dataList = ['Work', 'Friends', 'Eat', 'TV', 'Gym', 'Sleep'];
-			var dataListValues = [8, 2, 2, 2, 2, 8];
+		function consultarCursos() {
+			var dpto = $('#modalSelectDptoCursos').val()
+			var periodo = $('#modalSelectPeriodoCursos').val()
+
+			$.ajax({
+				url: '../admin/cursos/' + dpto + "/" + periodo,
+				type: 'GET',
+				success: (data)=>{
+					drawChartCursos(data);
+				}
+			});
+		}
+
+		function drawChartCursos(todo) {
+			var data;
+			var total = todo.reduce((anterior, actual) => {return anterior + actual.inscriptos}, 0); 
+			var dataList = todo.map((el)=>{
+				var html = 	"<h5>" + el.codigo + " - " + el.nombre + "</h5>"+
+							"<h6> # Inscriptos: <b>" + el.inscriptos + "</b></h6>" + 
+							"<h6> # Docentes: <b>" + el.docentes + "</b></h6>" + 
+							"<h6> # Cursos: <b>" + el.cursos + "</b></h6>";
+				return [el.codigo + " - " + el.nombre, el.inscriptos/total, html];
+			});
 			var chart;
 		  	data = google.visualization.arrayToDataTable([
-			  ['Task', 'Hours per Day'],
-			  ['Work', 8],
-			  ['Friends', 2],
-			  ['Eat', 2],
-			  ['TV', 2],
-			  ['Gym', 2],
-			  ['Sleep', 8]
-			]);
+		  			[	"Materia", 
+		  				"# Inscriptos",
+		  				{type: 'string', role: 'tooltip', 'p': {'html': true}}]
+		  		].concat(dataList));
 			var options = {
-				'title':'My Average Day',
-				'width':550, 
-				'height':400, 
-				'backgroundColor': 
-				'transparent', 
-				'legend': 'none'
+				'title':'Cantidad de Inscriptos por Materia',
+				'width':700, 
+				'height':500, 
+				'backgroundColor': 'transparent', 
+				'legend': 'none',
+				'tooltip': {isHtml: true}
 			};
 			chart = new google.visualization.PieChart(document.getElementById('piechartCursos'));
 			chart.draw(data, options);
-			google.visualization.events.addListener(chart, 'select', ()=>{selectHandlerCursos(chart.getSelection())});
+			// google.visualization.events.addListener(chart, 'select', ()=>{
+			// 	var materia = dataList[chart.getSelection()[0].row];
+			// 	var listado = todo.filter((el) => { if (el.materia == materia[0]) return el.observacion }); 
+			// 	selectHandlerEncuestas(listado, materia)
+			// });
 		}
 
 		function selectHandlerCursos(selection) {

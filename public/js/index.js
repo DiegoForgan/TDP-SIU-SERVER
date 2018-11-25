@@ -83,11 +83,15 @@ function cargarInfo(termina){
 							if (dpto.id != 0) {
 								var option = new Option(dpto.nombre, dpto.id, false, false);
 								$("#modalSelectDptoEncuestas").append(option);
+								var option2 = new Option(dpto.nombre, dpto.id, false, false);
+								$("#modalSelectDptoCursos").append(option2);
 							}
 						}
 
 						$("#modalSelectDptoEncuestas").trigger('change');
+						$("#modalSelectDptoCursos").trigger('change');
 						$("#modalSelectDptoEncuestas").select2({ width: '100%' });
+						$("#modalSelectDptoCursos").select2({ width: '100%' });
 					}
 					if (data[4]){
 						initialData.listadoPeriodos = data[4].rows;
@@ -95,10 +99,14 @@ function cargarInfo(termina){
 							var periodo = data[4].rows[i];
 							var option = new Option(periodo.desc, periodo.id, false, false);
 							$("#modalSelectPeriodoEncuestas").append(option);
+							var option2 = new Option(periodo.desc, periodo.id, false, false);
+							$("#modalSelectPeriodoCursos").append(option2);
 						}
 						
 						$("#modalSelectPeriodoEncuestas").trigger('change');
+						$("#modalSelectPeriodoCursos").trigger('change');
 						$("#modalSelectPeriodoEncuestas").select2({ width: '100%' });
+						$("#modalSelectPeriodoCursos").select2({ width: '100%' });
 
 					}
 				}
@@ -1181,11 +1189,15 @@ var login = function(){
 
 						if (initialData && initialData.role == "dpto" && initialData.id){
 							$("#modalSelectDptoEncuestas").val(initialData.id);
+							$("#modalSelectDptoCursos").val(initialData.id);
 							$("#modalSelectDptoEncuestas").prop('disabled', 'disabled');
+							$("#modalSelectDptoCursos").prop('disabled', 'disabled');
 						}else{
 							$("#modalSelectDptoEncuestas").prop('disabled', false);
+							$("#modalSelectDptoCursos").prop('disabled', false);
 						}
 						$("#modalSelectDptoEncuestas").trigger('change');
+						$("#modalSelectDptoCursos").trigger('change');
 					}else{
 						swal({
 						  type: 'error',
