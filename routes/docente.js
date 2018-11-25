@@ -170,11 +170,18 @@ router.put('/perfil', (req, res) =>{
                 });
             }
             else{
-                var actual = usuarioEncontrado.rows[0].usuario+req.query.pswactual;
-                var actual_encriptada = (SHA256(actual)).toString();
+                var actual = null;
+                var actual_encriptada = null;
+                var nueva = null;
+                var nueva_encriptada = null;
 
-                var nueva = usuarioEncontrado.rows[0].usuario+req.query.pswnueva;
-                var nueva_encriptada = (SHA256(nueva)).toString();
+                if (req.query.pswactual && req.query.pswnueva) {
+                    actual = usuarioEncontrado.rows[0].usuario+req.query.pswactual;
+                    actual_encriptada = (SHA256(actual)).toString();
+                    
+                    nueva = usuarioEncontrado.rows[0].usuario+req.query.pswnueva;
+                    nueva_encriptada = (SHA256(nueva)).toString();
+                }
 
                 db.query('SELECT editarDatosDocente($1, $2, $3, $4)', 
                 [req.query.legajo, req.query.mail, actual_encriptada, nueva_encriptada], 
