@@ -161,7 +161,7 @@ router.post('/periodos', (req, res) => {
 });
 
 router.post('/notificaciones', (req, res) => {
-    var titulo = new Date().toLocaleString() + " - " + req.body.titulo;
+    var titulo = req.body.titulo;
     var texto = req.body.texto;
 
     try {
