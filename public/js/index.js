@@ -1147,7 +1147,6 @@ function okPeriodo(numero){
 				&& $("#inputFechaFinalesFin").val() 
 				&& $("#inputFechaFinalesInicio").val() < $("#inputFechaFinalesFin").val()
 				&& $("#inputFechaFinalesInicio").val() > $("#inputFechaCursadasFin").val()){
-					console.log("ENTRA ACA");
 					$.blockUI({message:"Guardando.."})
 					$.ajax({
 							url: '../admin/periodos/',
