@@ -5,7 +5,7 @@ var initialData = {
 	listadoMaterias : [],
 	listadoDepartamentos : [],
 	listadoPeriodos : [],
-	role : "admin",
+	role : "",
 	id : undefined,
 	nombre : undefined
 }
