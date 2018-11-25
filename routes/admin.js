@@ -208,7 +208,57 @@ router.get('/encuestas/:dpto/:periodo', (req, res) => {
                 }
                 res.send(result);
             }else{
-                res.send({status: 0, role: "", id: 0, nombre: ""});
+                res.send({});
+            }
+    });
+})
+
+router.get('/cursos/:dpto/:periodo', (req, res) => {
+    db.query("select m.id, m.codigo, m.nombre, count(distinct i.*) as inscriptos, count(distinct c.docente_a_cargo) as docentes, count(distinct c.*) as cursos\
+            from materias m\
+            inner join materias_departamento md on md.id_materia = m.id and md.id_dpto = $1\
+            inner join cursos c on c.id_materia = m.id and c.id_periodo = $2\
+            inner join inscripciones i on i.id_curso = c.id_curso\
+            group by m.id, m.codigo, m.nombre;",
+            [req.params.dpto, req.params.periodo], (err, response)=>{
+            if (!err) {
+                result = [];
+                for (var i = 0; i < response.rows.length; i++) {
+                    result.push({
+                        id: response.rows[i].id,
+                        codigo: response.rows[i].codigo, 
+                        nombre: response.rows[i].nombre, 
+                        inscriptos: response.rows[i].inscriptos, 
+                        docentes: response.rows[i].docentes, 
+                        cursos: response.rows[i].cursos})
+                }
+                res.send(result);
+            }else{
+                res.send({});
+            }
+    });
+})
+
+router.get('/cursos/:dpto/:periodo/:materia', (req, res) => {
+    db.query("select d.apellido || ', ' || d.nombre as docente, count(distinct i.*) as inscriptos\
+            from materias m\
+            inner join materias_departamento md on md.id_materia = m.id and md.id_dpto = $1\
+            inner join cursos c on c.id_materia = m.id and c.id_periodo = $2\
+            inner join docentes d on d.legajo = c.docente_a_cargo\
+            inner join inscripciones i on i.id_curso = c.id_curso\
+            where m.id = $3\
+            group by d.apellido, d.nombre;",
+            [req.params.dpto, req.params.periodo, req.params.materia], (err, response)=>{
+            if (!err) {
+                result = [];
+                for (var i = 0; i < response.rows.length; i++) {
+                    result.push({
+                        docente: response.rows[i].docente,
+                        inscriptos: response.rows[i].inscriptos})
+                }
+                res.send(result);
+            }else{
+                res.send({});
             }
     });
 })

@@ -447,6 +447,25 @@
 			</div>
 		</div>
 		<div class="row">
+			<div class="col-lg-4">
+			    <label>Departamento:</label>
+			    <select id="modalSelectDptoCursos">
+
+			    </select>
+			</div>
+			<div class="col-lg-2">
+			    <label>Periodo:</label>
+			    <select id="modalSelectPeriodoCursos">
+
+			    </select>
+			</div>
+		</div>
+		<div class="row" style="text-align: right; margin-top: 10px;">
+			<div class="col-lg-6">
+			    <button class="btn btn-success" onclick="consultarCursos()">Consultar</button>
+			</div>
+		</div>
+		<div class="row">
 			<div class="col-lg-5">
 				<div id="piechartCursos"></div>
 			</div>
@@ -568,9 +587,19 @@
 
 		function drawChartEncuestas(todo, listado) {
 			var data; 
-			var dataList = listado.map((el)=>{return [el.materia, el.avg]});
+			var dataList = listado.map((el)=>{
+				var color;
+				if (el.avg >= 4) {
+					color = 'green';
+				}else if (el.avg > 2) {
+					color = 'yellow';
+				}else{
+					color = 'red';
+				}
+				return [el.materia, el.avg, color];
+			});
 			var chart;
-		  	data = google.visualization.arrayToDataTable([["Materia","Promedio"]].concat(dataList));
+		  	data = google.visualization.arrayToDataTable([["Materia","Promedio", { role: 'style' }]].concat(dataList));
 			var options = {
 				'title':'Promedio de opinión general',
 				'width':700, 
@@ -594,54 +623,86 @@
 		  	}
 		}
 		
-		function drawChartCursos() {
-			var data; 
-			var dataList = ['Work', 'Friends', 'Eat', 'TV', 'Gym', 'Sleep'];
-			var dataListValues = [8, 2, 2, 2, 2, 8];
+		function consultarCursos() {
+			var dpto = $('#modalSelectDptoCursos').val()
+			var periodo = $('#modalSelectPeriodoCursos').val()
+
+			$.ajax({
+				url: '../admin/cursos/' + dpto + "/" + periodo,
+				type: 'GET',
+				success: (data)=>{
+					drawChartCursos(data);
+				}
+			});
+		}
+
+		function drawChartCursos(todo) {
+			var data;
+			var total = todo.reduce((anterior, actual) => {return anterior + actual.inscriptos}, 0); 
+			var dataList = todo.map((el)=>{
+				var html = 	"<h6><b>" + el.codigo + " - " + el.nombre + "</b></h6>"+
+							"<h6> # Inscriptos: <b>" + el.inscriptos + "</b></h6>" + 
+							"<h6> # Docentes: <b>" + el.docentes + "</b></h6>" + 
+							"<h6> # Cursos: <b>" + el.cursos + "</b></h6>";
+				return [el.codigo + " - " + el.nombre, el.inscriptos/total, html];
+			});
 			var chart;
 		  	data = google.visualization.arrayToDataTable([
-			  ['Task', 'Hours per Day'],
-			  ['Work', 8],
-			  ['Friends', 2],
-			  ['Eat', 2],
-			  ['TV', 2],
-			  ['Gym', 2],
-			  ['Sleep', 8]
-			]);
+		  			[	"Materia", 
+		  				"# Inscriptos",
+		  				{type: 'string', role: 'tooltip', 'p': {'html': true}}]
+		  		].concat(dataList));
 			var options = {
-				'title':'My Average Day',
-				'width':550, 
-				'height':400, 
-				'backgroundColor': 
-				'transparent', 
-				'legend': 'none'
+				'title':'Cantidad de Inscriptos por Materia',
+				'width':700, 
+				'height':500, 
+				'backgroundColor': 'transparent', 
+				'legend': 'none',
+				'tooltip': {isHtml: true}
 			};
 			chart = new google.visualization.PieChart(document.getElementById('piechartCursos'));
 			chart.draw(data, options);
-			google.visualization.events.addListener(chart, 'select', ()=>{selectHandlerCursos(chart.getSelection())});
+			google.visualization.events.addListener(chart, 'select', ()=>{
+				var materia = dataList[chart.getSelection()[0].row];
+				var listado = todo.filter((el) => { if (el.codigo + " - " + el.nombre == materia[0]) return el.id }); 
+				selectHandlerCursos(listado[0].id, listado[0].codigo + " - " + listado[0].nombre)
+			});
 		}
 
-		function selectHandlerCursos(selection) {
-		  	var data; 
-			var dataList = ['a', 'b'];
-			var dataListValues = [8, 2];
-			var chart;
-			data = google.visualization.arrayToDataTable([
-			  ['Task', 'Hours per Day'],
-			  ['a', 8],
-			  ['b', 2]
-			]);
-			var options = {
-				'title':'My Average Day2',
-				'width':550, 
-				'height':400, 
-				'backgroundColor': 
-				'transparent', 
-				'legend': 'none'
-			};
-			chart = new google.visualization.PieChart(document.getElementById('piechartCursos2'));
-			chart.draw(data, options);
-		  	//alert('Selección: ' + dataList[selection[0].row] + " - Valor: " + dataListValues[selection[0].row]);
+		function selectHandlerCursos(materia_id, materia_nombre) {
+			var dpto = $('#modalSelectDptoCursos').val()
+			var periodo = $('#modalSelectPeriodoCursos').val()
+
+		  	$.ajax({
+				url: '../admin/cursos/' + dpto + "/" + periodo + "/" + materia_id,
+				type: 'GET',
+				success: (todo)=>{
+					var data; 
+					var total = todo.reduce((anterior, actual) => {return anterior + actual.inscriptos}, 0); 
+					var dataList = todo.map((el) => {
+						var html = "<h6> Docente a Cargo: <b>" + el.docente + "</b></h6>" + 
+							"<h6> # Inscriptos: <b>" + el.inscriptos + "</b></h6>";
+						return [el.docente, el.inscriptos/total, html]
+					});
+					var chart;
+					data = google.visualization.arrayToDataTable([
+			  			[	"Docente a Cargo", 
+			  				"# Inscriptos",
+			  				{type: 'string', role: 'tooltip', 'p': {'html': true}}]
+		  			].concat(dataList));
+					var options = {
+						'title':'Cantidad de Inscriptos por Cursos de la Materia ' + materia_nombre,
+						'width':700, 
+						'height':500, 
+						'backgroundColor': 
+						'transparent', 
+						'legend': 'none',
+						'tooltip': {isHtml: true}
+					};
+					chart = new google.visualization.PieChart(document.getElementById('piechartCursos2'));
+					chart.draw(data, options);
+				}
+			});
 		}
 	</script>
 
