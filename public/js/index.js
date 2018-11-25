@@ -1178,8 +1178,6 @@ function okPeriodo(numero){
 								$("#inputFechaCursadasFin").val('')
 								$("#inputFechaFinalesInicio").val('')
 								$("#inputFechaFinalesFin").val('') 
-								$("#divFinales").addClass("divInhabilitado");
-								$("#divInscripcionCursadas").removeClass("divInhabilitado");
 							},
 							error: function (xhr, ajaxOptions, thrownError) {
 						        $.unblockUI();
@@ -1190,8 +1188,6 @@ function okPeriodo(numero){
 								});
 						        console.log(xhr.responseText);
 						        console.log(thrownError);
-						        $("#divFinales").addClass("divInhabilitado");
-								$("#divInscripcionCursadas").removeClass("divInhabilitado");
 					      	}
 						});
 			} else {
