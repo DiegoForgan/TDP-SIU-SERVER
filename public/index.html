@@ -620,9 +620,12 @@
 			chart = new google.visualization.BarChart(document.getElementById('barchartEncuestas'));
 			chart.draw(data, options);
 			google.visualization.events.addListener(chart, 'select', ()=>{
-				var materia = dataList[chart.getSelection()[0].row];
-				var listado = todo.filter((el) => { if (el.materia == materia[0]) return el.observacion }); 
-				selectHandlerEncuestas(listado, materia)
+				var selecttion = chart.getSelection();
+				if (selection.length > 0) {
+					var materia = dataList[chart.getSelection()[0].row];
+					var listado = todo.filter((el) => { if (el.materia == materia[0]) return el.observacion }); 
+					selectHandlerEncuestas(listado, materia)
+				}
 			});
 		}
 
@@ -683,9 +686,12 @@
 			chart = new google.visualization.PieChart(document.getElementById('piechartCursos'));
 			chart.draw(data, options);
 			google.visualization.events.addListener(chart, 'select', ()=>{
-				var materia = dataList[chart.getSelection()[0].row];
-				var listado = todo.filter((el) => { if (el.codigo + " - " + el.nombre == materia[0]) return el.id }); 
-				selectHandlerCursos(listado[0].id, listado[0].codigo + " - " + listado[0].nombre)
+				var selecttion = chart.getSelection();
+				if (selection.length > 0) {
+					var materia = dataList[chart.getSelection()[0].row];
+					var listado = todo.filter((el) => { if (el.codigo + " - " + el.nombre == materia[0]) return el.id }); 
+					selectHandlerCursos(listado[0].id, listado[0].codigo + " - " + listado[0].nombre)
+				}
 			});
 		}
 
