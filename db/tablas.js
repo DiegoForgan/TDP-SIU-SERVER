@@ -7,7 +7,7 @@ module.exports = function(pool){
 				apellido varchar(200) not null,\
 				nombre varchar(200) not null,\
 				usuario varchar(50) not null,\
-				contrasena varchar(20) not null,\
+				contrasena varchar(64) not null,\
 				email varchar(200) not null);"
             );
 
@@ -19,7 +19,7 @@ module.exports = function(pool){
 				apellido varchar(200) not null,\
 				nombre varchar(200) not null,\
 				usuario varchar(50) not null,\
-				contrasena varchar(20) not null,\
+				contrasena varchar(64) not null,\
 				prioridad int not null,\
 				carrera varchar(50) not null,\
 				f_update timestamp not null,\
@@ -57,6 +57,23 @@ module.exports = function(pool){
 				id_carrera int not null,\
                 id_materia int not null);"
             );
+
+    pool.query("DROP TABLE IF EXISTS materias_departamento;\
+			\
+			create table materias_departamento(\
+				id_dpto int not null,\
+                id_materia int not null);"
+            );
+
+    pool.query("DROP TABLE IF EXISTS departamentos;\
+			\
+			create table departamentos(\
+				id_dpto int not null,\
+				nombre_dpto varchar(200) not null,\
+                usuario varchar(50) not null,\
+                contrasena varchar(64) not null,\
+                role varchar(10) not null);"
+            );			
 
     
     pool.query("DROP TABLE IF EXISTS materias;\
@@ -135,4 +152,5 @@ module.exports = function(pool){
 				nombre varchar(40) not null,\
 				creditos_totales int not null);"
 		);
+
 }

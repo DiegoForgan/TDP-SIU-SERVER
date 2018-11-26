@@ -25,15 +25,26 @@ var notificar = function(titulo, texto, destino){
 	  console.error(e);
 	});
 
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; 
+	var yyyy = today.getFullYear();
+	var hh = today.getHours();
+	var min = today.getMinutes();
+	var ss = today.getSeconds()
+	if(dd<10) { dd='0'+dd; } 
+	if(mm<10) { mm='0'+mm; } 
+
 	var postData = JSON.stringify({
 	    'data' : {
 	    	'title': titulo,
-	    	'text': texto
+	    	'text': texto,
+	    	'timestamp': dd+"/"+mm+"/"+yyyy+" "+hh+":"+min+":"+ss
 	    },
 	    'to': '/topics/' + destino,
 	    'priority': 'high'
 	});
-
+	console.log(postData)
 	req.write(postData);
 	req.end();
 }

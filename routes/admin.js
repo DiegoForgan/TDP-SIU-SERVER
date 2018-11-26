@@ -1,6 +1,7 @@
 var router = require('express').Router();
 const db = require('../db');
 const fb = require('../firebase');
+var SHA256 = require('crypto-js/sha256');
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -103,7 +104,19 @@ router.get('/info', (req, res) => {
                 codigo,\
                 nombre\
             FROM materias\
-            ORDER BY nombre;", null, (err, response)=>{
+            ORDER BY nombre;\
+            \
+            SELECT\
+                id_dpto as id,\
+                nombre_dpto as nombre\
+            FROM departamentos\
+            ORDER BY nombre;\
+            \
+            SELECT\
+                id,\
+                descripcion as desc\
+            FROM periodos\
+            ORDER BY id;", null, (err, response)=>{
                                     res.send(response);
                                 }
     )
@@ -158,6 +171,97 @@ router.post('/notificaciones', (req, res) => {
     } finally{
         res.send("ok");
     }
+})
+
+router.post('/login', (req, res) => {
+    var usr = req.body.usr;
+    var pwd = (SHA256(req.body.pwd)).toString();
+    db.query("SELECT * from login($1, $2)",
+            [usr, pwd], (err, response)=>{
+            if (!err) {
+                console.log({status: response.rows[0].status, role: response.rows[0].role, id: response.rows[0].id, nombre: response.rows[0].nombre})
+                res.send({status: response.rows[0].status, role: response.rows[0].role, id: response.rows[0].id, nombre: response.rows[0].nombre});
+            }else{
+                res.send({status: 0, role: "", id: 0, nombre: ""});
+            }
+    });
+})
+
+router.get('/encuestas/:dpto/:periodo', (req, res) => {
+    db.query("select m.id, m.nombre, ha.resultados_encuesta\
+                from materias_departamento md\
+                inner join materias m on m.id = md.id_materia\
+                inner join historialacademico ha on ha.id_materia = m.id\
+                where md.id_dpto = $1 \
+                    and ha.fecha < (select fechafinfinales from periodos where id = $2)\
+                    and ha.fecha > (select fechainiciofinales from periodos where id = $2)\
+                    and completo_encuesta;",
+            [req.params.dpto, req.params.periodo], (err, response)=>{
+            if (!err) {
+                result = [];
+                for (var i = 0; i < response.rows.length; i++) {
+                    var encuesta = JSON.parse(response.rows[i].resultados_encuesta)
+                    result.push({
+                        id: response.rows[i].id,
+                        materia: response.rows[i].nombre, 
+                        puntaje: encuesta.Pregunta1, 
+                        observacion: encuesta.Pregunta7})
+                }
+                res.send(result);
+            }else{
+                res.send({});
+            }
+    });
+})
+
+router.get('/cursos/:dpto/:periodo', (req, res) => {
+    db.query("select m.id, m.codigo, m.nombre, count(distinct i.*) as inscriptos, count(distinct c.docente_a_cargo) as docentes, count(distinct c.*) as cursos\
+            from materias m\
+            inner join materias_departamento md on md.id_materia = m.id and md.id_dpto = $1\
+            inner join cursos c on c.id_materia = m.id and c.id_periodo = $2\
+            inner join inscripciones i on i.id_curso = c.id_curso\
+            group by m.id, m.codigo, m.nombre;",
+            [req.params.dpto, req.params.periodo], (err, response)=>{
+            if (!err) {
+                result = [];
+                for (var i = 0; i < response.rows.length; i++) {
+                    result.push({
+                        id: response.rows[i].id,
+                        codigo: response.rows[i].codigo, 
+                        nombre: response.rows[i].nombre, 
+                        inscriptos: response.rows[i].inscriptos, 
+                        docentes: response.rows[i].docentes, 
+                        cursos: response.rows[i].cursos})
+                }
+                res.send(result);
+            }else{
+                res.send({});
+            }
+    });
+})
+
+router.get('/cursos/:dpto/:periodo/:materia', (req, res) => {
+    db.query("select d.apellido || ', ' || d.nombre as docente, count(distinct i.*) as inscriptos\
+            from materias m\
+            inner join materias_departamento md on md.id_materia = m.id and md.id_dpto = $1\
+            inner join cursos c on c.id_materia = m.id and c.id_periodo = $2\
+            inner join docentes d on d.legajo = c.docente_a_cargo\
+            inner join inscripciones i on i.id_curso = c.id_curso\
+            where m.id = $3\
+            group by d.apellido, d.nombre;",
+            [req.params.dpto, req.params.periodo, req.params.materia], (err, response)=>{
+            if (!err) {
+                result = [];
+                for (var i = 0; i < response.rows.length; i++) {
+                    result.push({
+                        docente: response.rows[i].docente,
+                        inscriptos: response.rows[i].inscriptos})
+                }
+                res.send(result);
+            }else{
+                res.send({});
+            }
+    });
 })
 
 module.exports = router;

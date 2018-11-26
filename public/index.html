@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="resources/css/select2.min.css"></style>
 	<link rel="stylesheet" href="resources/css/bootstrap-toggle.min.css"></style>
 	<link rel="stylesheet" href="resources/css/bootstrap-datepicker.css"></style>
+	<link rel="stylesheet" href="resources/css/estilo.css"></style>
 
 	<script type="text/javascript" src="resources/js/jquery-3.3.1.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap.js"></script>
@@ -16,43 +17,120 @@
 	<script type="text/javascript" src="resources/js/bootstrap-toggle.min.js"></script>
 	<script type="text/javascript" src="resources/js/bootstrap-datepicker.js"></script>
 	<script src="resources/locales/bootstrap-datepicker.es.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-	<style type="text/css">
-		.btnAccion{
-			margin: 0px 5px;
-		}
-		.swal2-popup{
-			font-size: 1.6rem !important;
-		}
-		.divInhabilitado *{
-		    pointer-events: none;
-		    opacity: 0.4;
-		}
-		.divInhabilitado{
-			cursor: not-allowed;
-		}
-	</style>
 </head>
-<body>
+<body style="background-image:url(resources/img/fondologin.jpg); height: 100%; background-position: center;background-repeat: no-repeat; background-size: cover;">
 	
 	<!-- Barra navegación -->
 	<nav class="navbar navbar-inverse ">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
-	      <a class="navbar-brand">SIU - FIUBA</a>
+	      <a class="navbar-brand" id="homeMenu" onclick="cambiarPantalla(0)">SIU - FIUBA</a>
 	    </div>
 	    <ul class="nav navbar-nav">
-	      <li class="active" id="importacionMenu" onclick="cambiarPantalla(1);"><a>Importación</a></li>
-	      <li id="abmCursosMenu" onclick="cambiarPantalla(2);"><a>Cursos</a></li>
-	      <li id="periodosMenu" onclick="cambiarPantalla(3);"><a>Periodos Inscripción</a></li>
-	      <li id="notificacionesMenu" onclick="cambiarPantalla(4);"><a>Notificaciones</a></li>
+			<li class="active" id="importacionMenu" onclick="cambiarPantalla(1);"><a>Importación</a></li>
+			<li id="abmCursosMenu" onclick="cambiarPantalla(2);"><a>Cursos</a></li>
+			<li id="periodosMenu" onclick="cambiarPantalla(3);"><a>Periodos Inscripción</a></li>
+			<li id="notificacionesMenu" onclick="cambiarPantalla(4);"><a>Notificaciones</a></li>
+			<li id="cerrarSesion" onclick="cerrarSesion();"><a>Cerrar sesión</a></li>
+			<li id="reportes" class="dropdown">
+			   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Reportes <span class="caret"></span></a>
+			    <ul class="dropdown-menu" role="menu">
+			       <li onclick="cambiarPantalla(5);"><a>Reporte de encuestas</a></li>
+			       <li onclick="cambiarPantalla(6);"><a>Reporte de cursos</a></li>
+			    </ul>
+			</li>
 	    </ul>
 	  </div>
 	</nav>
 
+	<!-- Pantalla login -->
+	<div id="loginPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-12" style="text-align: center;">
+		      	<img src="./resources/img/fiubaLogoChico.png" >
+      		</div>
+      	</div>
+      	<div class="row" style="margin: 5px">
+      		<div class="col-lg-3"></div>
+      		<div class="col-lg-6">
+			    <label for="email">Usuario:</label>
+			    <input type="email" class="form-control" id="usrLogin">
+		  	</div>
+	  	</div>
+		<div class="row" style="margin: 5px">
+			<div class="col-lg-3"></div>
+      		<div class="col-lg-6">
+				    <label for="pwd">Contraseña:</label>
+				    <input type="password" class="form-control" id="pwdLogin">
+		  	</div>
+	  	</div>
+	  	<div class="row" style="margin: 5px">
+      		<div class="col-lg-9" style="text-align: right;">
+	  			<button  class="btn btn-success" onclick="login();">INICIAR SESIÓN</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Pantalla bienvenido -->
+	<div id="bienvenidoPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Bienvenido a SIU-FIUBA</h3>
+			</div>
+			<div class="jzdbox1 jzdbasf jzdcal">
+
+			<div class="jzdcalt">Noviembre 2018</div>
+
+				<span>LUN</span>
+				<span>MAR</span>
+				<span>MIÉ</span>
+				<span>JUE</span>
+				<span>VIE</span>
+				<span>SÁB</span>
+				<span>DOM</span>
+				<span class="jzdb"><!--BLANK--></span>
+				<span class="jzdb"><!--BLANK--></span>
+				<span class="jzdb"><!--BLANK--></span>
+				<span>1</span>
+				<span>2</span>
+				<span>3</span>
+				<span>4</span>
+				<span>5</span>
+				<span>6</span>
+				<span>7</span>
+				<span>8</span>
+				<span>9</span>
+				<span>10</span>
+				<span>11</span>
+				<span>12</span>
+				<span>13</span>
+				<span>14</span>
+				<span>15</span>
+				<span>16</span>
+				<span>17</span>
+				<span>18</span>
+				<span class="circle" data-title="Día de la Soberanía Nacional">19</span>
+				<span>20</span>
+				<span>21</span>
+				<span>22</span>
+				<span>23</span>
+				<span>24</span>
+				<span>25</span>
+				<span class="today">26</span>
+				<span>27</span>
+				<span>28</span>
+				<span>29</span>
+				<span>30</span>
+				<span class="jzdb"><!--BLANK--></span>
+				<span class="jzdb"><!--BLANK--></span>
+			</div>
+		</div>
+	</div>
 
 	<!-- Pantalla importación -->
-	<div id="importacionPantalla" class="container">
+	<div id="importacionPantalla" class="container" style="display: none;">
 		<div class="row">
 			<div class="col-lg-5">
 			    <h3>Importación estudiantes</h3>
@@ -68,14 +146,14 @@
 				<div class="form-group">
 					<div class="input-group input-file-estudiantes">
 						<span class="input-group-btn">
-			        		<button class="btn btn-primary btn-choose" type="button">Elegir</button>
+			        		<button class="btn btn-primary btn-choose" type="button">ELEGIR</button>
 			    		</span>
 			    		<input id="archivoEstudiantes" type="text" class="form-control" placeholder='Elegir archivo .csv ...' />
 					</div>
 				</div>
 				<div class="form-group" style="text-align: right">
 					<span class="input-group-btn">
-						<button onclick="clickEstudiantes()" type="submit" class="btn btn-primary pull-right">Importar</button>
+						<button class="btn btn-success" onclick="clickEstudiantes()" type="submit" class="btn btn-primary pull-right">IMPORTAR</button>
 					</span>
 				</div>
 			</div>
@@ -86,14 +164,14 @@
 				<div class="form-group">
 					<div class="input-group input-file-docentes">
 						<span class="input-group-btn">
-			        		<button class="btn btn-primary btn-choose" type="button">Elegir</button>
+			        		<button class="btn btn-primary btn-choose" type="button">ELEGIR</button>
 			    		</span>
 			    		<input id="archivoDocentes" type="text" class="form-control" placeholder='Elegir archivo .csv ...' />
 					</div>
 				</div>
 				<div class="form-group" style="text-align: right">
 					<span class="input-group-btn">
-						<button onclick="clickDocentes()" type="submit" class="btn btn-primary pull-right">Importar</button>
+						<button class="btn btn-success" onclick="clickDocentes()" type="submit" class="btn btn-primary pull-right">IMPORTAR</button>
 					</span>
 				</div>
 				
@@ -109,15 +187,30 @@
 			    <h3>Cursos</h3>
 			</div>
 		</div>
+		<div class="row row-filtro">
+			<div class="col-lg-3">
+				<input type="text" id="inputCodigo" placeholder="Codigo..." title="Codigo...">
+			</div>
+			<div class="col-lg-3">
+				<input type="text" id="inputNombre" placeholder="Nombre..." title="Nombre...">
+			</div>
+			<div class="col-lg-3">
+				<input type="text" id="inputDocente" placeholder="Docente..." title="Docente...">
+			</div>
+			<div class="col-lg-3">
+				<button class="btn btn-danger btn-filtro" type="button" onclick="quitarFiltro()">QUITAR FILTRO</button>
+				<button class="btn btn-success btn-filtro" type="button" onclick="filtrar()">FILTRAR</button>
+			</div>
+		</div>
 		<div class="row">
 			<div id="tablaCursos" class="col-lg-12">
 			</div>
 		</div>
 
 		<div class="row">
-			<div class="col-lg-12" style="text-align: right;">
+			<div class="col-lg-12" style="text-align: right; margin-bottom: 20px;">
 			    <span class="input-group-btn">
-	       			<button class="btn btn-success" type="button" data-toggle="modal" data-target="#modalCurso" data-accion="borrar">Agregar Curso</button>
+	       			<button class="btn btn-success" type="button" data-toggle="modal" data-target="#modalCurso" data-accion="borrar">AGREGAR CURSO</button>
 	    		</span>
 			</div>
 		</div>
@@ -126,9 +219,14 @@
 	<!-- Pantalla periodos -->
 	<div id="periodosPantalla" class="container" style="display: none;">
 		<div class="row">
-			<div class="col-lg-8">
+			<div class="col-lg-12">
+			    <h3>Períodos</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-8 col-no-padding">
 				<div class="col-lg-12">
-					<label>Periodo Actual
+					<label>Periodo a modificar/crear
 						<input type="hidden" id="ultimoPeriodo">
 						<div class="row">
 							<div class="col-lg-4">
@@ -150,7 +248,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-5" id="divInscripcionCursadas">
+			<div class="col-lg-5 col-no-padding" id="divInscripcionCursadas">
 				<div class="col-lg-12"><h3>Inscripción a cursadas</h3></div>
 				<div class="col-lg-6">
 					<label>Inicio
@@ -162,12 +260,9 @@
 				    	<input id="inputFechaInscripcionCursadasFin" type="text" class="form-control">
 			    	</label>
 				</div>
-			    <div class="col-lg-12" style="text-align: right;">
-				    <button class="btn btn-success" id="btnInscripcionCursadas" onclick="okPeriodo(1)">OK</button>
-				</div>
 			</div>
 			<div class="col-lg-2"></div>
-			<div class="col-lg-5 divInhabilitado" id="divDesinscripcionCursadas">
+			<div class="col-lg-5 col-no-padding" id="divDesinscripcionCursadas">
 				<div class="col-lg-12"><h3>Desinscripción a cursadas</h3></div>
 				<div class="col-lg-6">
 					<label>Inicio
@@ -179,13 +274,10 @@
 				    	<input id="inputFechaDesinscripcionCursadasFin" type="text" class="form-control">
 			    	</label>
 				</div>
-				<div class="col-lg-12" style="text-align: right;">
-				    <button class="btn btn-success" id="btnDesinscripcionCursadas" onclick="okPeriodo(2)">OK</button>
-				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-lg-5 divInhabilitado" id="divCursadas">
+			<div class="col-lg-5 col-no-padding" id="divCursadas">
 				<div class="col-lg-12"><h3>Cursada</h3></div>
 				<div class="col-lg-6">
 					<label>Inicio
@@ -197,12 +289,9 @@
 				    	<input id="inputFechaCursadasFin" type="text" class="form-control">
 			    	</label>
 				</div>
-				<div class="col-lg-12" style="text-align: right;">
-				    <button class="btn btn-success" id="btnCursadas" onclick="okPeriodo(3)">OK</button>
-				</div>
 			</div>
 			<div class="col-lg-2"></div>
-			<div class="col-lg-5 divInhabilitado" id="divFinales">
+			<div class="col-lg-5 col-no-padding" id="divFinales">
 				<div class="col-lg-12"><h3>Finales</h3></div>
 				<div class="col-lg-6">
 					<label>Inicio
@@ -214,9 +303,9 @@
 				    	<input id="inputFechaFinalesFin" type="text" class="form-control">
 			    	</label>
 				</div>
-				<div class="col-lg-12" style="text-align: right;">
-				    <button class="btn btn-success" id="btnFinales" onclick="okPeriodo(4)">Guardar</button>
-				</div>
+			</div>
+			<div class="col-lg-12" style="text-align: right; padding-top: 10px;">
+			    <button class="btn btn-success" id="btnFinales" onclick="okPeriodo(5)">GUARDAR</button>
 			</div>
 		</div>
 		<!-- <div class="row">
@@ -232,9 +321,57 @@
 			    <input id="jrr" type="text" class="form-control">
 			
 		</div> -->
+		<div class="row">
+			<div class="col-lg-12">
+			    <h3>Períodos guardados</h3>
+		</div>
+		</div>
+		<div class="row">
+			<div id="tablaPeriodos" class="col-lg-12">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>Inicio inscripción</th>
+							<th>Fin inscripción</th>
+							<th>Inicio desinscripción</th>
+							<th>Fin desinscripción</th>
+							<th>Inicio cursada</th>
+							<th>Fin cursada</th>
+							<th>Inicio finales</th>
+							<th>Fin finales</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>2°-2018</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+						</tr>
+						<tr>
+							<td>1°-2018</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+							<td>10/10/10</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 
-	<!-- Pantalla importación -->
+	<!-- Pantalla notificaciones -->
 	<div id="notificacionesPantalla" class="container" style="display: none;">
 		<div class="row">
 			<div class="col-lg-5">
@@ -243,7 +380,7 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="input-group input-group-lg" style="width: 100%">
+				<div class="input-group input-group-lg" style="width: 100%; margin-bottom: 10px;">
 					<span class="input-group-addon" id="sizing-addon1">Título</span>
 					<textarea id="notificacionesTitulo" type="text" class="form-control" aria-describedby="sizing-addon1" style="width: 100%; height: 50px"></textarea>
 				</div>
@@ -251,7 +388,7 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="input-group input-group-lg" style="width: 100%">
+				<div class="input-group input-group-lg" style="width: 100%; margin-bottom: 10px;">
 					<span class="input-group-addon" id="sizing-addon2">Texto</span>
 					<textarea id="notificacionesTexto" type="text" class="form-control"  aria-describedby="sizing-addon2" style="width: 100%; height: 200px"></textarea>
 				</div>
@@ -259,10 +396,83 @@
 		</div>
 		<div class="row">
 			<div class="col-lg-12" style="text-align: right;">
-				<button type="button" class="btn btn-success" onclick="enviarNotificacion();">Enviar Notificación</button>
+				<button type="button" class="btn btn-success" onclick="enviarNotificacion();">ENVIAR NOTIFICACIÓN</button>
 			</div>
 		</div>
 
+	</div>
+
+
+	<!-- Pantalla reportes de encuestas -->
+	<div id="reporteEncuestasPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Reportes de encuestas</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4">
+			    <label>Departamento:</label>
+			    <select id="modalSelectDptoEncuestas">
+
+			    </select>
+			</div>
+			<div class="col-lg-2">
+			    <label>Periodo:</label>
+			    <select id="modalSelectPeriodoEncuestas">
+
+			    </select>
+			</div>
+		</div>
+		<div class="row" style="text-align: right; margin-top: 10px;">
+			<div class="col-lg-6">
+			    <button class="btn btn-success" onclick="consultarEncuesta()">Consultar</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-7">
+				<div id="barchartEncuestas"></div>
+			</div>
+			<div class="col-lg-5">
+				<div id="barchartEncuestas2"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Pantalla reportes de cursos -->
+	<div id="reporteCursosPantalla" class="container" style="display: none;">
+		<div class="row">
+			<div class="col-lg-5">
+			    <h3>Reportes de cursos</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-4">
+			    <label>Departamento:</label>
+			    <select id="modalSelectDptoCursos">
+
+			    </select>
+			</div>
+			<div class="col-lg-2">
+			    <label>Periodo:</label>
+			    <select id="modalSelectPeriodoCursos">
+
+			    </select>
+			</div>
+		</div>
+		<div class="row" style="text-align: right; margin-top: 10px;">
+			<div class="col-lg-6">
+			    <button class="btn btn-success" onclick="consultarCursos()">Consultar</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-5">
+				<div id="piechartCursos"></div>
+			</div>
+			<div class="col-lg-5">
+				<div id="piechartCursos2"></div>
+			</div>
+		</div>
 	</div>
 
 	<!-- Modal -->
@@ -328,5 +538,189 @@
 	</div>
 
 	<script type="text/javascript" src="js/index.js"></script>
+
+	<script type="text/javascript">
+		google.charts.load('visualization', '1.0', {'packages':['corechart','bar']});
+		// google.charts.setOnLoadCallback(drawCharts);    
+		
+		// function drawCharts(){
+		// 	drawChartEncuestas();
+		// 	drawChartCursos();
+		// }
+
+		function consultarEncuesta(){
+			var dpto = $('#modalSelectDptoEncuestas').val()
+			var periodo = $('#modalSelectPeriodoEncuestas').val()
+
+			$.ajax({
+				url: '../admin/encuestas/' + dpto + "/" + periodo,
+				type: 'GET',
+				success: (data)=>{
+					var obj = data.reduce((todos, actual) =>{
+						if ( todos[actual.id] ) {
+							todos[actual.id].sum += actual.puntaje;
+							todos[actual.id].total += 1; 
+						}else{
+							todos[actual.id] = {'id': actual.id}
+							todos[actual.id].materia = actual.materia;
+							todos[actual.id].sum = actual.puntaje;	
+							todos[actual.id].total = 1; 
+						}
+						return todos;
+					}, {});
+
+					//promedio
+					var listado = Object.keys(obj).map((key)=>{ obj[key].avg = obj[key].sum / obj[key].total; return obj[key];}).sort((a,b) => {
+						    if (a.avg > b.avg) {
+							   	return -1;
+							}
+							if (a.avg < b.avg) {
+							    return 1;
+							}
+							return 0;
+						});
+
+					drawChartEncuestas(data,listado);
+				}
+			});
+		}
+
+		function drawChartEncuestas(todo, listado) {
+			var data; 
+			var dataList = listado.map((el)=>{
+				var color;
+				if (el.avg >= 4) {
+					color = 'green';
+				}else if (el.avg > 2) {
+					color = 'yellow';
+				}else{
+					color = 'red';
+				}
+				return [el.materia, el.avg, color];
+			});
+			var chart;
+		  	data = google.visualization.arrayToDataTable([["Materia","Promedio", { role: 'style' }]].concat(dataList));
+			var options = {
+				'title':'Promedio de opinión general',
+				'width':700, 
+				'height':500, 
+				'backgroundColor': 'transparent', 
+				'legend': 'none'
+			};
+			chart = new google.visualization.BarChart(document.getElementById('barchartEncuestas'));
+			chart.draw(data, options);
+			google.visualization.events.addListener(chart, 'select', ()=>{
+				var materia = dataList[chart.getSelection()[0].row];
+				var listado = todo.filter((el) => { if (el.materia == materia[0]) return el.observacion }); 
+				selectHandlerEncuestas(listado, materia)
+			});
+		}
+
+		function selectHandlerEncuestas(listado, materia) {
+		  	$('#barchartEncuestas2').html("Comentarios de la materia: <b>" + materia[0] + "</b><br>Promedio: <b>" + materia[1] + "</b><ul id='listado'></ul>");
+		  	for (var i = 0; i < listado.length; i++) {
+		  		$('#listado').append('<li>' + listado[i].observacion + '</li>');
+		  	}
+		}
+		
+		function consultarCursos() {
+			var dpto = $('#modalSelectDptoCursos').val()
+			var periodo = $('#modalSelectPeriodoCursos').val()
+
+			$.ajax({
+				url: '../admin/cursos/' + dpto + "/" + periodo,
+				type: 'GET',
+				success: (data)=>{
+					drawChartCursos(data);
+				}
+			});
+		}
+
+		function drawChartCursos(todo) {
+			var data;
+			var total = todo.reduce((anterior, actual) => {return anterior + actual.inscriptos}, 0); 
+			var dataList = todo.map((el)=>{
+				var html = 	"<h6><b>" + el.codigo + " - " + el.nombre + "</b></h6>"+
+							"<h6> # Inscriptos: <b>" + el.inscriptos + "</b></h6>" + 
+							"<h6> # Docentes: <b>" + el.docentes + "</b></h6>" + 
+							"<h6> # Cursos: <b>" + el.cursos + "</b></h6>";
+				return [el.codigo + " - " + el.nombre, el.inscriptos/total, html];
+			});
+			var chart;
+		  	data = google.visualization.arrayToDataTable([
+		  			[	"Materia", 
+		  				"# Inscriptos",
+		  				{type: 'string', role: 'tooltip', 'p': {'html': true}}]
+		  		].concat(dataList));
+			var options = {
+				'title':'Cantidad de Inscriptos por Materia',
+				'width':700, 
+				'height':500, 
+				'backgroundColor': 'transparent', 
+				'legend': 'none',
+				'tooltip': {isHtml: true}
+			};
+			chart = new google.visualization.PieChart(document.getElementById('piechartCursos'));
+			chart.draw(data, options);
+			google.visualization.events.addListener(chart, 'select', ()=>{
+				var materia = dataList[chart.getSelection()[0].row];
+				var listado = todo.filter((el) => { if (el.codigo + " - " + el.nombre == materia[0]) return el.id }); 
+				selectHandlerCursos(listado[0].id, listado[0].codigo + " - " + listado[0].nombre)
+			});
+		}
+
+		function selectHandlerCursos(materia_id, materia_nombre) {
+			var dpto = $('#modalSelectDptoCursos').val()
+			var periodo = $('#modalSelectPeriodoCursos').val()
+
+		  	$.ajax({
+				url: '../admin/cursos/' + dpto + "/" + periodo + "/" + materia_id,
+				type: 'GET',
+				success: (todo)=>{
+					var data; 
+					var total = todo.reduce((anterior, actual) => {return anterior + actual.inscriptos}, 0); 
+					var dataList = todo.map((el) => {
+						var html = "<h6> Docente a Cargo: <b>" + el.docente + "</b></h6>" + 
+							"<h6> # Inscriptos: <b>" + el.inscriptos + "</b></h6>";
+						return [el.docente, el.inscriptos/total, html]
+					});
+					var chart;
+					data = google.visualization.arrayToDataTable([
+			  			[	"Docente a Cargo", 
+			  				"# Inscriptos",
+			  				{type: 'string', role: 'tooltip', 'p': {'html': true}}]
+		  			].concat(dataList));
+					var options = {
+						'title':'Cantidad de Inscriptos por Cursos de la Materia ' + materia_nombre,
+						'width':700, 
+						'height':500, 
+						'backgroundColor': 
+						'transparent', 
+						'legend': 'none',
+						'tooltip': {isHtml: true}
+					};
+					chart = new google.visualization.PieChart(document.getElementById('piechartCursos2'));
+					chart.draw(data, options);
+				}
+			});
+		}
+	</script>
+
+	<script type="text/javascript">
+		
+		var f5Key = 116;
+
+		$(document).keydown(function( e ) {
+		    if( e.keyCode == f5Key ) {
+		        if(initialData.role){
+		        	e.preventDefault( );
+		        } else {
+
+		        }
+		    }
+		});
+
+	</script>
+
 </body>
 </html>

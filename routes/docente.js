@@ -2,6 +2,8 @@ var router = require('express').Router();
 var db = require('../db');
 var fb = require('../firebase');
 var separar = require('../auxiliares/separarValoresPuntoYComa');
+var SHA256 = require('crypto-js/sha256');
+
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -153,17 +155,49 @@ router.get('/periodos', (req, res) =>{
 // 4- la contra es incorrecta
 router.put('/perfil', (req, res) =>{
     if (req.query.legajo){
-        db.query('SELECT editarDatosDocente($1, $2, $3, $4)', 
-            [req.query.legajo, req.query.mail, req.query.pswactual, req.query.pswnueva], 
-            (err, response)=>{
-                if(!err){
-                    res.send({
-                        'result': response.rows[0].editardatosdocente
-                    });
-                }
-                
+        db.query('SELECT docentes.usuario \
+        FROM docentes \
+        WHERE docentes.legajo = $1',[req.query.legajo],(error,usuarioEncontrado) => {
+            if (error) {
+                console.log(error);
+                res.send({
+                    'result': 4
+                });
             }
-        );
+            else if (usuarioEncontrado.rowCount == 0) {
+                res.send({
+                    'result': 4
+                });
+            }
+            else{
+                var actual = null;
+                var actual_encriptada = null;
+                var nueva = null;
+                var nueva_encriptada = null;
+
+                if (req.query.pswactual && req.query.pswnueva) {
+                    actual = usuarioEncontrado.rows[0].usuario+req.query.pswactual;
+                    actual_encriptada = (SHA256(actual)).toString();
+                    
+                    nueva = usuarioEncontrado.rows[0].usuario+req.query.pswnueva;
+                    nueva_encriptada = (SHA256(nueva)).toString();
+                }
+
+                db.query('SELECT editarDatosDocente($1, $2, $3, $4)', 
+                [req.query.legajo, req.query.mail, actual_encriptada, nueva_encriptada], 
+                (err, response)=>{
+                    if(!err){
+                        res.send({
+                            'result': response.rows[0].editardatosdocente
+                        });
+                    }
+                
+                });
+            }
+        });
+    }
+    else{
+        res.send('No mandaste el legajo!');
     }
 });
 

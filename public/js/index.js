@@ -2,7 +2,12 @@
 var initialData = {
 	listadoDocentes : [],
 	listadoAulas : [],
-	listadoMaterias : []
+	listadoMaterias : [],
+	listadoDepartamentos : [],
+	listadoPeriodos : [],
+	role : "",
+	id : undefined,
+	nombre : undefined
 }
 
 $(document).ready(()=>{
@@ -70,6 +75,39 @@ function cargarInfo(termina){
 							$("#modalSelectMaterias").append(option);
 						}
 						$("#modalSelectMaterias").trigger('change');
+					}
+					if (data[3]){
+						initialData.listadoDepartamentos = data[3].rows;
+						for (var i = 0; i < data[3].rows.length; i++) {
+							var dpto = data[3].rows[i];
+							if (dpto.id != 0) {
+								var option = new Option(dpto.nombre, dpto.id, false, false);
+								$("#modalSelectDptoEncuestas").append(option);
+								var option2 = new Option(dpto.nombre, dpto.id, false, false);
+								$("#modalSelectDptoCursos").append(option2);
+							}
+						}
+
+						$("#modalSelectDptoEncuestas").trigger('change');
+						$("#modalSelectDptoCursos").trigger('change');
+						$("#modalSelectDptoEncuestas").select2({ width: '100%' });
+						$("#modalSelectDptoCursos").select2({ width: '100%' });
+					}
+					if (data[4]){
+						initialData.listadoPeriodos = data[4].rows;
+						for (var i = 0; i < data[4].rows.length; i++) {
+							var periodo = data[4].rows[i];
+							var option = new Option(periodo.desc, periodo.id, false, false);
+							$("#modalSelectPeriodoEncuestas").append(option);
+							var option2 = new Option(periodo.desc, periodo.id, false, false);
+							$("#modalSelectPeriodoCursos").append(option2);
+						}
+						
+						$("#modalSelectPeriodoEncuestas").trigger('change');
+						$("#modalSelectPeriodoCursos").trigger('change');
+						$("#modalSelectPeriodoEncuestas").select2({ width: '100%' });
+						$("#modalSelectPeriodoCursos").select2({ width: '100%' });
+
 					}
 				}
 
@@ -458,6 +496,7 @@ function guardarCurso(){
 }
 
 function agregarCurso(){
+	var materia = $("#modalSelectMaterias").val();
 	var docente = $("#modalSelectDocentes").val();
 	var cupos = $("#modalInputCupos").val();
 	var dias = $("#modalSelectDias").val();
@@ -475,8 +514,9 @@ function agregarCurso(){
 	strHorarios = strHorarios.slice(0, -1);
 
 	var idCurso = $("#modalInputId").val();
-	$.blockUI({message:"Guardando.."})
-	$.ajax({
+	if(materia && docente && cupos && dias && strAulas && strSedes && strDias && strHorarios){
+		$.blockUI({message:"Guardando.."})
+		$.ajax({
 			url: '../admin/cursos/',
 			type: 'POST',
 			data: {
@@ -509,6 +549,15 @@ function agregarCurso(){
 		        console.log(thrownError);
 	      	}
 		});
+	} else {
+		swal({
+			title: 'Faltan datos',
+			type: 'warning',
+			confirmButtonColor: '#3085d6',
+			confirmButtonText: 'ACEPTAR',
+		});
+	}
+
 }
 
 $('#modalCurso').on('show.bs.modal', function (event) {
@@ -635,83 +684,183 @@ $("#modalSelectDias").on('change', (event) => {
 // maneja menu
 function cambiarPantalla(numero){
 	switch(numero){
-		case 1:
-			$("#importacionPantalla").show();
+		case 0:
+			if (!initialData.role){
+				$("#loginPantalla").show();
+				$("#bienvenidoPantalla").hide();
+				$("#importacionMenu").hide();
+				$("#abmCursosMenu").hide();
+				$("#periodosMenu").hide();
+				$("#notificacionesMenu").hide();
+				$("#cerrarSesion").hide();
+				$("#reportes").hide();
+			}else{
+				if(initialData.role == "admin"){
+					$("#loginPantalla").hide();
+					$("#bienvenidoPantalla").show();
+					$("#importacionMenu").show();
+					$("#abmCursosMenu").show();
+					$("#periodosMenu").show();
+					$("#notificacionesMenu").show();
+					$("#cerrarSesion").show();
+					$("#reportes").show();
+				} else {
+					$("#loginPantalla").hide();
+					$("#bienvenidoPantalla").show();
+					$("#abmCursosMenu").show();
+					$("#cerrarSesion").show();
+					$("#reportes").show();
+				}
+			}
+			$("#importacionPantalla").hide();
 			$("#abmCursosPantalla").hide();
 			$("#periodosPantalla").hide();
 			$("#notificacionesPantalla").hide();
+			$("#reporteEncuestasPantalla").hide();
+			$("#reporteCursosPantalla").hide();
 
-			$("#importacionMenu").addClass("active");
+			$("#importacionMenu").removeClass("active");
 			$("#abmCursosMenu").removeClass("active");
 			$("#periodosMenu").removeClass("active");
 			$("#notificacionesMenu").removeClass("active");
+			$("#reportes").removeClass("active");
+			break;
+		case 1:
+			if (initialData.role){
+				$("#importacionPantalla").show();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
+
+				$("#importacionMenu").addClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
+			}
 			break;
 		case 2:
-			$("#importacionPantalla").hide();
-			$("#abmCursosPantalla").show();
-			$("#periodosPantalla").hide();
-			$("#notificacionesPantalla").hide();
+			if (initialData.role){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").show();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
-			$("#importacionMenu").removeClass("active");
-			$("#abmCursosMenu").addClass("active");
-			$("#periodosMenu").removeClass("active");
-			$("#notificacionesMenu").removeClass("active");
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").addClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
+			}
 			break;
 		case 3:
-			$.blockUI();
-			$.ajax({
-				url: '../admin/periodoActual/',
-				type: 'GET',
-				success: (data)=>{
-					$.unblockUI();
-					var info = data[0].descripcion.split('-');
-					if (data[0].activo) {
-						$('#cuatrimestrePeriodoActual').val(info[0]).trigger('change');
-						$('#inputAnioPeriodoActual').val(info[1]);
-						$("#inputPeriodoActual").val(data[0].descripcion);
-					}
-					$('#ultimoPeriodo').val(data[0].descripcion);
-					$('#inputAnioPeriodoActual').datepicker({
-						format: "yyyy",
-					    viewMode: "years", 
-					    minViewMode: "years",
-					    language: "es"
-					});
+			if (initialData.role){
+				$.blockUI({message:"Cargando.."})
+				$.ajax({
+					url: '../admin/periodoActual/',
+					type: 'GET',
+					success: (data)=>{
+						$.unblockUI();
+						var info = data[0].descripcion.split('-');
+						if (data[0].activo) {
+							$('#cuatrimestrePeriodoActual').val(info[0]).trigger('change');
+							$('#inputAnioPeriodoActual').val(info[1]);
+							$("#inputPeriodoActual").val(data[0].descripcion);
+						}
+						$('#ultimoPeriodo').val(data[0].descripcion);
+						$('#inputAnioPeriodoActual').datepicker({
+							format: "yyyy",
+						    viewMode: "years", 
+						    minViewMode: "years",
+						    language: "es"
+						});
 
-					
-				},
-				error: function (xhr, ajaxOptions, thrownError) {
-			        $.unblockUI();
-			        swal({
-					  type: 'error',
-					  title: 'Oops...',
-					  text: 'Ha ocurrido un error al intentar traer info de periodo'
-					});
-			        console.log(xhr.responseText);
-			        console.log(thrownError);
-			  	}
-			});
+						
+					},
+					error: function (xhr, ajaxOptions, thrownError) {
+				        $.unblockUI();
+				        swal({
+						  type: 'error',
+						  title: 'Oops...',
+						  text: 'Ha ocurrido un error al intentar traer info de periodo'
+						});
+				        console.log(xhr.responseText);
+				        console.log(thrownError);
+				  	}
+				});
 
-			$("#importacionPantalla").hide();
-			$("#abmCursosPantalla").hide();
-			$("#periodosPantalla").show();
-			$("#notificacionesPantalla").hide();
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").show();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
-			$("#importacionMenu").removeClass("active");
-			$("#abmCursosMenu").removeClass("active");
-			$("#periodosMenu").addClass("active");
-			$("#notificacionesMenu").removeClass("active");
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").addClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").removeClass("active");
+			}
 			break;
 		case 4:
-			$("#importacionPantalla").hide();
-			$("#abmCursosPantalla").hide();
-			$("#periodosPantalla").hide();
-			$("#notificacionesPantalla").show();
+			if (initialData.role){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").show();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").hide();
 
-			$("#importacionMenu").removeClass("active");
-			$("#abmCursosMenu").removeClass("active");
-			$("#periodosMenu").removeClass("active");
-			$("#notificacionesMenu").addClass("active");
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").addClass("active");
+				$("#reportes").removeClass("active");
+			}
+			break;
+		case 5:
+			if (initialData.role){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").show();
+				$("#reporteCursosPantalla").hide();								
+
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").addClass("active");
+			}
+			break;
+		case 6:
+			if (initialData.role){
+				$("#importacionPantalla").hide();
+				$("#abmCursosPantalla").hide();
+				$("#periodosPantalla").hide();
+				$("#notificacionesPantalla").hide();
+				$("#bienvenidoPantalla").hide();
+				$("#reporteEncuestasPantalla").hide();
+				$("#reporteCursosPantalla").show();								
+
+				$("#importacionMenu").removeClass("active");
+				$("#abmCursosMenu").removeClass("active");
+				$("#periodosMenu").removeClass("active");
+				$("#notificacionesMenu").removeClass("active");
+				$("#reportes").addClass("active");
+			}
+			break;
 
 	}
 }
@@ -773,7 +922,7 @@ $.ajax({
 });
 
 //comentar linea, solo para desarrollo
-cambiarPantalla(4);
+cambiarPantalla(0);
 
 // maneja el input
 $(".input-file-estudiantes").before(
@@ -977,6 +1126,76 @@ function okPeriodo(numero){
 					});
 			}
 			break;
+		case 5:
+			var ultPeriodo = $('#ultimoPeriodo').val().split('-');
+			if ($("#inputFechaInscripcionCursadasInicio").val() 
+				&& $("#inputFechaInscripcionCursadasFin").val() 
+				&& $("#inputFechaInscripcionCursadasInicio").val() < $("#inputFechaInscripcionCursadasFin").val()
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() 
+				&& $("#inputFechaDesinscripcionCursadasFin").val() 
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() < $("#inputFechaDesinscripcionCursadasFin").val()
+				&& $("#inputFechaDesinscripcionCursadasInicio").val() > $("#inputFechaInscripcionCursadasFin").val()
+				&& $("#inputFechaCursadasInicio").val() 
+				&& $("#inputFechaCursadasFin").val() 
+				&& $("#inputFechaCursadasInicio").val() < $("#inputFechaCursadasFin").val()
+				&& $("#inputFechaCursadasInicio").val() > $("#inputFechaDesinscripcionCursadasFin").val()
+				&& $('#cuatrimestrePeriodoActual').val() 
+				&& $('#inputAnioPeriodoActual').val()
+				&& ($('#inputAnioPeriodoActual').val() > ultPeriodo[1]
+					|| $('#inputAnioPeriodoActual').val() == ultPeriodo[1] && $('#cuatrimestrePeriodoActual').val()[0] >= ultPeriodo[0][0])
+				&& $("#inputFechaFinalesInicio").val() 
+				&& $("#inputFechaFinalesFin").val() 
+				&& $("#inputFechaFinalesInicio").val() < $("#inputFechaFinalesFin").val()
+				&& $("#inputFechaFinalesInicio").val() > $("#inputFechaCursadasFin").val()){
+					$.blockUI({message:"Guardando.."})
+					$.ajax({
+							url: '../admin/periodos/',
+							type: 'POST',
+							data: {
+								periodo: $('#inputPeriodoActual').val() ,
+								fechaInicioInscripcionCursadas: $("#inputFechaInscripcionCursadasInicio").val() ,
+								fechaFinInscripcionCursadas: $("#inputFechaInscripcionCursadasFin").val() ,
+								fechaInicioDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasInicio").val() ,
+								fechaFinDesinscripcionCursadas: $("#inputFechaDesinscripcionCursadasFin").val() ,
+								fechaInicioCursadas: $("#inputFechaCursadasInicio").val() ,
+								fechaFinCursadas: $("#inputFechaCursadasFin").val() ,
+								fechaInicioFinales: $("#inputFechaFinalesInicio").val() ,
+								fechaFinFinales: $("#inputFechaFinalesFin").val() 
+							},
+							success: (data)=>{
+								$.unblockUI();
+								swal({
+								  type: 'success',
+								  title: 'Guardado!',
+								  text: 'Se han guardado los periodos'
+								});
+								$("#inputFechaInscripcionCursadasInicio").val('')
+								$("#inputFechaInscripcionCursadasFin").val('')
+								$("#inputFechaDesinscripcionCursadasInicio").val('')
+								$("#inputFechaDesinscripcionCursadasFin").val('')
+								$("#inputFechaCursadasInicio").val('')
+								$("#inputFechaCursadasFin").val('')
+								$("#inputFechaFinalesInicio").val('')
+								$("#inputFechaFinalesFin").val('') 
+							},
+							error: function (xhr, ajaxOptions, thrownError) {
+						        $.unblockUI();
+						        swal({
+								  type: 'error',
+								  title: 'Oops...',
+								  text: 'Ha ocurrido un error al intentar guardar periodos'
+								});
+						        console.log(xhr.responseText);
+						        console.log(thrownError);
+					      	}
+						});
+			} else {
+					swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  html: '<h3>Verificar que las fechas sean correctas</h3><p>Las fecha de fin debe ser mayor a la de inicio<br>La fecha de inicio debe ser mayor a la de fin de la etapa anterior</p>'
+					});
+			}
 	}
 }
 
@@ -1027,5 +1246,117 @@ function enviarNotificacion(){
 }
 
 
+//manejo el login
+var login = function(){
+	var usr = $("#usrLogin").val();
+	var pwd = $("#pwdLogin").val();
 
+	if (usr != undefined && usr != '' && pwd != undefined && pwd != ''){
+		$.blockUI({message:"Loggeando.."})
+		$.ajax({
+				url: '../admin/login/',
+				type: 'POST',
+				data: {
+					usr: usr,
+					pwd: pwd
+				},
+				success: (data)=>{
+					$.unblockUI();
+					if(data.status == 1){
+						initialData.role = data.role;
+						initialData.id = data.id;
+						initialData.nombre = data.nombre;
+						cambiarPantalla(0);
 
+						if (initialData && initialData.role == "dpto" && initialData.id){
+							$("#modalSelectDptoEncuestas").val(initialData.id);
+							$("#modalSelectDptoCursos").val(initialData.id);
+							$("#modalSelectDptoEncuestas").prop('disabled', 'disabled');
+							$("#modalSelectDptoCursos").prop('disabled', 'disabled');
+						}else{
+							$("#modalSelectDptoEncuestas").prop('disabled', false);
+							$("#modalSelectDptoCursos").prop('disabled', false);
+						}
+						$("#modalSelectDptoEncuestas").trigger('change');
+						$("#modalSelectDptoCursos").trigger('change');
+					}else{
+						swal({
+						  type: 'error',
+						  title: 'Oops...',
+						  html: '<h3>Usuario y/o contraseña incorrectos</h3>'
+						});
+					}
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+			        $.unblockUI();
+			        swal({
+					  type: 'error',
+					  title: 'Oops...',
+					  html: '<h3>Ha ocurrido un error al intentar loggearse</h3>'
+					});
+			        console.log(xhr.responseText);
+			        console.log(thrownError);
+		      	}
+			});
+	}else{
+		swal({
+			type: 'error',
+			title: 'Oops...',
+			html: '<h3>Verificar que el usuario o contraseña no se encuentren vacíos</h3>'
+		});
+	}
+}
+
+function filtrar() {
+	  var inputCodigo, inputNombre, inputDocente, table, tr, tdCodigo, tdNombre, tdDocente, i;
+	  inputCodigo = document.getElementById("inputCodigo").value;
+	  inputNombre = document.getElementById("inputNombre").value;
+	  inputDocente = document.getElementById("inputDocente").value;
+	  table = document.getElementById("tablaCursos");
+	  tr = table.getElementsByTagName("tr");
+
+	  // Loop through all table rows, and hide those who don't match the search query
+	  for (i = 0; i < tr.length; i++) {
+	    tdCodigo = tr[i].getElementsByTagName("td")[0];
+	    tdNombre = tr[i].getElementsByTagName("td")[1];
+	    tdDocente = tr[i].getElementsByTagName("td")[2];
+	    if (tdCodigo && tdNombre) {
+	      if ((tdCodigo.innerHTML.indexOf(inputCodigo) > -1) && (tdNombre.innerHTML.toUpperCase().indexOf(inputNombre.toUpperCase()) > -1) && (tdDocente.innerHTML.toUpperCase().indexOf(inputDocente.toUpperCase()) > -1)) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    } 
+	  }
+}
+
+function quitarFiltro() {
+	  var inputCodigo, inputNombre, inputDocente, table, tr, tdCodigo, tdNombre, tdDocente, i;
+	  inputCodigo = "";
+	  inputNombre = "";
+	  inputDocente = "";
+	  table = document.getElementById("tablaCursos");
+	  tr = table.getElementsByTagName("tr");
+
+	  // Loop through all table rows, and hide those who don't match the search query
+	  for (i = 0; i < tr.length; i++) {
+	    tdCodigo = tr[i].getElementsByTagName("td")[0];
+	    tdNombre = tr[i].getElementsByTagName("td")[1];
+	    tdDocente = tr[i].getElementsByTagName("td")[2];
+	    if (tdCodigo && tdNombre) {
+	      if ((tdCodigo.innerHTML.indexOf(inputCodigo) > -1) && (tdNombre.innerHTML.indexOf(inputNombre) > -1) && (tdDocente.innerHTML.indexOf(inputDocente) > -1)) {
+	        tr[i].style.display = "";
+	      } else {
+	        tr[i].style.display = "none";
+	      }
+	    } 
+	  }
+
+	  document.getElementById("inputCodigo").value = "";
+	  document.getElementById("inputNombre").value = "";
+	  document.getElementById("inputDocente").value = "";
+}
+
+function cerrarSesion(){
+	location.reload();
+}
