@@ -789,7 +789,7 @@ function cambiarPantalla(numero){
 				} else {
 					$("#loginPantalla").hide();
 					$("#bienvenidoPantalla").show();
-					$("#abmCursosMenu").show();
+					$("#abmCursosMenu").hide();
 					$("#cerrarSesion").show();
 					$("#reportes").show();
 				}
