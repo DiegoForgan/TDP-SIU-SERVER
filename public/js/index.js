@@ -13,12 +13,14 @@ var initialData = {
 $(document).ready(()=>{
 	var termina = {
 		infoCargada: false,
-		cursosCargados: false
+		cursosCargados: false,
+		periodosCargados: false
 	};
 
 	$.blockUI({message: "Cargando.."})
 	cargarCursos(termina);
 	cargarInfo(termina);
+	cargarPeriodos(termina);
 });
 
 function borrarCurso(curso){
@@ -113,7 +115,7 @@ function cargarInfo(termina){
 
 				if(termina){
 					termina.infoCargada = true;
-					if(termina.cursosCargados && termina.infoCargada){
+					if(termina.cursosCargados && termina.infoCargada && termina.periodosCargados){
 						$.unblockUI();
 					}
 				}
@@ -256,7 +258,7 @@ function cargarCursos(termina){
 
 				if(termina){
 					termina.cursosCargados = true;
-					if(termina.cursosCargados && termina.infoCargada){
+					if(termina.cursosCargados && termina.infoCargada && termina.periodosCargados){
 						$.unblockUI();
 					}
 				}
@@ -267,6 +269,86 @@ function cargarCursos(termina){
 				  type: 'error',
 				  title: 'Oops...',
 				  text: 'Ha ocurrido un error al intentar cargar cursos'
+				});
+		        console.log(xhr.responseText);
+		        console.log(thrownError);
+	      	}
+		});
+}
+
+function convertDate(inputFormat) {
+  function pad(s) { return (s < 10) ? '0' + s : s; }
+  var d = new Date(inputFormat);
+  return [pad(d.getDate()), pad(d.getMonth()+1), d.getFullYear()].join('/');
+}
+
+function cargarPeriodos(termina){
+	$.ajax({
+			url: '../admin/periodosLista',
+			type: 'GET',
+			success: (data)=>{
+				console.log(data)
+				if (data.length > 0){
+					$("#listadoDePeriodos").empty();
+					var tbody = $('#listadoDePeriodos')
+					for (var i = 0; i < data.length; i++) {
+						var tr = document.createElement("tr");
+						tr.setAttribute("id", data[i].id)
+						tbody.append(tr);
+
+						var tdDescripcion = document.createElement("td");
+						tdDescripcion.innerHTML = data[i].descripcion;
+						tr.append(tdDescripcion);
+
+						var fechainicioinscripcioncursadas = document.createElement("td");
+						fechainicioinscripcioncursadas.innerHTML = convertDate(data[i].fechainicioinscripcioncursadas);
+						tr.append(fechainicioinscripcioncursadas);
+
+						var fechafininscripcioncursadas = document.createElement("td");
+						fechafininscripcioncursadas.innerHTML = convertDate(data[i].fechafininscripcioncursadas);
+						tr.append(fechafininscripcioncursadas);
+
+						var fechainiciodesinscripcioncursadas = document.createElement("td");
+						fechainiciodesinscripcioncursadas.innerHTML = convertDate(data[i].fechainiciodesinscripcioncursadas);
+						tr.append(fechainiciodesinscripcioncursadas);
+
+						var fechafindesinscripcioncursadas = document.createElement("td");
+						fechafindesinscripcioncursadas.innerHTML = convertDate(data[i].fechafindesinscripcioncursadas);
+						tr.append(fechafindesinscripcioncursadas);
+
+						var fechainiciocursadas = document.createElement("td");
+						fechainiciocursadas.innerHTML = convertDate(data[i].fechainiciocursadas);
+						tr.append(fechainiciocursadas);
+
+						var fechafincursadas = document.createElement("td");
+						fechafincursadas.innerHTML = convertDate(data[i].fechafincursadas);
+						tr.append(fechafincursadas);
+
+						var fechainiciofinales = document.createElement("td");
+						fechainiciofinales.innerHTML = convertDate(data[i].fechainiciofinales);
+						tr.append(fechainiciofinales);
+
+						var fechafinfinales = document.createElement("td");
+						fechafinfinales.innerHTML = convertDate(data[i].fechafinfinales);
+						tr.append(fechafinfinales);
+					}
+				} else{
+					$("#listadoDePeriodos").html("No existen periodos.");
+				}
+
+				if(termina){
+					termina.periodosCargados = true;
+					if(termina.cursosCargados && termina.infoCargada && termina.periodosCargados){
+						$.unblockUI();
+					}
+				}
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+		        $.unblockUI();
+		        swal({
+				  type: 'error',
+				  title: 'Oops...',
+				  text: 'Ha ocurrido un error al intentar cargar periodos'
 				});
 		        console.log(xhr.responseText);
 		        console.log(thrownError);
@@ -1177,6 +1259,8 @@ function okPeriodo(numero){
 								$("#inputFechaCursadasFin").val('')
 								$("#inputFechaFinalesInicio").val('')
 								$("#inputFechaFinalesFin").val('') 
+
+								cargarPeriodos();
 							},
 							error: function (xhr, ajaxOptions, thrownError) {
 						        $.unblockUI();

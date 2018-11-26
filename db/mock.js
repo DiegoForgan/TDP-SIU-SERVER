@@ -157,7 +157,6 @@ module.exports = function(pool){
 			INSERT INTO materias_departamento VALUES(1, 1);\
 			INSERT INTO materias_departamento VALUES(1, 2);\
 			INSERT INTO materias_departamento VALUES(2, 3);\
-			INSERT INTO materias_departamento VALUES(2, 3);\
 			INSERT INTO materias_departamento VALUES(2, 4);\
 			INSERT INTO materias_departamento VALUES(2, 5);\
 			INSERT INTO materias_departamento VALUES(2, 6);\
@@ -239,17 +238,17 @@ module.exports = function(pool){
 			");
 
 	pool.query("\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 1, 10, '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 2, 9 , '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 3, 8 , '25/10/2018', true, '{\"Pregunta1\":2,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 4, 7 , '25/10/2018', true, '{\"Pregunta1\":1,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 5, 10, '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 6, 4 , '25/10/2018', true, '{\"Pregunta1\":3,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 7, 10, '25/10/2018', true, '{\"Pregunta1\":3,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 1, 10, '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Muy buena materia\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 2, 9 , '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Aprendi un monton\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 3, 8 , '25/10/2018', true, '{\"Pregunta1\":5,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Mona es la mejor profe del mundo\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 4, 7 , '25/10/2018', true, '{\"Pregunta1\":1,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Pesima, una basura\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 5, 10, '25/10/2018', true, '{\"Pregunta1\":4,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Gran materia\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 6, 4 , '25/10/2018', true, '{\"Pregunta1\":3,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Normal, no fue wow\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 7, 10, '25/10/2018', true, '{\"Pregunta1\":1,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Esta materia es peor que la conmebol\"}');\
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 8, 9 , '25/10/2018', false, null);\
 			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('95812', 9, 6 , '25/10/2018', false, null);\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('38383', 8, 4 , '25/10/2018', true, '{\"Pregunta1\":5,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
-			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('96803', 8, 4 , '25/10/2018', true, '{\"Pregunta1\":5,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"comentarios del alumno\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('38383', 5, 4 , '25/10/2018', true, '{\"Pregunta1\":5,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Excelente!\"}');\
+			INSERT INTO historialacademico(padron, id_materia, nota, fecha, completo_encuesta, resultados_encuesta) VALUES('96803', 3, 4 , '25/10/2018', true, '{\"Pregunta1\":5,\"Pregunta2\":3,\"Pregunta3\":3,\"Pregunta4\":3,\"Pregunta5\":3,\"Pregunta6\":4,\"Pregunta7\":\"Esta materia no seria nada sin Mona :)\"}');\
 			\
 			");
 

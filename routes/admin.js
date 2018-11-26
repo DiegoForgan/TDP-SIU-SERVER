@@ -264,4 +264,16 @@ router.get('/cursos/:dpto/:periodo/:materia', (req, res) => {
     });
 })
 
+router.get('/periodosLista', (req, res) => {
+    db.query("select *\
+            from periodos;",
+            [], (err, response)=>{
+            if (!err) {
+                res.send(response.rows);
+            }else{
+                res.send({});
+            }
+    });
+})
+
 module.exports = router;

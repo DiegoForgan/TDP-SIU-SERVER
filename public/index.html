@@ -342,8 +342,8 @@
 							<th>Fin finales</th>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="listadoDePeriodos">
+						<!-- <tr>
 							<td>2°-2018</td>
 							<td>10/10/10</td>
 							<td>10/10/10</td>
@@ -364,7 +364,7 @@
 							<td>10/10/10</td>
 							<td>10/10/10</td>
 							<td>10/10/10</td>
-						</tr>
+						</tr> -->
 					</tbody>
 				</table>
 			</div>
@@ -556,7 +556,8 @@
 				url: '../admin/encuestas/' + dpto + "/" + periodo,
 				type: 'GET',
 				success: (data)=>{
-					var obj = data.reduce((todos, actual) =>{
+					if (data.length != 0){
+						var obj = data.reduce((todos, actual) =>{
 						if ( todos[actual.id] ) {
 							todos[actual.id].sum += actual.puntaje;
 							todos[actual.id].total += 1; 
@@ -581,6 +582,13 @@
 						});
 
 					drawChartEncuestas(data,listado);
+					}else{
+						swal({
+						  type: 'info',
+						  title: 'Oops...',
+						  text: 'No hay información para el Departamento y Periodo elegido'
+						});
+					}
 				}
 			});
 		}
@@ -631,7 +639,15 @@
 				url: '../admin/cursos/' + dpto + "/" + periodo,
 				type: 'GET',
 				success: (data)=>{
-					drawChartCursos(data);
+					if (data.length != 0){
+						drawChartCursos(data);
+					}else{
+						swal({
+						  type: 'info',
+						  title: 'Oops...',
+						  text: 'No hay información para el Departamento y Periodo elegido'
+						});
+					}
 				}
 			});
 		}
