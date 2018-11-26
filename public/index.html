@@ -551,7 +551,7 @@
 		function consultarEncuesta(){
 			var dpto = $('#modalSelectDptoEncuestas').val()
 			var periodo = $('#modalSelectPeriodoEncuestas').val()
-
+			$.blockUI({ message: "Cargando.." });
 			$.ajax({
 				url: '../admin/encuestas/' + dpto + "/" + periodo,
 				type: 'GET',
@@ -582,12 +582,14 @@
 						});
 
 					drawChartEncuestas(data,listado);
+					$.unblockUI();
 					}else{
 						swal({
 						  type: 'info',
 						  title: 'Oops...',
 						  text: 'No hay información para el Departamento y Periodo elegido'
 						});
+						$.unblockUI();
 					}
 				}
 			});
@@ -634,19 +636,21 @@
 		function consultarCursos() {
 			var dpto = $('#modalSelectDptoCursos').val()
 			var periodo = $('#modalSelectPeriodoCursos').val()
-
+			$.blockUI({ message: "Cargando.." });
 			$.ajax({
 				url: '../admin/cursos/' + dpto + "/" + periodo,
 				type: 'GET',
 				success: (data)=>{
 					if (data.length != 0){
 						drawChartCursos(data);
+						$.unblockUI();
 					}else{
 						swal({
 						  type: 'info',
 						  title: 'Oops...',
 						  text: 'No hay información para el Departamento y Periodo elegido'
 						});
+						$.unblockUI();
 					}
 				}
 			});
