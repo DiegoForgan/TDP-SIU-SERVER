@@ -615,7 +615,13 @@
 				'width':700, 
 				'height':500, 
 				'backgroundColor': 'transparent', 
-				'legend': 'none'
+				'legend': 'none',
+				'hAxis': {
+				    'textStyle':{color: '#FFF'}
+				},
+				'vAxis': {
+				    'textStyle':{color: '#FFF'}
+				}
 			};
 			chart = new google.visualization.BarChart(document.getElementById('barchartEncuestas'));
 			chart.draw(data, options);
