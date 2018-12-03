@@ -137,6 +137,92 @@ router.get('/oferta/:padron', function (req, res) {
 
 });
 
+//Devuelve la oferta de los finales.
+//params: ?id_materia={id_materia}&filtro={filtro}&id_carrera={id_carrera}
+router.get('/ofertaFinales/:padron', function (req, res) {
+    console.log("Un alumno consulto la oferta academica Finales");
+    var listado = [];
+
+    var padron = req.params.padron;
+
+    var filtro, filtro2, filtro3;
+    if (req.query.filtro){
+        filtro = '%' + req.query.filtro + '%';
+        filtro2 = req.query.filtro + '%';
+        filtro3 = '% ' + req.query.filtro + '%';
+    }else{
+        filtro = '%%';
+        filtro2 = '%%';
+        filtro3 = '%%';
+    }
+    // envio materias
+    if (!req.query.id_materia) {
+        db.query("SELECT m.*\
+                    FROM materias m\
+                    INNER JOIN materias_carrera mc ON mc.id_materia = m.id AND mc.id_carrera = $5\
+                    INNER JOIN alumnos a ON true\
+                    INNER JOIN regexp_split_to_table(a.carrera, ';') carreraaux on cast(carreraaux as int) = mc.id_carrera\
+                    WHERE a.padron = $1 AND (replace(m.codigo, '.', '') ilike $2 or m.codigo ilike $2 or m.nombre ilike $3 or m.nombre ilike $4)\
+                        AND m.id not in (\
+                            SELECT materias.id\
+                            FROM historialacademico\
+                            INNER JOIN materias ON materias.id = historialacademico.id_materia\
+                            INNER JOIN materias_carrera mc ON mc.id_materia = materias.id AND mc.id_carrera = $5\
+                            WHERE $1 = historialacademico.padron and historialacademico.nota >= 4\
+                        )\
+                    ORDER BY m.nombre",
+                [padron, filtro, filtro2, filtro3, req.query.id_carrera],
+                (error, respuesta) => {
+                    if (!error) {
+                        if (respuesta.rowCount != 0) {
+                            (respuesta.rows).forEach(materia => {
+                                var elemento = {
+                                    'id': materia.id,
+                                    'codigo': materia.codigo,
+                                    'nombre': materia.nombre,
+                                };
+                                listado.push(elemento);
+                            });
+                            res.send(listado);
+                        }else{
+                            res.send([{}]);
+                        }
+                    }
+                })
+    }else{
+        // envio cursos
+        db.query("SELECT c.*, docentes.apellido || ', ' || docentes.nombre AS nombre_docente, p.descripcion as descripcion_periodo, row_number() over (order by c.id_curso asc) as nro_curso\
+                 FROM cursos c\
+                 INNER JOIN docentes ON docentes.legajo = c.docente_a_cargo\
+                 INNER JOIN periodos p ON p.id = c.id_periodo\
+                 WHERE docentes.apellido || ', ' || docentes.nombre ilike $2 and c.id_materia = $1 and p.activo\
+                 ORDER BY c.id_curso ASC", [req.query.id_materia, filtro], (error, respuesta) => {
+            if (!error) {
+                if (respuesta.rowCount != 0) {
+                    (respuesta.rows).forEach(curso => {
+                        var elemento = {
+                            'id': curso.id_curso,
+                            'nro_curso': curso.nro_curso,
+                            'docente': curso.nombre_docente,
+                            'sede': separar(curso.sede),
+                            'aulas': separar(curso.aulas),
+                            'vacantes': curso.cupos_disponibles,
+                            'dias': separar(curso.dias),
+                            'horarios': separar(curso.horarios),
+                            'periodo': curso.descripcion_periodo
+                        };
+                        listado.push(elemento);
+                    });
+                    res.send(listado);
+                } else {
+                    res.send([{}]);
+                }
+            }
+        });
+    }
+
+});
+
 //Devuelve los cursos a los cuales se inscribio el alumno
 router.get('/inscripciones/:padron',(req,res)=>{
     db.query('SELECT * FROM obtenerCursosDondeMeInscribi($1)',[req.params.padron],(err,resp_cursos)=>{
